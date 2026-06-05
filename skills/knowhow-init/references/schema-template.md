@@ -9,6 +9,7 @@
 |---------|----------|
 | raw/ | Nguồn thô, immutable. Agent đọc nhưng không sửa. |
 | inbox/ | Bộ đệm chờ đúc kết. Nội dung chưa phân loại. |
+| archive/ | Page lỗi thời đã rút khỏi wiki. Lint consolidation chuyển vào đây. |
 | wiki/ | Tri thức có cấu trúc, liên kết chéo. |
 | skills/ | Công việc cụ thể, chạy độc lập, tái sử dụng cao. |
 | workflows/ | Chuỗi bước, gắn domain, gọi nhiều skill. |
