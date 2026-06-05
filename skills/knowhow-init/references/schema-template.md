@@ -1,5 +1,7 @@
 # Knowhow Schema — {{PROJECT_NAME}}
 
+**schema_version**: 1
+
 ## Giới thiệu dự án
 {{PROJECT_DESCRIPTION}}
 
@@ -13,6 +15,8 @@
 | wiki/ | Tri thức có cấu trúc, liên kết chéo. |
 | skills/ | Công việc cụ thể, chạy độc lập, tái sử dụng cao. |
 | workflows/ | Chuỗi bước, gắn domain, gọi nhiều skill. |
+
+> **Lưu ý file top-level**: ngoài `SCHEMA.md`, thư mục `.knowhow/` còn có `schema-signals.md` — sổ tích luỹ tín hiệu "khuôn không vừa" (meta về khuôn, KHÔNG phải tri thức). distill và query ghi vào đây; lint `schema-review` đọc. File này KHÔNG nằm trong `wiki/` và KHÔNG vào `index.md`.
 
 ## Page Types
 
@@ -46,6 +50,8 @@
 - Nếu nhiều page khác type trùng slug, link phải kèm type để khử nhập nhằng: `[[decision-rest-to-graphql]]`.
 - Workflow reference skill bằng `→ Dùng skill: [[skill-name]]`.
 - Mọi page phải xuất hiện trong index.md hoặc registry.md tương ứng.
+- **Type động**: tập type hợp lệ ĐỌC TỪ bảng "Page Types" ở trên, không cố định. Khi schema tiến hoá thêm type mới (ví dụ `experiment`), link `[[experiment-<slug>]]` resolve được ngay.
+- **Subfolder**: khi một type bị tách vào subfolder (ví dụ `wiki/experiment/experiment-abc.md`), link vẫn viết `[[experiment-abc]]` (slug trần hoặc kèm type). Resolve tìm đệ quy trong `wiki/`, không chỉ ở mức phẳng.
 
 ## Vòng đời metadata
 
@@ -72,6 +78,7 @@
 - Khi distill: đọc index.md + registry.md trước. Ưu tiên cập nhật cái cũ hơn tạo mới
 - Mọi thay đổi ghi changelog cuối page
 - Mọi hoạt động ghi log vào wiki/log.md
+- Mỗi entry log dùng heading prefix parse được: `## [YYYY-MM-DD] <op> | <tiêu đề>` (op ∈ init/capture/distill/lint/query). Cho phép `grep "^## \[" wiki/log.md | tail -5` xem hoạt động gần nhất.
 
 ## Onboarding cho agent mới
 
@@ -82,3 +89,22 @@
 5. Khi cần thực hiện quy trình, tra skills/ và workflows/ trước
 
 > **Phạm vi agent**: `.knowhow/` là markdown thuần, MỌI agent ĐỌC được. Nhưng 4 skill vận hành (init, capture, distill, lint) hiện viết cho Antigravity (Gemini). Agent khác (Claude Code, Codex) chỉ ĐỌC knowhow, chưa chạy được capture/distill/lint cho tới khi skill được port.
+
+## Tiến hoá cấu trúc (schema evolution)
+
+Khuôn này tự tiến hoá theo dự án. Cơ chế:
+
+1. distill/query phát hiện "khuôn không vừa" → ghi tín hiệu vào `schema-signals.md` (KHÔNG tự đổi khuôn).
+2. `knowhow-lint schema-review` đọc sổ + quét sống + áp ngưỡng → đề xuất diff lên SCHEMA.md.
+3. User duyệt từng đề xuất.
+4. Hệ migrate file bị ảnh hưởng, rewrite link, rebuild index, bump `schema_version`, ghi vào Changelog dưới đây.
+
+Bốn loại thay đổi cấu trúc: thêm/đổi/nghỉ hưu page type, đổi layout (subfolder), đổi format page type, sửa mục SCHEMA. Mọi thay đổi reversible bằng git.
+
+## Glossary & Convention (tiến hoá)
+
+[Thuật ngữ riêng dự án + quy ước vận hành bổ sung. Trống lúc init. schema-review thêm vào khi phát hiện thuật ngữ/quy ước lặp nhiều lần.]
+
+## Changelog
+
+- {{DATE}}: Khởi tạo schema v1 (init).
