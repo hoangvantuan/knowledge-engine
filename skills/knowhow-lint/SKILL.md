@@ -17,6 +17,7 @@ Rà soát sức khoẻ hệ thống knowhow. Hai chế độ: **quick** (mặc �
 
 - User không nói gì thêm, hoặc nói "quick", "lint" → chạy **Quick Lint**.
 - User nói "consolidation", "deep", "audit" → chạy **Consolidation**.
+- User nói "rebuild", "rebuild-index", "sinh lại index" → chạy **Rebuild Index**.
 
 ---
 
@@ -33,16 +34,23 @@ Chạy nhanh, kiểm tra 5 hạng mục. Không đọc nội dung page, chỉ đ
 ### 1b. Link integrity
 
 - Tìm tất cả `[[...]]` trong body các page (wiki, skills, workflows).
-- Resolve link thành file path.
+- Resolve mỗi link `[[X]]` theo thuật toán (match CHẶT type-slug, không glob đuôi tự do):
+  1. Nếu `X` có dạng `<type>-<slug>` với type ∈ {decision, pattern, concept, troubleshooting}: khớp chính xác `wiki/<type>-<slug>.md`. Dạng tường minh, không ambiguous.
+  2. Nếu `X` là slug trần: thử khớp chính xác từng ứng viên `wiki/decision-X.md`, `wiki/pattern-X.md`, `wiki/concept-X.md`, `wiki/troubleshooting-X.md`. Đếm số file tồn tại:
+     - Đúng 1 → resolve OK.
+     - 0 → báo link hỏng (ghi page nguồn + target).
+     - ≥2 (cùng slug khác type) → báo **ambiguous**, yêu cầu link kèm type `[[decision-X]]`.
+  3. Skill/workflow: khớp chính xác `skills/X.md` hoặc `workflows/X.md`.
 - File không tồn tại → báo link hỏng, ghi rõ page nguồn và target.
 
 ### 1c. Frontmatter check
 
-Mọi page phải có: `type`, `title`, `created`.
+Mọi page phải có: `type`, `title`, `created`, `status`.
 
 Thêm theo loại:
 - **Skill**: `version`, `input`, `output`
 - **Workflow**: `version`, `trigger`
+- **Wiki (4 type)**: `confidence`
 
 Thiếu field nào → báo cụ thể file và field thiếu.
 
@@ -118,6 +126,7 @@ Fix các vấn đề:
 
 ### Lỗi thời (N items)
 - [ ] Page X không cập nhật từ DD/MM → review hoặc archive?
+- [ ] Page Y `updated` cũ hơn 90 ngày, không có entry changelog mới → hạ `confidence` 1 bậc (high→medium→low)?
 
 ### Thiếu phủ (N items)
 - [ ] Lĩnh vực Y chưa có knowhow
@@ -136,9 +145,24 @@ Tạo báo cáo dạng artifact. Trình bày cho user duyệt.
 Thực thi từng thay đổi đã được duyệt:
 - Gộp page → tạo page mới, xoá page cũ, cập nhật registry và link.
 - Thống nhất thuật ngữ → find-replace trên tất cả page liên quan.
-- Archive page lỗi thời → chuyển vào `archive/`, xoá khỏi registry.
+- Archive page lỗi thời → chuyển vào `archive/`, set `status: archived`, xoá khỏi registry.
+- Hạ confidence → sửa `confidence` trong frontmatter page xuống 1 bậc, ghi entry changelog.
 - Bổ sung page thiếu phủ → tạo stub page, thêm vào registry.
 - Cập nhật workflow dependency → sửa version reference.
+
+---
+
+## Chế độ 3: Rebuild Index (file dẫn xuất)
+
+`wiki/index.md`, `skills/registry.md`, `workflows/registry.md` là **file dẫn xuất** từ frontmatter các page. Khi merge conflict ở 3 file này, không cần giải tay, sinh lại.
+
+### Bước thực hiện
+
+1. Quét frontmatter mọi file trong `wiki/` (trừ index.md, log.md): đọc `type`, `title`, `tags`, `updated`.
+2. Sinh `wiki/index.md`, group theo `type` (4 heading: Decisions, Patterns, Concepts, Troubleshooting), mỗi dòng `- [[<type>-<slug>]] - <title>`.
+3. Quét frontmatter mọi file trong `skills/` (trừ registry.md): đọc `title`, `version`, `tags`, `updated`. Sinh `skills/registry.md` theo format page-formats mục 6.1, sort alphabet.
+4. Quét frontmatter mọi file trong `workflows/` (trừ registry.md): đọc `title`, `skills_used`, `version`, `updated`. Sinh `workflows/registry.md` theo format mục 6.2, sort alphabet.
+5. Ghi log: `- [lint] Rebuild index + 2 registry từ frontmatter`.
 
 ---
 

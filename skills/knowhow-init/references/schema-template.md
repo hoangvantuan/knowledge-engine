@@ -9,20 +9,21 @@
 |---------|----------|
 | raw/ | Nguồn thô, immutable. Agent đọc nhưng không sửa. |
 | inbox/ | Bộ đệm chờ đúc kết. Nội dung chưa phân loại. |
+| archive/ | Page lỗi thời đã rút khỏi wiki. Lint consolidation chuyển vào đây. |
 | wiki/ | Tri thức có cấu trúc, liên kết chéo. |
 | skills/ | Công việc cụ thể, chạy độc lập, tái sử dụng cao. |
 | workflows/ | Chuỗi bước, gắn domain, gọi nhiều skill. |
 
 ## Page Types
 
-| Type | Thư mục | Mục đích |
-|------|---------|----------|
-| decision | wiki/decisions/ | Quyết định + lý do + bối cảnh |
-| pattern | wiki/patterns/ | Cách làm đã chứng minh hiệu quả |
-| concept | wiki/concepts/ | Thuật ngữ, khái niệm riêng dự án |
-| troubleshooting | wiki/troubleshooting/ | Sự cố đã gặp + cách xử lý |
-| skill | skills/ | Công việc cụ thể, chạy độc lập, tái sử dụng |
-| workflow | workflows/ | Chuỗi bước, gắn domain, gọi nhiều skill |
+| Type | Đường dẫn file | Mục đích |
+|------|----------------|----------|
+| decision | wiki/decision-<slug>.md | Quyết định + lý do + bối cảnh |
+| pattern | wiki/pattern-<slug>.md | Cách làm đã chứng minh hiệu quả |
+| concept | wiki/concept-<slug>.md | Thuật ngữ, khái niệm riêng dự án |
+| troubleshooting | wiki/troubleshooting-<slug>.md | Sự cố đã gặp + cách xử lý |
+| skill | skills/<slug>.md | Công việc cụ thể, chạy độc lập, tái sử dụng |
+| workflow | workflows/<slug>.md | Chuỗi bước, gắn domain, gọi nhiều skill |
 
 ## Phân biệt Skill và Workflow
 
@@ -35,17 +36,35 @@
 
 ## Naming Conventions
 
-- File: `kebab-case.md`
-- Skill: động từ + danh từ (`parse-invoice.md`, `write-commit-msg.md`)
-- Workflow: danh từ mô tả quy trình (`release-checklist.md`, `customer-onboard.md`)
-- Decision: mô tả quyết định (`rest-to-graphql.md`)
-- Pattern: mô tả pattern (`retry-with-jitter.md`)
+- File wiki: `wiki/<type>-<slug>.md`, slug `kebab-case`. Ví dụ: `wiki/decision-rest-to-graphql.md`, `wiki/pattern-retry-with-jitter.md`.
+- Skill: `skills/<slug>.md`, slug động từ + danh từ (`skills/parse-invoice.md`, `skills/write-commit-msg.md`).
+- Workflow: `workflows/<slug>.md`, slug danh từ mô tả quy trình (`workflows/release-checklist.md`).
 
 ## Cross-referencing
 
-- Dùng `[[page-slug]]` để liên kết giữa các page wiki
-- Workflow reference skill bằng `→ Dùng skill: [[skill-name]]`
-- Mọi page phải xuất hiện trong index.md hoặc registry.md tương ứng
+- Dùng `[[slug]]` để liên kết giữa các page. `slug` = phần sau prefix type. Ví dụ file `wiki/decision-rest-to-graphql.md` có slug `rest-to-graphql`, link bằng `[[rest-to-graphql]]`.
+- Nếu nhiều page khác type trùng slug, link phải kèm type để khử nhập nhằng: `[[decision-rest-to-graphql]]`.
+- Workflow reference skill bằng `→ Dùng skill: [[skill-name]]`.
+- Mọi page phải xuất hiện trong index.md hoặc registry.md tương ứng.
+
+## Vòng đời metadata
+
+### status (mọi page, gồm skill/workflow)
+
+- `active`: đang dùng. Mặc định khi tạo.
+- `deprecated`: còn để tham khảo nhưng có cách mới tốt hơn. Distill set khi thay thế cách cũ.
+- `archived`: lỗi thời, chuyển vào `archive/`. Lint consolidation set.
+
+### confidence (chỉ 4 wiki type, skill/workflow dùng version)
+
+Đếm theo **số entry trong phần Changelog** của page:
+- 1 entry (mới tạo) → `low`.
+- ≥2 entry → `medium`.
+- ≥3 entry → `high`.
+
+- capture set `low` cho item mới.
+- distill nâng khi page được cập nhật lặp lại (grep trỏ về page cũ → CẬP NHẬT → thêm entry changelog).
+- lint consolidation hạ 1 bậc khi `updated` cũ hơn 90 ngày và không có entry changelog mới trong khoảng đó.
 
 ## Quy tắc vận hành
 
@@ -61,3 +80,5 @@
 3. Đọc skills/registry.md và workflows/registry.md để biết có gì dùng được
 4. Khi gặp vấn đề, tra wiki/ trước khi tự suy luận
 5. Khi cần thực hiện quy trình, tra skills/ và workflows/ trước
+
+> **Phạm vi agent**: `.knowhow/` là markdown thuần, MỌI agent ĐỌC được. Nhưng 4 skill vận hành (init, capture, distill, lint) hiện viết cho Antigravity (Gemini). Agent khác (Claude Code, Codex) chỉ ĐỌC knowhow, chưa chạy được capture/distill/lint cho tới khi skill được port.

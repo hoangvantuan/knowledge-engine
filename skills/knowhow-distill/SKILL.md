@@ -7,7 +7,7 @@ description: "Đúc kết knowhow từ inbox thành wiki pages, skills, workflow
 
 > **QUY TẮC SỐ 1: LUÔN đọc `wiki/index.md` + `skills/registry.md` + `workflows/registry.md` TRƯỚC KHI xử lý inbox. Ưu tiên cải tiến cái cũ hơn tạo mới.**
 >
-> Tại sao? Hệ thống knowhow tự cải tiến bằng cách tích lũy. Tạo mới khi đã có page tương tự sẽ phân mảnh tri thức, khiến tìm kiếm khó hơn và kiến thức mâu thuẫn nhau. Cập nhật page cũ giữ tri thức tập trung, dễ tra cứu, ngày càng sâu.
+> Tại sao? Hệ thống knowhow tích luỹ giá trị bằng cách gộp tri thức, không phân mảnh. Tạo mới khi đã có page tương tự sẽ phân mảnh tri thức, khiến tìm kiếm khó hơn và kiến thức mâu thuẫn nhau. Cập nhật page cũ giữ tri thức tập trung, dễ tra cứu, ngày càng sâu.
 
 ## Precondition
 
@@ -21,7 +21,7 @@ description: "Đúc kết knowhow từ inbox thành wiki pages, skills, workflow
 |---|---|---|
 | Chưa có gì liên quan | **TẠO MỚI** page | Lần đầu gặp pattern retry |
 | Đã có page, knowhow bổ sung | **CẬP NHẬT** page cũ, thêm nội dung, ghi changelog | Thêm edge case vào retry.md |
-| Đã có page, knowhow thay thế | **SỬA** page cũ, đánh dấu cách cũ deprecated | Đổi từ exponential sang jitter |
+| Đã có page, knowhow thay thế | **SỬA** page cũ, set status: deprecated cho cách cũ | Đổi từ exponential sang jitter |
 | Đã có skill/workflow, thiếu/thừa bước | **REFINE** skill/workflow, tăng version | Skill deploy thiếu bước verify |
 | Nhiều page nhỏ cùng chủ đề | **GỘP** thành 1 page chất lượng hơn | 3 page error handling → 1 |
 | Không đáng lưu | **BỎ QUA**, xoá khỏi inbox | Thông tin quá cụ thể, không tái sử dụng |
@@ -49,7 +49,17 @@ Ghi nhận toàn bộ vào context. Đây là bước quan trọng nhất: khôn
 Với mỗi inbox item:
 
 1. **Phân loại**: wiki page (decision/pattern/concept/troubleshooting) hay skill hay workflow? (xem quy tắc phân loại bên dưới)
-2. **Tìm trùng**: So sánh title, tags, nội dung với registry đã đọc ở Bước 1. Tìm page đã tồn tại có liên quan.
+2. **Tìm trùng (grep nội dung thật, chống mù)**: Registry chỉ có title + mô tả 1 dòng, KHÔNG đủ để so sánh nội dung. Với mỗi inbox item:
+   - Rút 3-5 từ khoá từ tiêu đề + `tags` của item.
+   - Chạy grep tìm page liên quan:
+     ```bash
+     grep -ril "<từ khoá>" .knowhow/wiki .knowhow/skills .knowhow/workflows
+     ```
+   - Đọc các file hit. CHỈ sau khi đọc nội dung thật mới áp bảng quyết định (tạo mới / cập nhật / sửa / refine / gộp / bỏ qua).
+   - Lưới an toàn: `knowhow-lint consolidation` chạy định kỳ bắt trùng mà grep lọt.
+
+> **Lưu ý**: Capture phải gán `tags` nhất quán để grep theo tag hiệu quả. Item không tag → grep chỉ dựa từ khoá tiêu đề, dễ lọt trùng.
+
 3. **Quyết định hành động**: Dùng bảng quyết định ở trên.
 
 Trình bày đề xuất cho user. Mỗi item gồm:
@@ -75,8 +85,8 @@ Cho phép user thay đổi:
 Với mỗi item được duyệt, thực hiện theo thứ tự:
 
 1. **Tạo hoặc cập nhật page** theo format chuẩn.
-   - Format reference: `~/.gemini/config/skills/knowhow-capture/references/page-formats.md`
-   - Nếu file format chưa tồn tại, dùng format frontmatter cơ bản: title, type, tags, created, updated.
+   - Format reference: `../knowhow-capture/references/page-formats.md` (đường dẫn tương đối từ thư mục skill này). Nếu không resolve được, dùng format frontmatter cơ bản bên dưới.
+   - Format frontmatter cơ bản: title, type, tags, created, updated.
 
 2. **Cập nhật registry tương ứng**:
    - Tạo/xoá wiki page → cập nhật `wiki/index.md`
@@ -88,13 +98,24 @@ Với mỗi item được duyệt, thực hiện theo thứ tự:
    - Thêm `[[...]]` link trong body khi mention page khác.
    - Cập nhật page cũ thêm reference ngược đến page mới (nếu cần).
 
-4. **Changelog**: Ghi dòng changelog cuối page bị thay đổi.
+3b. **Rewrite inbound link khi GỘP/deprecate**: Khi gộp page hoặc set deprecated, page khác có thể đang trỏ `[[old-slug]]`. Grep toàn repo và sửa:
+   ```bash
+   grep -rln "\[\[old-slug\]\]" .knowhow
+   ```
+   - GỘP: đổi `[[old-slug]]` → `[[new-slug]]` ở mọi file nguồn.
+   - Deprecate (vẫn giữ page): để link nguyên nhưng đảm bảo page đích có `status: deprecated` để người đọc biết.
+
+4. **Changelog**: Ghi dòng changelog cuối page bị thay đổi. Lấy nguồn từ `source_file` của inbox item (trỏ `raw/...`), KHÔNG trỏ `inbox/...` (inbox sẽ bị xoá ở mục 7).
    ```
    ## Changelog
-   - YYYY-MM-DD: [mô tả thay đổi] (source: inbox/[file].md)
+   - YYYY-MM-DD: [mô tả thay đổi] (source: raw/YYYY-MM-DD-slug.md)
    ```
 
 5. **Version**: Tăng version trong frontmatter nếu skill/workflow bị sửa.
+
+5b. **Lifecycle metadata**:
+   - `status`: page mới set `active`. Khi hành động là SỬA (thay cách cũ), set page/section cũ `status: deprecated`. Khi GỘP, page bị nuốt set `status: archived`.
+   - `confidence` (chỉ wiki, không áp skill/workflow): set theo số entry Changelog sau khi ghi entry mới — 1 → `low`, ≥2 → `medium`, ≥3 → `high`.
 
 6. **Log**: Ghi vào `wiki/log.md`:
    ```

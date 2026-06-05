@@ -85,7 +85,9 @@ Với mỗi item được duyệt:
 1. Tạo file `inbox/YYYY-MM-DD-slug.md` theo format trong [page-formats.md](references/page-formats.md).
    - `slug`: tóm tắt 2-4 từ, kebab-case (ví dụ: `chon-postgresql`, `retry-jitter-pattern`).
    - Nếu trùng slug trong ngày, thêm suffix số: `-2`, `-3`.
-2. Nếu có file nguồn gốc, copy vào `raw/` và ghi đường dẫn trong frontmatter `source_file`.
+2. **Luôn lưu nguồn vào `raw/`** (cả khi nguồn là hội thoại, không có file ngoài):
+   - Ghi trích đoạn nguyên văn nguồn vào `raw/YYYY-MM-DD-slug.md` (cùng slug với inbox item).
+   - Set frontmatter inbox `source_file: raw/YYYY-MM-DD-slug.md` (đường dẫn tương đối từ `.knowhow/`). KHÔNG để trống. KHÔNG trỏ vào chính file inbox.
 
 ### Bước 5: Ghi log
 
@@ -102,6 +104,8 @@ Trong đó `[nguồn]` = "conversation" hoặc tên file gốc.
 Báo user kết quả: bao nhiêu item đã ghi, đường dẫn file.
 
 Gợi ý chạy `knowhow-distill` để đúc kết inbox thành wiki/skill/workflow.
+
+**Chế độ liền mạch (user solo)**: Nếu user gọi capture kèm cờ `--then-distill`, sau khi ghi inbox xong, chạy luôn `knowhow-distill` trong cùng phiên để duyệt + đúc kết liền 2 bước, không phải gọi lại.
 
 ## Quy tắc cứng
 
