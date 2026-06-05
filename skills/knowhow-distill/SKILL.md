@@ -75,8 +75,8 @@ Cho phép user thay đổi:
 Với mỗi item được duyệt, thực hiện theo thứ tự:
 
 1. **Tạo hoặc cập nhật page** theo format chuẩn.
-   - Format reference: `~/.gemini/config/skills/knowhow-capture/references/page-formats.md`
-   - Nếu file format chưa tồn tại, dùng format frontmatter cơ bản: title, type, tags, created, updated.
+   - Format reference: `../knowhow-capture/references/page-formats.md` (đường dẫn tương đối từ thư mục skill này). Nếu không resolve được, dùng format frontmatter cơ bản bên dưới.
+   - Format frontmatter cơ bản: title, type, tags, created, updated.
 
 2. **Cập nhật registry tương ứng**:
    - Tạo/xoá wiki page → cập nhật `wiki/index.md`
