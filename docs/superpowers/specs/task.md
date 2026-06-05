@@ -49,17 +49,22 @@ Tất cả mục 1-5 đúng như mô tả. Đối chiếu "Tiêu chí done cho v
 Chạy trên 1 dự án nghiên cứu giả lập (thư mục tạm). Mỗi kịch bản kiểm một loại thay đổi.
 
 1. **Living contract + signals (nền)**: chạy `knowhow-init`. Kiểm:
-   - `.knowhow/SCHEMA.md` có `**schema_version**: 1` và mục `## Changelog`.
-   - `.knowhow/schema-signals.md` tồn tại, có `## Đang chờ xử lý` + `## Đã xử lý`, rỗng.
+   - `.knowhow/SCHEMA.md` có `**schema_version**: 1`, mục `## Changelog` với entry đầu `- <ngày>: Khởi tạo schema v1 (init)`.
+   - `.knowhow/schema-signals.md` tồn tại, có `## Đang chờ xử lý` + `## Đã xử lý`, CHƯA có dòng tín hiệu nào (file có header/mô tả nhưng 2 section rỗng tín hiệu).
    - SCHEMA có mục `## Glossary & Convention` và `## Tiến hoá cấu trúc`.
 
-2. **Thêm type (luồng chính)**: capture nhiều item kiểu "experiment" → distill emit `no-fit-type` đúng format vào sổ. Sau ≥ 5 tín hiệu cùng chủ đề, chạy `knowhow-lint schema-review` → kiểm đề xuất type `experiment` xuất hiện. Duyệt → kiểm: SCHEMA bảng Page Types có dòng `experiment`, `schema_version` bump lên 2, Changelog SCHEMA có entry, naming `wiki/experiment-<slug>.md` đúng, index rebuild đúng, resolve `[[slug]]` vẫn chạy, không link hỏng.
+2. **Thêm type (luồng chính)**: capture nhiều item kiểu "experiment".
+   - distill emit `no-fit-type` đúng format vào `schema-signals.md` mục "Đang chờ xử lý".
+   - **Dưới ngưỡng**: với < 5 tín hiệu, chạy `knowhow-lint schema-review` → KHÔNG đề xuất thêm type (hiển thị `✅ Không đủ ngưỡng nào`).
+   - **Vượt ngưỡng**: sau ≥ 5 tín hiệu cùng chủ đề, chạy `schema-review` → đề xuất type `experiment` xuất hiện.
+   - Duyệt → reclassify TỪNG FILE MỘT (user duyệt mỗi file, KHÔNG đổi hàng loạt).
+   - Kiểm sau migrate: SCHEMA bảng Page Types có dòng `experiment`; `schema_version` bump lên 2; Changelog SCHEMA có entry mới; naming `wiki/experiment-<slug>.md` đúng; `wiki/index.md` rebuild có heading `## experiment` liệt kê page đã reclassify; resolve `[[slug]]` vẫn chạy, không link hỏng.
 
 3. **Query làm tín hiệu**: lặp một câu query không trúng page sạch (≥ 3 page chắp vá) → `knowhow-query` emit `query-miss` vào sổ → `schema-review` tính vào ngưỡng thêm type/page.
 
-4. **Đổi layout**: tạo > 30 page cùng một type → `schema-review` đề xuất subfolder → duyệt → move file vào `wiki/<type>/`, rewrite link, kiểm resolve `[[slug]]` vẫn đúng sau split.
+4. **Đổi layout**: tạo > 30 page cùng một type → `schema-review` đề xuất subfolder → duyệt → move file vào `wiki/<type>/`, rewrite mọi `[[link]]` trỏ tới. Kiểm: link trong FILE KHÁC (không phải file bị move) vẫn resolve đúng sau split, không link hỏng.
 
-5. **File ngược qua inbox**: `knowhow-query` ra câu trả lời tốt, user OK file → kiểm item vào `inbox/` (KHÔNG vào thẳng `wiki/`), raw lưu Q&A tại `raw/YYYY-MM-DD-query-<slug>.md`.
+5. **File ngược qua inbox**: `knowhow-query` ra câu trả lời tốt, user OK file → kiểm: item vào `inbox/` (KHÔNG vào thẳng `wiki/`); inbox item có `captured_from: query` và `source_file: raw/YYYY-MM-DD-query-<slug>.md`; raw lưu Q&A tại `raw/YYYY-MM-DD-query-<slug>.md`.
 
 6. **Reversibility**: sau một migrate, `git revert` → kiểm hệ về trạng thái cũ sạch.
 
