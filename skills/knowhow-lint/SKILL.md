@@ -1,11 +1,11 @@
 ---
 name: knowhow-lint
-description: "Rà soát sức khoẻ hệ thống knowhow. Có 2 chế độ: quick (link hỏng, orphan, thiếu frontmatter) và consolidation (deep audit: mâu thuẫn nội dung, trùng lặp, lỗi thời, thiếu phủ, nhất quán thuật ngữ). Trigger: 'knowhow lint', 'rà soát knowhow', 'kiểm tra knowhow', 'consolidation', 'audit knowhow', hoặc khi knowhow đã tích luỹ nhiều cần dọn dẹp."
+description: "Rà soát sức khoẻ hệ thống knowhow. Có 4 chế độ: quick (link hỏng, orphan, thiếu frontmatter), consolidation (deep audit), rebuild-index (sinh lại file dẫn xuất), schema-review (tiến hoá cấu trúc). Trigger: 'knowhow lint', 'rà soát knowhow', 'kiểm tra knowhow', 'consolidation', 'audit knowhow', hoặc khi knowhow đã tích luỹ nhiều cần dọn dẹp."
 ---
 
 # Knowhow Lint
 
-Rà soát sức khoẻ hệ thống knowhow. Hai chế độ: **quick** (mặc định) và **consolidation** (deep audit).
+Rà soát sức khoẻ hệ thống knowhow. Bốn chế độ: **quick** (mặc định), **consolidation** (deep audit), **rebuild-index** (sinh lại file dẫn xuất), **schema-review** (tiến hoá cấu trúc).
 
 ## Precondition
 
@@ -181,14 +181,14 @@ Tổng hợp tín hiệu "khuôn không vừa" → đề xuất diff lên `SCHEM
 
 ### Precondition
 
-- `.knowhow/schema-signals.md` PHẢI tồn tại (init tạo). Nếu thiếu: tạo lại file rỗng theo template init (header + `## Đang chờ xử lý` + `## Đã xử lý`) rồi tiếp tục, coi như chưa có tín hiệu sự kiện nào. KHÔNG dừng.
+- `.knowhow/schema-signals.md` PHẢI tồn tại (init tạo). Nếu thiếu: tạo lại file rỗng tối thiểu — dòng tiêu đề `# Schema Signals`, rồi hai heading `## Đang chờ xử lý` và `## Đã xử lý` (giống template init) — rồi tiếp tục, coi như chưa có tín hiệu sự kiện nào. KHÔNG dừng. (Lưu ý: `schema-signals.md` là file meta top-level, KHÔNG phải page nên không chịu frontmatter check 1c.)
 
 ### Flow
 
 1. **Đọc sổ tín hiệu**: đọc `.knowhow/schema-signals.md`, lấy các dòng trong mục "Đang chờ xử lý" (BỎ QUA mục "Đã xử lý").
 2. **Quét sống**: tính tín hiệu trạng thái tại thời điểm chạy (đếm page mỗi type, cụm tag, file/folder phình, orphan). Lệnh cụ thể trong `references/schema-review.md` mục 2. KHÔNG ghi tín hiệu trạng thái vào sổ.
 3. **Áp ngưỡng**: đối chiếu tín hiệu (sự kiện + trạng thái) với 4 ngưỡng trong reference mục 3. Chỉ những gì VƯỢT ngưỡng mới thành đề xuất. Dưới ngưỡng → giữ trong sổ, không báo.
-4. **Sinh đề xuất diff**, nhóm theo 4 loại thay đổi. Trình bày cho user (xem Output format dưới).
+4. **Sinh đề xuất diff**, nhóm theo 4 loại thay đổi. Trình bày cho user (xem Output format dưới). Nếu KHÔNG có tín hiệu nào vượt ngưỡng → hiển thị `✅ Không đủ ngưỡng nào` và DỪNG, không sang bước 5-6.
 5. **User duyệt từng đề xuất**: đồng ý / sửa / bác. Bác → tín hiệu ở lại "Đang chờ xử lý".
 6. **Migrate** cái được duyệt theo playbook reference mục 4, kết thúc bằng "Bước chung cuối batch" (reference mục 5: bump version, ghi changelog, rewrite link, rebuild index, ghi log, cắt tín hiệu sang "Đã xử lý").
 
@@ -230,4 +230,5 @@ Ghi vào `wiki/log.md`:
 ```
 ## [YYYY-MM-DD] lint | Quick lint: N vấn đề, M đã fix
 ## [YYYY-MM-DD] lint | Consolidation: N vấn đề, M đã fix
+## [YYYY-MM-DD] lint | Schema-review: N đề xuất, M migrate
 ```
