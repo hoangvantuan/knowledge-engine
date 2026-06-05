@@ -34,14 +34,19 @@ Chạy nhanh, kiểm tra 5 hạng mục. Không đọc nội dung page, chỉ đ
 ### 1b. Link integrity
 
 - Tìm tất cả `[[...]]` trong body các page (wiki, skills, workflows).
+- Trước khi resolve, **đọc tập type hợp lệ từ `SCHEMA.md`** (cột "Type" trong bảng Page Types) thay vì hardcode. Gọi tập này là `TYPES` (mặc định mới init: {decision, pattern, concept, troubleshooting}; sau tiến hoá có thể thêm, ví dụ `experiment`).
+- File wiki có thể nằm **phẳng** (`wiki/<type>-<slug>.md`) hoặc **trong subfolder** (`wiki/<nhóm>/<type>-<slug>.md`). Resolve tìm ĐỆ QUY trong `wiki/`.
 - Resolve mỗi link `[[X]]` theo thuật toán (match CHẶT type-slug, không glob đuôi tự do):
-  1. Nếu `X` có dạng `<type>-<slug>` với type ∈ {decision, pattern, concept, troubleshooting}: khớp chính xác `wiki/<type>-<slug>.md`. Dạng tường minh, không ambiguous.
-  2. Nếu `X` là slug trần: thử khớp chính xác từng ứng viên `wiki/decision-X.md`, `wiki/pattern-X.md`, `wiki/concept-X.md`, `wiki/troubleshooting-X.md`. Đếm số file tồn tại:
+  1. Nếu `X` có dạng `<type>-<slug>` với `type ∈ TYPES`: tìm đệ quy file khớp chính xác tên `<type>-<slug>.md` trong `wiki/`:
+     ```bash
+     find .knowhow/wiki -name "<type>-<slug>.md"
+     ```
+     Đúng 1 file → resolve OK. 0 → báo link hỏng. ≥2 (cùng tên ở 2 subfolder) → báo trùng vị trí.
+  2. Nếu `X` là slug trần: với mỗi `type ∈ TYPES`, tìm đệ quy `find .knowhow/wiki -name "<type>-X.md"`. Đếm tổng số file tồn tại:
      - Đúng 1 → resolve OK.
      - 0 → báo link hỏng (ghi page nguồn + target).
-     - ≥2 (cùng slug khác type) → báo **ambiguous**, yêu cầu link kèm type `[[decision-X]]`.
-  3. Skill/workflow: khớp chính xác `skills/X.md` hoặc `workflows/X.md`.
-- File không tồn tại → báo link hỏng, ghi rõ page nguồn và target.
+     - ≥2 (cùng slug khác type) → báo **ambiguous**, yêu cầu link kèm type `[[<type>-X]]`.
+  3. Skill/workflow: tìm đệ quy `find .knowhow/skills -name "X.md"` hoặc `find .knowhow/workflows -name "X.md"`.
 
 ### 1c. Frontmatter check
 
@@ -158,10 +163,10 @@ Thực thi từng thay đổi đã được duyệt:
 
 ### Bước thực hiện
 
-1. Quét frontmatter mọi file trong `wiki/` (trừ index.md, log.md): đọc `type`, `title`, `tags`, `updated`.
-2. Sinh `wiki/index.md`, group theo `type` (4 heading: Decisions, Patterns, Concepts, Troubleshooting), mỗi dòng `- [[<type>-<slug>]] - <title>`.
-3. Quét frontmatter mọi file trong `skills/` (trừ registry.md): đọc `title`, `version`, `tags`, `updated`. Sinh `skills/registry.md` theo format page-formats mục 6.1, sort alphabet.
-4. Quét frontmatter mọi file trong `workflows/` (trừ registry.md): đọc `title`, `skills_used`, `version`, `updated`. Sinh `workflows/registry.md` theo format mục 6.2, sort alphabet.
+1. Quét frontmatter mọi file trong `wiki/` ĐỆ QUY (gồm subfolder, trừ index.md, log.md): đọc `type`, `title`, `tags`, `updated`. Dùng `find .knowhow/wiki -name "*.md"`.
+2. Sinh `wiki/index.md`, group theo `type`. Tập type ĐỌC TỪ bảng Page Types trong `SCHEMA.md` (không cố định 4 heading — nếu schema đã thêm type mới như `experiment`, sinh thêm heading tương ứng). Mỗi dòng `- [[<type>-<slug>]] - <title>`.
+3. Quét frontmatter mọi file trong `skills/` (đệ quy, `find .knowhow/skills -name "*.md"`) (trừ registry.md): đọc `title`, `version`, `tags`, `updated`. Sinh `skills/registry.md` theo format page-formats mục 6.1, sort alphabet.
+4. Quét frontmatter mọi file trong `workflows/` (đệ quy, `find .knowhow/workflows -name "*.md"`) (trừ registry.md): đọc `title`, `skills_used`, `version`, `updated`. Sinh `workflows/registry.md` theo format mục 6.2, sort alphabet.
 5. Ghi log: `## [YYYY-MM-DD] lint | Rebuild index + 2 registry từ frontmatter`.
 
 ---
