@@ -49,7 +49,17 @@ Ghi nhận toàn bộ vào context. Đây là bước quan trọng nhất: khôn
 Với mỗi inbox item:
 
 1. **Phân loại**: wiki page (decision/pattern/concept/troubleshooting) hay skill hay workflow? (xem quy tắc phân loại bên dưới)
-2. **Tìm trùng**: So sánh title, tags, nội dung với registry đã đọc ở Bước 1. Tìm page đã tồn tại có liên quan.
+2. **Tìm trùng (grep nội dung thật, chống mù)**: Registry chỉ có title + mô tả 1 dòng, KHÔNG đủ để so sánh nội dung. Với mỗi inbox item:
+   - Rút 3-5 từ khoá từ tiêu đề + `tags` của item.
+   - Chạy grep tìm page liên quan:
+     ```bash
+     grep -ril "<từ khoá>" .knowhow/wiki .knowhow/skills .knowhow/workflows
+     ```
+   - Đọc các file hit. CHỈ sau khi đọc nội dung thật mới áp bảng quyết định (tạo mới / cập nhật / sửa / refine / gộp / bỏ qua).
+   - Lưới an toàn: `knowhow-lint consolidation` chạy định kỳ bắt trùng mà grep lọt.
+
+> **Lưu ý**: Capture phải gán `tags` nhất quán để grep theo tag hiệu quả. Item không tag → grep chỉ dựa từ khoá tiêu đề, dễ lọt trùng.
+
 3. **Quyết định hành động**: Dùng bảng quyết định ở trên.
 
 Trình bày đề xuất cho user. Mỗi item gồm:
