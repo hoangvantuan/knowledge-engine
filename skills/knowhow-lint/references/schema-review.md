@@ -20,9 +20,11 @@ for t in decision pattern concept troubleshooting; do
   echo "$t: $n"
 done
 # Cụm tag: gom tag từ frontmatter mọi wiki page, đếm tần suất
-grep -rh "^tags:" .knowhow/wiki | sed 's/tags://' | tr -d '[]' | tr ',' '\n' | sed 's/^ *//' | sort | uniq -c | sort -rn
+grep -rh "^tags:" .knowhow/wiki | sed 's/tags://' | tr -d '[]' | tr ',' '\n' | sed 's/^[[:space:]]*//; s/[[:space:]]*$//' | grep -v '^$' | sort | uniq -c | sort -rn
 # Orphan ratio: page không được [[link]] hay related trỏ tới (tham khảo consolidation checklist mục 8)
 ```
+
+> Lưu ý: quét tag giả định format inline `tags: [a, b]` (chuẩn của page-formats.md). Vòng lặp đếm type ở trên nên bao gồm cả type mới đã thêm vào SCHEMA Page Types, không chỉ 4 base type.
 
 - `type-bloat`: một type vượt 30 page (xem ngưỡng đổi layout).
 - `tag-cluster`: một tag xuất hiện ở ≥ 5 page mà chưa thành type riêng.
@@ -46,7 +48,8 @@ Mỗi đề xuất được duyệt chạy một batch migrate. Mọi batch Đ�
 
 1. Định nghĩa type mới trong `SCHEMA.md`: thêm dòng vào bảng "Page Types" (`<type> | wiki/<type>-<slug>.md | <mục đích>`) và Naming Conventions.
 2. Reclassify page default cũ: đề xuất **TỪNG FILE MỘT**, user duyệt từng file. KHÔNG đổi hàng loạt. Mỗi file được duyệt: đổi tên `wiki/<old>-<slug>.md` → `wiki/<type>-<slug>.md`, cập nhật `type:` trong frontmatter.
-3. (Tín hiệu liên quan: `no-fit-type`, `tag-cluster`, `query-miss` cùng chủ đề.)
+3. Cập nhật vòng lặp quét sống ở mục 2 để bao gồm type mới (thêm vào danh sách `for t in ...`).
+4. (Tín hiệu liên quan: `no-fit-type`, `tag-cluster`, `query-miss` cùng chủ đề.)
 
 ### 4.2. Đổi layout (subfolder)
 
@@ -57,7 +60,7 @@ Mỗi đề xuất được duyệt chạy một batch migrate. Mọi batch Đ�
 
 ### 4.3. Đổi format page type
 
-1. Thêm section vào template type trong `../knowhow-capture/references/page-formats.md` (áp cho page tạo MỚI).
+1. Thêm section vào template type trong `../../knowhow-capture/references/page-formats.md` (đường dẫn tương đối từ thư mục chứa file này, `skills/knowhow-lint/references/`) (áp cho page tạo MỚI).
 2. Backfill page cũ là **TUỲ CHỌN**: đề xuất riêng từng đợt, KHÔNG tự động hàng loạt.
 3. (Tín hiệu liên quan: `adhoc-section`.)
 
