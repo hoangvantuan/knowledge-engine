@@ -16,7 +16,7 @@ Mỗi item capture ghi vào `inbox/YYYY-MM-DD-slug.md`.
 type: decision | pattern | troubleshooting | concept | candidate-skill | candidate-workflow
 title: "Tên ngắn gọn"
 tags: []
-captured_from: conversation | file-import
+captured_from: conversation | file-import | query
 captured_at: "YYYY-MM-DDTHH:mm"
 source_file: "raw/YYYY-MM-DD-slug.md"  # BẮT BUỘC. Trích đoạn nguồn (cả hội thoại) luôn lưu vào raw/. Không để trống.
 ---

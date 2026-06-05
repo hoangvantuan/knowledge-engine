@@ -62,10 +62,10 @@ Ví dụ dòng tín hiệu:
 
 Nếu câu trả lời đáng tái dùng (user xác nhận OK), thả nó vào `inbox/` như một candidate page. KHÔNG ghi thẳng vào `wiki/`. distill xử lý sau như mọi item khác.
 
-1. Hỏi user: "Câu trả lời này đáng lưu lại không?"
+1. Đánh giá đáng lưu: câu trả lời đáng lưu nếu có thể tái dùng cho câu hỏi tương tự sau này (không phải thông tin quá cụ thể, dùng một lần). Nếu đáng, hỏi user: "Câu trả lời này đáng lưu lại không?"
 2. Nếu user OK:
    - Lưu Q&A nguyên văn vào `raw/YYYY-MM-DD-query-<slug>.md` (provenance, nhất quán quy tắc capture C3).
-   - Tạo inbox item `inbox/YYYY-MM-DD-query-<slug>.md` theo format inbox trong `../knowhow-capture/references/page-formats.md`, với:
+   - Tạo inbox item `inbox/YYYY-MM-DD-query-<slug>.md` theo format inbox trong `../knowhow-capture/references/page-formats.md` (đường dẫn tương đối từ thư mục skill này), với:
      - `captured_from: query`
      - `source_file: raw/YYYY-MM-DD-query-<slug>.md`
    - KHÔNG ghi vào `wiki/`, `skills/`, `workflows/`.
