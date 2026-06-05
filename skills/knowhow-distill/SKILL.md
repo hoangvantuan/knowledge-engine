@@ -119,10 +119,10 @@ Với mỗi item được duyệt, thực hiện theo thứ tự:
 
 6. **Log**: Ghi vào `wiki/log.md`:
    ```
-   - [distill] Tạo mới [type]/[slug].md
-   - [distill] Cập nhật [type]/[slug].md: [mô tả thay đổi]
-   - [distill] Gộp [slug-a].md + [slug-b].md → [slug-mới].md
-   - [distill] Bỏ qua inbox/[slug].md: [lý do]
+   ## [YYYY-MM-DD] distill | Tạo mới wiki/<type>-<slug>.md
+   ## [YYYY-MM-DD] distill | Cập nhật wiki/<type>-<slug>.md: <mô tả thay đổi>
+   ## [YYYY-MM-DD] distill | Gộp <slug-a> + <slug-b> → <slug-mới>
+   ## [YYYY-MM-DD] distill | Bỏ qua inbox/<slug>.md: <lý do>
    ```
 
 7. **Xoá inbox items** đã xử lý thành công.

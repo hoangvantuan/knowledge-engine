@@ -162,7 +162,7 @@ Thực thi từng thay đổi đã được duyệt:
 2. Sinh `wiki/index.md`, group theo `type` (4 heading: Decisions, Patterns, Concepts, Troubleshooting), mỗi dòng `- [[<type>-<slug>]] - <title>`.
 3. Quét frontmatter mọi file trong `skills/` (trừ registry.md): đọc `title`, `version`, `tags`, `updated`. Sinh `skills/registry.md` theo format page-formats mục 6.1, sort alphabet.
 4. Quét frontmatter mọi file trong `workflows/` (trừ registry.md): đọc `title`, `skills_used`, `version`, `updated`. Sinh `workflows/registry.md` theo format mục 6.2, sort alphabet.
-5. Ghi log: `- [lint] Rebuild index + 2 registry từ frontmatter`.
+5. Ghi log: `## [YYYY-MM-DD] lint | Rebuild index + 2 registry từ frontmatter`.
 
 ---
 
@@ -171,6 +171,6 @@ Thực thi từng thay đổi đã được duyệt:
 Ghi vào `wiki/log.md`:
 
 ```
-- [lint] Quick lint: N vấn đề phát hiện, M đã fix
-- [lint] Consolidation: N vấn đề phát hiện, M đã fix
+## [YYYY-MM-DD] lint | Quick lint: N vấn đề, M đã fix
+## [YYYY-MM-DD] lint | Consolidation: N vấn đề, M đã fix
 ```

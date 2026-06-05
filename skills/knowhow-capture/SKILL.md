@@ -94,7 +94,7 @@ Với mỗi item được duyệt:
 Thêm entry vào `wiki/log.md`:
 
 ```
-- YYYY-MM-DD HH:mm [capture] Ghi nhận N items vào inbox từ [nguồn]
+## [YYYY-MM-DD] capture | Ghi nhận N items vào inbox từ [nguồn]
 ```
 
 Trong đó `[nguồn]` = "conversation" hoặc tên file gốc.
