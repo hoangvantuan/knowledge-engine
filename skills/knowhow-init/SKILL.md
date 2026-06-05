@@ -36,6 +36,7 @@ Tạo toàn bộ cây thư mục `.knowhow/` tại root workspace:
 ```
 .knowhow/
 ├── SCHEMA.md
+├── schema-signals.md
 ├── raw/
 ├── inbox/
 ├── archive/
@@ -61,6 +62,7 @@ mkdir -p .knowhow/{raw,inbox,archive,wiki,skills,workflows}
 Thay thế:
 - `{{PROJECT_NAME}}` → tên dự án user cung cấp
 - `{{PROJECT_DESCRIPTION}}` → mô tả domain user cung cấp
+- `{{DATE}}` → ngày hiện tại (YYYY-MM-DD), dùng cho entry Changelog đầu tiên trong SCHEMA
 
 Ghi kết quả vào `.knowhow/SCHEMA.md`.
 
@@ -83,8 +85,7 @@ Ghi kết quả vào `.knowhow/SCHEMA.md`.
 ```markdown
 # Activity Log
 
-## YYYY-MM-DD
-- [init] Khởi tạo .knowhow/ cho dự án {{PROJECT_NAME}}
+## [YYYY-MM-DD] init | Khởi tạo .knowhow/ cho dự án {{PROJECT_NAME}}
 ```
 
 **skills/registry.md**:
@@ -102,6 +103,24 @@ Ghi kết quả vào `.knowhow/SCHEMA.md`.
 | Workflow | Mô tả | Skills dùng | Version | Cập nhật |
 |----------|--------|-------------|---------|----------|
 ```
+
+**schema-signals.md** (top-level, cạnh SCHEMA.md — sổ tích luỹ tín hiệu tiến hoá, tạo rỗng chỉ có header):
+````markdown
+# Schema Signals
+
+Sổ tích luỹ tín hiệu "khuôn không vừa". Append-only, parse được.
+distill và query ghi vào "Đang chờ xử lý". lint `schema-review` đọc, áp ngưỡng, rồi cắt tín hiệu đã dùng sang "Đã xử lý".
+
+Format mỗi dòng:
+`- [YYYY-MM-DD] <nguồn> | <loại> | <chi tiết ngắn> | related: <slug-hoặc-tag>`
+
+- nguồn ∈ distill | query
+- loại ∈ no-fit-type | adhoc-section | query-miss
+
+## Đang chờ xử lý
+
+## Đã xử lý
+````
 
 ### Bước 5: Thêm hướng dẫn vào agent config
 
