@@ -45,11 +45,12 @@ Chạy nhanh, kiểm tra 5 hạng mục. Không đọc nội dung page, chỉ đ
 
 ### 1c. Frontmatter check
 
-Mọi page phải có: `type`, `title`, `created`.
+Mọi page phải có: `type`, `title`, `created`, `status`.
 
 Thêm theo loại:
 - **Skill**: `version`, `input`, `output`
 - **Workflow**: `version`, `trigger`
+- **Wiki (4 type)**: `confidence`
 
 Thiếu field nào → báo cụ thể file và field thiếu.
 
@@ -125,6 +126,7 @@ Fix các vấn đề:
 
 ### Lỗi thời (N items)
 - [ ] Page X không cập nhật từ DD/MM → review hoặc archive?
+- [ ] Page Y `updated` cũ hơn 90 ngày, không có entry changelog mới → hạ `confidence` 1 bậc (high→medium→low)?
 
 ### Thiếu phủ (N items)
 - [ ] Lĩnh vực Y chưa có knowhow
@@ -143,7 +145,8 @@ Tạo báo cáo dạng artifact. Trình bày cho user duyệt.
 Thực thi từng thay đổi đã được duyệt:
 - Gộp page → tạo page mới, xoá page cũ, cập nhật registry và link.
 - Thống nhất thuật ngữ → find-replace trên tất cả page liên quan.
-- Archive page lỗi thời → chuyển vào `archive/`, xoá khỏi registry.
+- Archive page lỗi thời → chuyển vào `archive/`, set `status: archived`, xoá khỏi registry.
+- Hạ confidence → sửa `confidence` trong frontmatter page xuống 1 bậc, ghi entry changelog.
 - Bổ sung page thiếu phủ → tạo stub page, thêm vào registry.
 - Cập nhật workflow dependency → sửa version reference.
 
