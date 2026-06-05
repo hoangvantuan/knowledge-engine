@@ -116,6 +116,7 @@ Format mỗi dòng:
 
 - nguồn ∈ distill | query
 - loại ∈ no-fit-type | adhoc-section | query-miss
+- lint scan (type-bloat, tag-cluster) KHÔNG ghi vào sổ này — tính live khi schema-review chạy.
 
 ## Đang chờ xử lý
 
