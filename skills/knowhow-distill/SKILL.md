@@ -98,10 +98,10 @@ Với mỗi item được duyệt, thực hiện theo thứ tự:
    - Thêm `[[...]]` link trong body khi mention page khác.
    - Cập nhật page cũ thêm reference ngược đến page mới (nếu cần).
 
-4. **Changelog**: Ghi dòng changelog cuối page bị thay đổi.
+4. **Changelog**: Ghi dòng changelog cuối page bị thay đổi. Lấy nguồn từ `source_file` của inbox item (trỏ `raw/...`), KHÔNG trỏ `inbox/...` (inbox sẽ bị xoá ở mục 7).
    ```
    ## Changelog
-   - YYYY-MM-DD: [mô tả thay đổi] (source: inbox/[file].md)
+   - YYYY-MM-DD: [mô tả thay đổi] (source: raw/YYYY-MM-DD-slug.md)
    ```
 
 5. **Version**: Tăng version trong frontmatter nếu skill/workflow bị sửa.

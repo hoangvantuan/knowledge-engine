@@ -18,7 +18,7 @@ title: "Tên ngắn gọn"
 tags: []
 captured_from: conversation | file-import
 captured_at: "YYYY-MM-DDTHH:mm"
-source_file: ""  # Đường dẫn file gốc trong raw/ (nếu có)
+source_file: "raw/YYYY-MM-DD-slug.md"  # BẮT BUỘC. Trích đoạn nguồn (cả hội thoại) luôn lưu vào raw/. Không để trống.
 ---
 ```
 
@@ -47,6 +47,7 @@ title: "Chọn PostgreSQL thay MongoDB"
 tags: [database, architecture]
 captured_from: conversation
 captured_at: "2026-06-05T11:30"
+source_file: "raw/2026-06-05-chon-postgresql.md"
 ---
 
 ## Tóm tắt
