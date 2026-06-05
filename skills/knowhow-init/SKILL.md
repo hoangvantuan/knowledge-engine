@@ -72,11 +72,11 @@ Ghi kết quả vào `.knowhow/SCHEMA.md`.
 ```markdown
 # Wiki Index
 
-## Decisions
+## Decision
 
-## Patterns
+## Pattern
 
-## Concepts
+## Concept
 
 ## Troubleshooting
 ```

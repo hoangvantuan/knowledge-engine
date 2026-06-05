@@ -58,7 +58,7 @@ Chạy trên 1 dự án nghiên cứu giả lập (thư mục tạm). Mỗi kị
    - **Dưới ngưỡng**: với < 5 tín hiệu, chạy `knowhow-lint schema-review` → KHÔNG đề xuất thêm type (hiển thị `✅ Không đủ ngưỡng nào`).
    - **Vượt ngưỡng**: sau ≥ 5 tín hiệu cùng chủ đề, chạy `schema-review` → đề xuất type `experiment` xuất hiện.
    - Duyệt → reclassify TỪNG FILE MỘT (user duyệt mỗi file, KHÔNG đổi hàng loạt).
-   - Kiểm sau migrate: SCHEMA bảng Page Types có dòng `experiment`; `schema_version` bump lên 2; Changelog SCHEMA có entry mới; naming `wiki/experiment-<slug>.md` đúng; `wiki/index.md` rebuild có heading `## experiment` liệt kê page đã reclassify; resolve `[[slug]]` vẫn chạy, không link hỏng.
+   - Kiểm sau migrate: SCHEMA bảng Page Types có dòng `experiment`; `schema_version` bump lên 2; Changelog SCHEMA có entry mới; naming `wiki/experiment-<slug>.md` đúng; `wiki/index.md` rebuild có heading `## Experiment` liệt kê page đã reclassify; resolve `[[slug]]` vẫn chạy, không link hỏng.
 
 3. **Query làm tín hiệu**: lặp một câu query không trúng page sạch (≥ 3 page chắp vá) → `knowhow-query` emit `query-miss` vào sổ → `schema-review` tính vào ngưỡng thêm type/page.
 
