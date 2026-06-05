@@ -18,6 +18,7 @@ Rà soát sức khoẻ hệ thống knowhow. Hai chế độ: **quick** (mặc �
 - User không nói gì thêm, hoặc nói "quick", "lint" → chạy **Quick Lint**.
 - User nói "consolidation", "deep", "audit" → chạy **Consolidation**.
 - User nói "rebuild", "rebuild-index", "sinh lại index" → chạy **Rebuild Index**.
+- User nói "schema-review", "review khuôn", "tiến hoá khuôn", "schema evolution" → chạy **Schema Review**.
 
 ---
 
@@ -169,6 +170,56 @@ Thực thi từng thay đổi đã được duyệt:
 3. Quét frontmatter mọi file trong `skills/` (đệ quy, `find .knowhow/skills -name "*.md" -not -name "registry.md"`) (trừ registry.md): đọc `title`, `version`, `tags`, `updated`. Sinh `skills/registry.md` theo format page-formats mục 6.1, sort alphabet.
 4. Quét frontmatter mọi file trong `workflows/` (đệ quy, `find .knowhow/workflows -name "*.md" -not -name "registry.md"`) (trừ registry.md): đọc `title`, `skills_used`, `version`, `updated`. Sinh `workflows/registry.md` theo format mục 6.2, sort alphabet.
 5. Ghi log: `## [YYYY-MM-DD] lint | Rebuild index + 2 registry từ frontmatter`.
+
+---
+
+## Chế độ 4: Schema Review (tiến hoá cấu trúc)
+
+Tổng hợp tín hiệu "khuôn không vừa" → đề xuất diff lên `SCHEMA.md` → user duyệt → migrate. Đây là vòng lặp tiến hoá *bên trên* cơ chế cải tiến nội dung.
+
+**Reference bắt buộc đọc trước**: `references/schema-review.md` (ngưỡng + migration playbook + bước chung cuối batch).
+
+### Precondition
+
+- `.knowhow/schema-signals.md` PHẢI tồn tại (init tạo). Nếu thiếu: tạo lại file rỗng theo template init (header + `## Đang chờ xử lý` + `## Đã xử lý`) rồi tiếp tục, coi như chưa có tín hiệu sự kiện nào. KHÔNG dừng.
+
+### Flow
+
+1. **Đọc sổ tín hiệu**: đọc `.knowhow/schema-signals.md`, lấy các dòng trong mục "Đang chờ xử lý" (BỎ QUA mục "Đã xử lý").
+2. **Quét sống**: tính tín hiệu trạng thái tại thời điểm chạy (đếm page mỗi type, cụm tag, file/folder phình, orphan). Lệnh cụ thể trong `references/schema-review.md` mục 2. KHÔNG ghi tín hiệu trạng thái vào sổ.
+3. **Áp ngưỡng**: đối chiếu tín hiệu (sự kiện + trạng thái) với 4 ngưỡng trong reference mục 3. Chỉ những gì VƯỢT ngưỡng mới thành đề xuất. Dưới ngưỡng → giữ trong sổ, không báo.
+4. **Sinh đề xuất diff**, nhóm theo 4 loại thay đổi. Trình bày cho user (xem Output format dưới).
+5. **User duyệt từng đề xuất**: đồng ý / sửa / bác. Bác → tín hiệu ở lại "Đang chờ xử lý".
+6. **Migrate** cái được duyệt theo playbook reference mục 4, kết thúc bằng "Bước chung cuối batch" (reference mục 5: bump version, ghi changelog, rewrite link, rebuild index, ghi log, cắt tín hiệu sang "Đã xử lý").
+
+### Output format (Schema Review)
+
+```markdown
+## Schema Review Report - YYYY-MM-DD
+
+### Thêm page type (N đề xuất)
+- [ ] Cụm tag `experiment` có 6 tín hiệu no-fit-type + 5 page → phong thành type `experiment`?
+      Diff SCHEMA: thêm dòng `experiment | wiki/experiment-<slug>.md | Kết quả thí nghiệm`.
+      Migrate: reclassify 5 page (duyệt từng file).
+
+### Đổi layout (N đề xuất)
+- [ ] Type `pattern` có 34 page phẳng (>30) → gắt vào `wiki/pattern/`?
+
+### Đổi format (N đề xuất)
+- [ ] Section "Metrics" xuất hiện ở 4 page type experiment → thêm vào template?
+
+### Thêm mục SCHEMA (N đề xuất)
+- [ ] Thuật ngữ "spike" lặp 7 lần → thêm vào Glossary?
+
+✅ Không đủ ngưỡng nào (nếu chưa có gì vượt)
+```
+
+### Nguyên tắc
+
+- **Tách phát hiện khỏi quyết định**: lint chỉ đề xuất; chỉ user duyệt.
+- **Ngưỡng bảo thủ**: thà bỏ sót còn hơn báo nhiễu lúc đầu (tín hiệu không mất, vẫn tích luỹ).
+- **Reversibility**: mọi migrate là markdown trong git, `git revert` được.
+- **Không auto-migrate**: mọi batch gate qua user.
 
 ---
 
