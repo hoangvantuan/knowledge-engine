@@ -7,7 +7,7 @@ description: "Khởi tạo hệ thống knowhow trong dự án. Tạo thư mục
 
 ## Tổng quan
 
-Knowhow System biến mỗi dự án thành "bộ não" tự cải tiến qua 3 lớp:
+Knowhow System là nghi thức tích luỹ tri thức có cấu trúc cho dự án (AI viết, người duyệt) qua 3 lớp:
 
 | Lớp | Vai trò |
 |-----|---------|

@@ -7,7 +7,7 @@ description: "Đúc kết knowhow từ inbox thành wiki pages, skills, workflow
 
 > **QUY TẮC SỐ 1: LUÔN đọc `wiki/index.md` + `skills/registry.md` + `workflows/registry.md` TRƯỚC KHI xử lý inbox. Ưu tiên cải tiến cái cũ hơn tạo mới.**
 >
-> Tại sao? Hệ thống knowhow tự cải tiến bằng cách tích lũy. Tạo mới khi đã có page tương tự sẽ phân mảnh tri thức, khiến tìm kiếm khó hơn và kiến thức mâu thuẫn nhau. Cập nhật page cũ giữ tri thức tập trung, dễ tra cứu, ngày càng sâu.
+> Tại sao? Hệ thống knowhow tích luỹ giá trị bằng cách gộp tri thức, không phân mảnh. Tạo mới khi đã có page tương tự sẽ phân mảnh tri thức, khiến tìm kiếm khó hơn và kiến thức mâu thuẫn nhau. Cập nhật page cũ giữ tri thức tập trung, dễ tra cứu, ngày càng sâu.
 
 ## Precondition
 

@@ -2,7 +2,7 @@
 
 **Ngày**: 2026-06-05
 **Phiên bản**: v1.0
-**Mục tiêu**: Xây dựng bộ skills giúp quản lý knowhow, đúc kết skill/workflow từ quá trình làm việc, biến mỗi dự án thành "bộ não" tự cải tiến.
+**Mục tiêu**: Xây dựng bộ skills giúp quản lý knowhow, đúc kết skill/workflow từ quá trình làm việc, biến mỗi dự án thành kho tri thức tích luỹ có cấu trúc, AI viết và người duyệt.
 
 ## Tổng quan
 
@@ -458,7 +458,7 @@ Sau khi user duyệt, AI thực thi các thay đổi và ghi log.
 
 ---
 
-## Vòng đời tự cải tiến
+## Vòng đời tích luỹ tri thức
 
 ```
 Lần 1: Gặp lỗi timeout
