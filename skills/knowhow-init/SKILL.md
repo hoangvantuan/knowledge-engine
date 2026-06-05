@@ -113,6 +113,10 @@ Tìm file cấu hình agent tại root workspace theo thứ tự ưu tiên:
 Quy tắc:
 - Thêm vào file **đầu tiên** tìm thấy.
 - Nếu **chưa có file nào**, tạo `CLAUDE.md` mới.
+- **Idempotent**: TRƯỚC khi append, grep `## Knowhow` trong file config. Nếu đã có → BỎ QUA, không append lần hai (tránh nhân đôi khi init chạy lại):
+  ```bash
+  grep -q "^## Knowhow" <config-file> && echo "Đã có, bỏ qua" || cat references/agent-config-snippet.md >> <config-file>
+  ```
 - Nội dung thêm: đọc `references/agent-config-snippet.md` và append vào cuối file.
 
 ### Bước 6: Ghi log hoàn tất
