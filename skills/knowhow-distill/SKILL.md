@@ -98,6 +98,13 @@ Với mỗi item được duyệt, thực hiện theo thứ tự:
    - Thêm `[[...]]` link trong body khi mention page khác.
    - Cập nhật page cũ thêm reference ngược đến page mới (nếu cần).
 
+3b. **Rewrite inbound link khi GỘP/deprecate**: Khi gộp page hoặc set deprecated, page khác có thể đang trỏ `[[old-slug]]`. Grep toàn repo và sửa:
+   ```bash
+   grep -rln "\[\[old-slug\]\]" .knowhow
+   ```
+   - GỘP: đổi `[[old-slug]]` → `[[new-slug]]` ở mọi file nguồn.
+   - Deprecate (vẫn giữ page): để link nguyên nhưng đảm bảo page đích có `status: deprecated` để người đọc biết.
+
 4. **Changelog**: Ghi dòng changelog cuối page bị thay đổi. Lấy nguồn từ `source_file` của inbox item (trỏ `raw/...`), KHÔNG trỏ `inbox/...` (inbox sẽ bị xoá ở mục 7).
    ```
    ## Changelog
