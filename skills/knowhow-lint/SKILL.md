@@ -33,7 +33,13 @@ Chạy nhanh, kiểm tra 5 hạng mục. Không đọc nội dung page, chỉ đ
 ### 1b. Link integrity
 
 - Tìm tất cả `[[...]]` trong body các page (wiki, skills, workflows).
-- Resolve link thành file path.
+- Resolve mỗi link `[[X]]` theo thuật toán (match CHẶT type-slug, không glob đuôi tự do):
+  1. Nếu `X` có dạng `<type>-<slug>` với type ∈ {decision, pattern, concept, troubleshooting}: khớp chính xác `wiki/<type>-<slug>.md`. Dạng tường minh, không ambiguous.
+  2. Nếu `X` là slug trần: thử khớp chính xác từng ứng viên `wiki/decision-X.md`, `wiki/pattern-X.md`, `wiki/concept-X.md`, `wiki/troubleshooting-X.md`. Đếm số file tồn tại:
+     - Đúng 1 → resolve OK.
+     - 0 → báo link hỏng (ghi page nguồn + target).
+     - ≥2 (cùng slug khác type) → báo **ambiguous**, yêu cầu link kèm type `[[decision-X]]`.
+  3. Skill/workflow: khớp chính xác `skills/X.md` hoặc `workflows/X.md`.
 - File không tồn tại → báo link hỏng, ghi rõ page nguồn và target.
 
 ### 1c. Frontmatter check

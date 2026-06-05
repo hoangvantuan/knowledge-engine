@@ -41,9 +41,10 @@
 
 ## Cross-referencing
 
-- Dùng `[[page-slug]]` để liên kết giữa các page wiki
-- Workflow reference skill bằng `→ Dùng skill: [[skill-name]]`
-- Mọi page phải xuất hiện trong index.md hoặc registry.md tương ứng
+- Dùng `[[slug]]` để liên kết giữa các page. `slug` = phần sau prefix type. Ví dụ file `wiki/decision-rest-to-graphql.md` có slug `rest-to-graphql`, link bằng `[[rest-to-graphql]]`.
+- Nếu nhiều page khác type trùng slug, link phải kèm type để khử nhập nhằng: `[[decision-rest-to-graphql]]`.
+- Workflow reference skill bằng `→ Dùng skill: [[skill-name]]`.
+- Mọi page phải xuất hiện trong index.md hoặc registry.md tương ứng.
 
 ## Quy tắc vận hành
 
