@@ -71,6 +71,28 @@ Trình bày đề xuất cho user. Mỗi item gồm:
    → Preview: [mô tả ngắn 1-2 câu nội dung sẽ thay đổi]
 ```
 
+### Bước 3.5: Phát tín hiệu strain (tiến hoá cấu trúc)
+
+Trong lúc phân loại + đề xuất, để ý hai dấu hiệu "khuôn không vừa". Nếu gặp, GHI tín hiệu vào `.knowhow/schema-signals.md` (mục "Đang chờ xử lý"). KHÔNG tự đổi khuôn — đó là việc của `knowhow-lint schema-review`.
+
+**Khi nào emit `no-fit-type`**: item rõ ràng là một *loại tri thức* không nằm trong 4 wiki type {decision, pattern, concept, troubleshooting} nhưng buộc phải xếp tạm thành wiki page chung chung. Ví dụ: "kết quả thí nghiệm", "nguồn tham khảo cần lưu", "runbook vận hành". Dấu hiệu: bạn thấy mình miễn cưỡng chọn type vì không cái nào khớp.
+
+**Khi nào emit `adhoc-section`**: khi tạo/cập nhật page, bạn phải thêm một section KHÔNG có trong template chuẩn của type đó (xem `../knowhow-capture/references/page-formats.md`), và bạn nhận ra section này từng xuất hiện ở page khác cùng type.
+
+**Cách ghi** (append vào mục "Đang chờ xử lý" của `schema-signals.md`):
+```bash
+echo '- [YYYY-MM-DD] distill | no-fit-type | <chi tiết ngắn> | related: tag:<chủ-đề>' >> .knowhow/schema-signals.md
+echo '- [YYYY-MM-DD] distill | adhoc-section | section "<tên section>" ở page <slug> | related: tag:<chủ-đề>' >> .knowhow/schema-signals.md
+```
+
+Ví dụ:
+```
+- [2026-06-05] distill | no-fit-type | item về kết quả thí nghiệm, không vừa decision/pattern/concept/troubleshooting | related: tag:experiment
+- [2026-06-05] distill | adhoc-section | section "Metrics đo được" ở page experiment-ab-test | related: tag:experiment
+```
+
+> **Quan trọng**: emit tín hiệu KHÔNG chặn distill. Vẫn xếp item vào wiki page tốt nhất hiện có và xử lý bình thường. Tín hiệu chỉ là ghi chú cho lần `schema-review` sau.
+
 ### Bước 4: User duyệt
 
 Hỏi user duyệt từng item: đồng ý / sửa / bác bỏ.
