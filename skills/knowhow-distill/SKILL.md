@@ -73,17 +73,22 @@ Trình bày đề xuất cho user. Mỗi item gồm:
 
 ### Bước 3.5: Phát tín hiệu strain (tiến hoá cấu trúc)
 
-Trong lúc phân loại + đề xuất, để ý hai dấu hiệu "khuôn không vừa". Nếu gặp, GHI tín hiệu vào `.knowhow/schema-signals.md` (mục "Đang chờ xử lý"). KHÔNG tự đổi khuôn — đó là việc của `knowhow-lint schema-review`.
+Trong lúc phân loại + đề xuất, để ý hai dấu hiệu "khuôn không vừa". Nếu gặp, GHI tín hiệu vào `.knowhow/schema-signals.md` (mục "Đang chờ xử lý"). KHÔNG tự đổi khuôn — đó là việc của `knowhow-lint schema-review`. Giả định init đã tạo `.knowhow/schema-signals.md` với sẵn heading; nếu thiếu, tạo lại theo template của init trước khi ghi.
 
-**Khi nào emit `no-fit-type`**: item rõ ràng là một *loại tri thức* không nằm trong 4 wiki type {decision, pattern, concept, troubleshooting} nhưng buộc phải xếp tạm thành wiki page chung chung. Ví dụ: "kết quả thí nghiệm", "nguồn tham khảo cần lưu", "runbook vận hành". Dấu hiệu: bạn thấy mình miễn cưỡng chọn type vì không cái nào khớp.
+**Khi nào emit `no-fit-type`**: item rõ ràng là một *loại tri thức* không nằm trong 4 wiki type {decision, pattern, concept, troubleshooting} nhưng buộc phải xếp tạm vào wiki type gần nhất. Ví dụ: "kết quả thí nghiệm", "nguồn tham khảo cần lưu", "runbook vận hành". Dấu hiệu: bạn thấy mình miễn cưỡng chọn type vì không cái nào khớp.
 
-**Khi nào emit `adhoc-section`**: khi tạo/cập nhật page, bạn phải thêm một section KHÔNG có trong template chuẩn của type đó (xem `../knowhow-capture/references/page-formats.md`), và bạn nhận ra section này từng xuất hiện ở page khác cùng type.
-
-**Cách ghi** (append vào mục "Đang chờ xử lý" của `schema-signals.md`):
+**Khi nào emit `adhoc-section`**: khi tạo/cập nhật page, bạn phải thêm một section KHÔNG có trong template chuẩn của type đó (xem `../knowhow-capture/references/page-formats.md`). Kiểm tra section này có lặp ở page khác cùng type không:
 ```bash
-echo '- [YYYY-MM-DD] distill | no-fit-type | <chi tiết ngắn> | related: tag:<chủ-đề>' >> .knowhow/schema-signals.md
-echo '- [YYYY-MM-DD] distill | adhoc-section | section "<tên section>" ở page <slug> | related: tag:<chủ-đề>' >> .knowhow/schema-signals.md
+grep -rl '## <tên section>' .knowhow/wiki
 ```
+Nếu section đã xuất hiện ở ≥ 1 page khác cùng type → emit `adhoc-section`. Nếu chưa thấy ở đâu, CHƯA cần emit, chờ nó lặp lại.
+
+**Cách ghi**: chèn dòng tín hiệu NGAY DƯỚI heading `## Đang chờ xử lý` trong `.knowhow/schema-signals.md`. KHÔNG append cuối file (cuối file là vùng `## Đã xử lý`). Chèn bằng awk:
+```bash
+awk '/^## Đang chờ xử lý$/{print; print "- [YYYY-MM-DD] distill | no-fit-type | <chi tiết ngắn> | related: tag:<chủ-đề>"; next} 1' \
+  .knowhow/schema-signals.md > /tmp/ss && mv /tmp/ss .knowhow/schema-signals.md
+```
+Dòng tín hiệu theo đúng format `- [YYYY-MM-DD] distill | <loại> | <chi tiết ngắn> | related: tag:<chủ-đề>`, với `<loại>` ∈ no-fit-type | adhoc-section.
 
 Ví dụ:
 ```
