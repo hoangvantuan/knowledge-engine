@@ -21,7 +21,7 @@ description: "Đúc kết knowhow từ inbox thành wiki pages, skills, workflow
 |---|---|---|
 | Chưa có gì liên quan | **TẠO MỚI** page | Lần đầu gặp pattern retry |
 | Đã có page, knowhow bổ sung | **CẬP NHẬT** page cũ, thêm nội dung, ghi changelog | Thêm edge case vào retry.md |
-| Đã có page, knowhow thay thế | **SỬA** page cũ, đánh dấu cách cũ deprecated | Đổi từ exponential sang jitter |
+| Đã có page, knowhow thay thế | **SỬA** page cũ, set status: deprecated cho cách cũ | Đổi từ exponential sang jitter |
 | Đã có skill/workflow, thiếu/thừa bước | **REFINE** skill/workflow, tăng version | Skill deploy thiếu bước verify |
 | Nhiều page nhỏ cùng chủ đề | **GỘP** thành 1 page chất lượng hơn | 3 page error handling → 1 |
 | Không đáng lưu | **BỎ QUA**, xoá khỏi inbox | Thông tin quá cụ thể, không tái sử dụng |
@@ -105,6 +105,10 @@ Với mỗi item được duyệt, thực hiện theo thứ tự:
    ```
 
 5. **Version**: Tăng version trong frontmatter nếu skill/workflow bị sửa.
+
+5b. **Lifecycle metadata**:
+   - `status`: page mới set `active`. Khi hành động là SỬA (thay cách cũ), set page/section cũ `status: deprecated`. Khi GỘP, page bị nuốt set `status: archived`.
+   - `confidence` (chỉ wiki, không áp skill/workflow): set theo số entry Changelog sau khi ghi entry mới — 1 → `low`, ≥2 → `medium`, ≥3 → `high`.
 
 6. **Log**: Ghi vào `wiki/log.md`:
    ```

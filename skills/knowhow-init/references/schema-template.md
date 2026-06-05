@@ -46,6 +46,25 @@
 - Workflow reference skill bằng `→ Dùng skill: [[skill-name]]`.
 - Mọi page phải xuất hiện trong index.md hoặc registry.md tương ứng.
 
+## Vòng đời metadata
+
+### status (mọi page, gồm skill/workflow)
+
+- `active`: đang dùng. Mặc định khi tạo.
+- `deprecated`: còn để tham khảo nhưng có cách mới tốt hơn. Distill set khi thay thế cách cũ.
+- `archived`: lỗi thời, chuyển vào `archive/`. Lint consolidation set.
+
+### confidence (chỉ 4 wiki type, skill/workflow dùng version)
+
+Đếm theo **số entry trong phần Changelog** của page:
+- 1 entry (mới tạo) → `low`.
+- ≥2 entry → `medium`.
+- ≥3 entry → `high`.
+
+- capture set `low` cho item mới.
+- distill nâng khi page được cập nhật lặp lại (grep trỏ về page cũ → CẬP NHẬT → thêm entry changelog).
+- lint consolidation hạ 1 bậc khi `updated` cũ hơn 90 ngày và không có entry changelog mới trong khoảng đó.
+
 ## Quy tắc vận hành
 
 - Mọi knowhow vào inbox trước, KHÔNG ghi thẳng vào wiki/skills/workflows

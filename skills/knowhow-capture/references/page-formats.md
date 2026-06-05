@@ -84,6 +84,7 @@ related: []
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 confidence: low | medium | high
+status: active   # active | deprecated | archived
 ---
 ```
 
@@ -129,6 +130,7 @@ related: [payment-module-design]
 created: 2026-06-05
 updated: 2026-06-05
 confidence: high
+status: active
 ---
 
 ## Bối cảnh
@@ -176,6 +178,7 @@ related: []
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 confidence: low | medium | high
+status: active   # active | deprecated | archived
 ---
 ```
 
@@ -214,6 +217,7 @@ related: [circuit-breaker-pattern]
 created: 2026-06-05
 updated: 2026-06-05
 confidence: high
+status: active
 ---
 
 ## Bối cảnh
@@ -267,6 +271,8 @@ tags: []
 related: []
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
+confidence: low | medium | high
+status: active   # active | deprecated | archived
 ---
 ```
 
@@ -300,6 +306,8 @@ tags: [ddd, architecture]
 related: [aggregate-root, ubiquitous-language]
 created: 2026-06-05
 updated: 2026-06-05
+confidence: medium
+status: active
 ---
 
 ## Định nghĩa
@@ -337,6 +345,7 @@ related: []
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 confidence: low | medium | high
+status: active   # active | deprecated | archived
 ---
 ```
 
@@ -379,6 +388,7 @@ related: [connection-pooling-pattern]
 created: 2026-06-05
 updated: 2026-06-05
 confidence: high
+status: active
 ---
 
 ## Triệu chứng
@@ -426,6 +436,7 @@ reusable_across: []
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 version: "1.0"
+status: active   # active | deprecated | archived
 ---
 ```
 
@@ -471,6 +482,7 @@ reusable_across: [accounting-module, report-generator]
 created: 2026-06-05
 updated: 2026-06-05
 version: "1.0"
+status: active
 ---
 
 ## Mục đích
@@ -534,6 +546,7 @@ trigger: "Khi nào kích hoạt"
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 version: "1.0"
+status: active   # active | deprecated | archived
 ---
 ```
 
@@ -575,6 +588,7 @@ trigger: "Khi merge vào branch main và muốn release lên production"
 created: 2026-06-05
 updated: 2026-06-05
 version: "1.0"
+status: active
 ---
 
 ## Khi nào dùng
