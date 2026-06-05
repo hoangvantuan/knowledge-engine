@@ -43,6 +43,7 @@
 - File wiki: `wiki/<type>-<slug>.md`, slug `kebab-case`. Ví dụ: `wiki/decision-rest-to-graphql.md`, `wiki/pattern-retry-with-jitter.md`.
 - Skill: `skills/<slug>.md`, slug động từ + danh từ (`skills/parse-invoice.md`, `skills/write-commit-msg.md`).
 - Workflow: `workflows/<slug>.md`, slug danh từ mô tả quy trình (`workflows/release-checklist.md`).
+- Khi một type được tách vào subfolder (do schema tiến hoá), subfolder đặt tên theo type và file VẪN giữ nguyên tên `<type>-<slug>.md`. Ví dụ: `wiki/experiment/experiment-ab-test.md`. Giữ prefix để resolve `[[slug]]` tìm đệ quy theo tên file vẫn đúng.
 
 ## Cross-referencing
 
