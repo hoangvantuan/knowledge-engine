@@ -103,6 +103,8 @@ Báo user kết quả: bao nhiêu item đã ghi, đường dẫn file.
 
 Gợi ý chạy `knowhow-distill` để đúc kết inbox thành wiki/skill/workflow.
 
+**Chế độ liền mạch (user solo)**: Nếu user gọi capture kèm cờ `--then-distill`, sau khi ghi inbox xong, chạy luôn `knowhow-distill` trong cùng phiên để duyệt + đúc kết liền 2 bước, không phải gọi lại.
+
 ## Quy tắc cứng
 
 1. Capture CHỈ ghi vào `inbox/`. KHÔNG ghi thẳng vào `wiki/`, `skills/`, `workflows/`.
