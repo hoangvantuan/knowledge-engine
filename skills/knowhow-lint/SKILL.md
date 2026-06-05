@@ -17,6 +17,7 @@ Rà soát sức khoẻ hệ thống knowhow. Hai chế độ: **quick** (mặc �
 
 - User không nói gì thêm, hoặc nói "quick", "lint" → chạy **Quick Lint**.
 - User nói "consolidation", "deep", "audit" → chạy **Consolidation**.
+- User nói "rebuild", "rebuild-index", "sinh lại index" → chạy **Rebuild Index**.
 
 ---
 
@@ -145,6 +146,20 @@ Thực thi từng thay đổi đã được duyệt:
 - Archive page lỗi thời → chuyển vào `archive/`, xoá khỏi registry.
 - Bổ sung page thiếu phủ → tạo stub page, thêm vào registry.
 - Cập nhật workflow dependency → sửa version reference.
+
+---
+
+## Chế độ 3: Rebuild Index (file dẫn xuất)
+
+`wiki/index.md`, `skills/registry.md`, `workflows/registry.md` là **file dẫn xuất** từ frontmatter các page. Khi merge conflict ở 3 file này, không cần giải tay, sinh lại.
+
+### Bước thực hiện
+
+1. Quét frontmatter mọi file trong `wiki/` (trừ index.md, log.md): đọc `type`, `title`, `tags`, `updated`.
+2. Sinh `wiki/index.md`, group theo `type` (4 heading: Decisions, Patterns, Concepts, Troubleshooting), mỗi dòng `- [[<type>-<slug>]] - <title>`.
+3. Quét frontmatter mọi file trong `skills/` (trừ registry.md): đọc `title`, `version`, `tags`, `updated`. Sinh `skills/registry.md` theo format page-formats mục 6.1, sort alphabet.
+4. Quét frontmatter mọi file trong `workflows/` (trừ registry.md): đọc `title`, `skills_used`, `version`, `updated`. Sinh `workflows/registry.md` theo format mục 6.2, sort alphabet.
+5. Ghi log: `- [lint] Rebuild index + 2 registry từ frontmatter`.
 
 ---
 
