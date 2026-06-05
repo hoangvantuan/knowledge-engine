@@ -38,13 +38,10 @@ Tạo toàn bộ cây thư mục `.knowhow/` tại root workspace:
 ├── SCHEMA.md
 ├── raw/
 ├── inbox/
+├── archive/
 ├── wiki/
 │   ├── index.md
-│   ├── log.md
-│   ├── decisions/
-│   ├── patterns/
-│   ├── concepts/
-│   └── troubleshooting/
+│   └── log.md
 ├── skills/
 │   └── registry.md
 └── workflows/
@@ -54,7 +51,7 @@ Tạo toàn bộ cây thư mục `.knowhow/` tại root workspace:
 Chạy lệnh tạo thư mục:
 
 ```bash
-mkdir -p .knowhow/{raw,inbox,wiki/{decisions,patterns,concepts,troubleshooting},skills,workflows}
+mkdir -p .knowhow/{raw,inbox,archive,wiki,skills,workflows}
 ```
 
 ### Bước 3: Sinh SCHEMA.md

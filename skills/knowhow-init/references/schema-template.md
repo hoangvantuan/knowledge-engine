@@ -15,14 +15,14 @@
 
 ## Page Types
 
-| Type | Thư mục | Mục đích |
-|------|---------|----------|
-| decision | wiki/decisions/ | Quyết định + lý do + bối cảnh |
-| pattern | wiki/patterns/ | Cách làm đã chứng minh hiệu quả |
-| concept | wiki/concepts/ | Thuật ngữ, khái niệm riêng dự án |
-| troubleshooting | wiki/troubleshooting/ | Sự cố đã gặp + cách xử lý |
-| skill | skills/ | Công việc cụ thể, chạy độc lập, tái sử dụng |
-| workflow | workflows/ | Chuỗi bước, gắn domain, gọi nhiều skill |
+| Type | Đường dẫn file | Mục đích |
+|------|----------------|----------|
+| decision | wiki/decision-<slug>.md | Quyết định + lý do + bối cảnh |
+| pattern | wiki/pattern-<slug>.md | Cách làm đã chứng minh hiệu quả |
+| concept | wiki/concept-<slug>.md | Thuật ngữ, khái niệm riêng dự án |
+| troubleshooting | wiki/troubleshooting-<slug>.md | Sự cố đã gặp + cách xử lý |
+| skill | skills/<slug>.md | Công việc cụ thể, chạy độc lập, tái sử dụng |
+| workflow | workflows/<slug>.md | Chuỗi bước, gắn domain, gọi nhiều skill |
 
 ## Phân biệt Skill và Workflow
 
@@ -35,11 +35,9 @@
 
 ## Naming Conventions
 
-- File: `kebab-case.md`
-- Skill: động từ + danh từ (`parse-invoice.md`, `write-commit-msg.md`)
-- Workflow: danh từ mô tả quy trình (`release-checklist.md`, `customer-onboard.md`)
-- Decision: mô tả quyết định (`rest-to-graphql.md`)
-- Pattern: mô tả pattern (`retry-with-jitter.md`)
+- File wiki: `wiki/<type>-<slug>.md`, slug `kebab-case`. Ví dụ: `wiki/decision-rest-to-graphql.md`, `wiki/pattern-retry-with-jitter.md`.
+- Skill: `skills/<slug>.md`, slug động từ + danh từ (`skills/parse-invoice.md`, `skills/write-commit-msg.md`).
+- Workflow: `workflows/<slug>.md`, slug danh từ mô tả quy trình (`workflows/release-checklist.md`).
 
 ## Cross-referencing
 
