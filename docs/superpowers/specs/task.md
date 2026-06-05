@@ -8,6 +8,7 @@
 | knowhow-capture | Done (v1.1) | skills/knowhow-capture/SKILL.md |
 | knowhow-distill | Done (v1.1) | skills/knowhow-distill/SKILL.md |
 | knowhow-lint | Done (v1.1) | skills/knowhow-lint/SKILL.md |
+| knowhow-query | Done (v1.2) | skills/knowhow-query/SKILL.md |
 
 ## Test end-to-end (chạy lại sau fix v1.1)
 
@@ -40,3 +41,33 @@ Chạy trên 1 dự án thử (thư mục tạm), kiểm từng tiêu chí:
 ## Tiêu chí pass
 
 Tất cả mục 1-5 đúng như mô tả. Đối chiếu "Tiêu chí done cho v1.1" trong spec review.
+
+---
+
+## Test end-to-end v1.2 (schema evolution)
+
+Chạy trên 1 dự án nghiên cứu giả lập (thư mục tạm). Mỗi kịch bản kiểm một loại thay đổi.
+
+1. **Living contract + signals (nền)**: chạy `knowhow-init`. Kiểm:
+   - `.knowhow/SCHEMA.md` có `**schema_version**: 1` và mục `## Changelog`.
+   - `.knowhow/schema-signals.md` tồn tại, có `## Đang chờ xử lý` + `## Đã xử lý`, rỗng.
+   - SCHEMA có mục `## Glossary & Convention` và `## Tiến hoá cấu trúc`.
+
+2. **Thêm type (luồng chính)**: capture nhiều item kiểu "experiment" → distill emit `no-fit-type` đúng format vào sổ. Sau ≥ 5 tín hiệu cùng chủ đề, chạy `knowhow-lint schema-review` → kiểm đề xuất type `experiment` xuất hiện. Duyệt → kiểm: SCHEMA bảng Page Types có dòng `experiment`, `schema_version` bump lên 2, Changelog SCHEMA có entry, naming `wiki/experiment-<slug>.md` đúng, index rebuild đúng, resolve `[[slug]]` vẫn chạy, không link hỏng.
+
+3. **Query làm tín hiệu**: lặp một câu query không trúng page sạch (≥ 3 page chắp vá) → `knowhow-query` emit `query-miss` vào sổ → `schema-review` tính vào ngưỡng thêm type/page.
+
+4. **Đổi layout**: tạo > 30 page cùng một type → `schema-review` đề xuất subfolder → duyệt → move file vào `wiki/<type>/`, rewrite link, kiểm resolve `[[slug]]` vẫn đúng sau split.
+
+5. **File ngược qua inbox**: `knowhow-query` ra câu trả lời tốt, user OK file → kiểm item vào `inbox/` (KHÔNG vào thẳng `wiki/`), raw lưu Q&A tại `raw/YYYY-MM-DD-query-<slug>.md`.
+
+6. **Reversibility**: sau một migrate, `git revert` → kiểm hệ về trạng thái cũ sạch.
+
+### Tiêu chí pass v1.2
+
+- distill/query ghi tín hiệu đúng định dạng vào `schema-signals.md`, KHÔNG tự đổi khuôn.
+- `schema-review` chỉ đề xuất khi vượt ngưỡng, không báo nhiễu dưới ngưỡng.
+- Migrate giữ link không hỏng, index rebuild đúng, SCHEMA version + changelog cập nhật.
+- Bất biến "mọi knowhow qua inbox trước" không bị phá bởi query.
+- Mọi migrate reversible bằng git.
+- Log dùng prefix parse được: `grep "^## \[" .knowhow/wiki/log.md` ra danh sách op.
