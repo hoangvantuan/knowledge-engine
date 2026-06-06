@@ -121,7 +121,13 @@ flowchart LR
 
 ### 3. Onboard agent mới
 
-Mọi agent mở dự án chỉ cần đọc `.knowhow/SCHEMA.md`, rồi tra `wiki/index.md` và 2 registry để biết dự án có gì dùng được.
+`knowhow-init` gắn khối `@import` vào file config agent (`CLAUDE.md` / `GEMINI.md`), nên 4 file bản đồ tri thức được nạp tự động vào context ngay đầu mỗi phiên:
+
+- `SCHEMA.md` (quy ước)
+- `wiki/index.md` (mục lục)
+- `skills/registry.md` và `workflows/registry.md` (cái gì dùng được)
+
+Đây là cơ chế "đảm bảo có mặt" thay cho "nhắc agent đọc": agent thấy bản đồ ngay, không phụ thuộc việc model có nhớ đọc hay không. Chỉ bản đồ được nạp sẵn, nội dung chi tiết (wiki page, skill/workflow bó) load on-demand qua `knowhow-query` / `knowhow-run`. Agent không hỗ trợ `@import` (ví dụ Codex/`AGENTS.md`) thì đọc thủ công 4 file trên theo chỉ dẫn trong config.
 
 ## Tiến hoá cấu trúc (schema evolution)
 

@@ -139,6 +139,11 @@ Quy tắc:
   ```
 - Nội dung thêm: đọc `references/agent-config-snippet.md` và append vào cuối file.
 
+Lưu ý về cơ chế nạp tự động:
+- Snippet chứa khối `@import` (4 dòng `@.knowhow/...`) để Claude Code và Gemini CLI tự nạp 4 file bản đồ vào context mỗi phiên. Các dòng này phải nằm ở dạng plain text, KHÔNG bọc trong code fence, nếu không sẽ không được parse. Lệnh `cat` ở trên giữ nguyên đúng định dạng này.
+- 4 file bản đồ phải tồn tại trước khi import (Bước 2-4 đã tạo, kể cả khi rỗng). Import file rỗng vô hại.
+- Với `AGENTS.md` (Codex) không hỗ trợ `@import`, các dòng `@path` chỉ là text liệt kê đường dẫn. Phần chỉ dẫn ngay dưới trong snippet sẽ yêu cầu agent đọc thủ công 4 file đó. Đây là lớp phòng thủ thứ hai, không cần sửa snippet theo từng nền tảng.
+
 ### Bước 6: Ghi log hoàn tất
 
 Xác nhận với user:
