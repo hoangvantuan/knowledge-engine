@@ -17,10 +17,6 @@ ls -d .knowhow/ 2>/dev/null
 
 Nếu không tồn tại, dừng và hướng dẫn user chạy `knowhow-init` trước.
 
-## Phạm vi agent
-
-`knowhow-query` và sản phẩm knowhow đều là markdown thuần, dùng chung cho mọi AI agent. Không gắn với agent cụ thể nào: mọi agent đều chạy được skill và đọc được kết quả query.
-
 ## Flow query
 
 ### Bước 1: Tìm page liên quan

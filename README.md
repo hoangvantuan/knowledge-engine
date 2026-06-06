@@ -102,9 +102,6 @@ Hệ thống chia làm hai tầng tách biệt:
 
 ## Bắt đầu
 
-> [!NOTE]
-> Cả 6 skill vận hành lẫn sản phẩm knowhow (`.knowhow/`) đều là markdown thuần, không gắn với AI agent cụ thể nào. Mọi agent (Claude Code, Codex, Gemini, ...) đều **đọc** knowhow và **chạy** được capture/distill/lint/query/run.
-
 ### 1. Khởi tạo
 
 Gọi `knowhow-init`. Skill hỏi tên dự án và mô tả domain, rồi:

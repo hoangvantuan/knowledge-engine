@@ -91,8 +91,6 @@
 4. Khi gặp vấn đề, tra wiki/ trước khi tự suy luận
 5. Khi cần thực hiện quy trình, tra skills/ và workflows/ trước
 
-> **Phạm vi agent**: `.knowhow/` và 6 skill vận hành (knowhow-init, knowhow-capture, knowhow-distill, knowhow-lint, knowhow-query, knowhow-run) đều là markdown thuần, dùng chung, không gắn với AI agent cụ thể nào. MỌI agent (Claude Code, Codex, Gemini, ...) đều ĐỌC knowhow và CHẠY được skill vận hành.
-
 ## Tiến hoá cấu trúc (schema evolution)
 
 Khuôn này tự tiến hoá theo dự án. Cơ chế:

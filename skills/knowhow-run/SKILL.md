@@ -25,10 +25,6 @@ ls -d .knowhow/ 2>/dev/null
 
 Nếu không tồn tại, dừng và hướng dẫn user chạy `knowhow-init` trước.
 
-## Phạm vi agent
-
-`knowhow-run` agent-agnostic: thuần đọc file bó rồi làm theo, không phụ thuộc thao tác cụ thể của agent nào. Skill này sống ở config agent, không nhúng vào sản phẩm `.knowhow/` (chỉ tiêu thụ, không sản xuất).
-
 ## Phân vai với knowhow-query
 
 |          | knowhow-query           | knowhow-run            |
