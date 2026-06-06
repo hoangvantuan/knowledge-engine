@@ -4,14 +4,12 @@ Dự án này sử dụng hệ thống Knowhow để quản lý tri thức và k
 
 ### Bản đồ tri thức (nạp tự động đầu phiên)
 
-4 file dưới đây là "bản đồ" để định tuyến công việc. Với agent hỗ trợ `@import` (Claude Code, Gemini CLI), chúng được nạp tự động vào context mỗi khi bắt đầu phiên:
+4 file dưới đây là "bản đồ" để định tuyến công việc. hãy ĐỌC đủ 4 file trên ngay khi bắt đầu phiên, trước khi làm việc.
 
-@.knowhow/SCHEMA.md
-@.knowhow/wiki/index.md
-@.knowhow/skills/registry.md
-@.knowhow/workflows/registry.md
-
-Nếu agent KHÔNG hỗ trợ `@import` (ví dụ Codex đọc `AGENTS.md`), hãy ĐỌC đủ 4 file trên ngay khi bắt đầu phiên, trước khi làm việc.
+.knowhow/SCHEMA.md
+.knowhow/wiki/index.md
+.knowhow/skills/registry.md
+.knowhow/workflows/registry.md
 
 Chỉ nạp 4 file bản đồ này, KHÔNG nạp sẵn nội dung chi tiết. Wiki page, skill và workflow bó được load on-demand qua `knowhow-query` / `knowhow-run` khi cần.
 
