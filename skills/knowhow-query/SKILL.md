@@ -1,6 +1,6 @@
 ---
 name: knowhow-query
-description: "Trả lời câu hỏi nhắm vào knowhow dự án: đọc index + grep page liên quan, tổng hợp câu trả lời kèm trích dẫn [[slug]]. Phát tín hiệu query-miss khi hỏi không trúng page sạch. Nếu câu trả lời đáng tái dùng, file ngược qua inbox (không ghi thẳng wiki). Trigger: 'tra knowhow', 'dự án có gì về X', 'so sánh...', 'knowhow query', khi user hỏi một câu nhắm vào tri thức đã tích luỹ."
+description: "Trả lời câu hỏi nhắm vào knowhow của kho: đọc index + grep page liên quan, tổng hợp câu trả lời kèm trích dẫn [[slug]]. Phát tín hiệu query-miss khi hỏi không trúng page sạch. Nếu câu trả lời đáng tái dùng, file ngược qua inbox (không ghi thẳng wiki). Trigger: 'tra knowhow', 'kho có gì về X', 'so sánh...', 'knowhow query', khi user hỏi một câu nhắm vào tri thức đã tích luỹ."
 ---
 
 # Knowhow Query

@@ -196,7 +196,7 @@ status: active   # active | deprecated | archived
 
 ## Ví dụ
 
-[Ví dụ từ dự án thực tế, có code nếu phù hợp]
+[Ví dụ từ thực tế, kèm code nếu phù hợp]
 
 ## Anti-pattern
 
@@ -282,7 +282,7 @@ status: active   # active | deprecated | archived
 ```markdown
 ## Định nghĩa
 
-[Nghĩa của khái niệm trong bối cảnh dự án. Không phải định nghĩa sách giáo khoa chung chung.]
+[Nghĩa của khái niệm trong bối cảnh của kho. Không phải định nghĩa sách giáo khoa chung chung.]
 
 ## Liên quan
 
@@ -290,7 +290,7 @@ status: active   # active | deprecated | archived
 
 ## Ví dụ
 
-[Ví dụ cụ thể trong dự án]
+[Ví dụ cụ thể trong kho]
 
 ## Changelog
 

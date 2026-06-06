@@ -1,6 +1,6 @@
 ---
 name: knowhow-run
-description: "Entrypoint chủ động để tiêu thụ skill/workflow đã đúc kết trong .knowhow/. Ba nhịp: tra registry → load file bó khớp → đọc hết rồi làm theo. Nhận 3 dạng input: tên bó cụ thể (load thẳng), mô tả task (tra registry theo trigger/Mô tả/tags), hoặc rỗng (liệt kê bó khả dụng). Workflow gặp skill con resolve đệ quy. KHÔNG sản xuất, KHÔNG ghi vào .knowhow/. Trigger: 'knowhow run', 'chạy skill X', 'làm theo workflow Y', 'dùng knowhow để làm', khi bắt đầu task thuộc domain dự án và cần dùng bó đã tích luỹ."
+description: "Entrypoint chủ động để tiêu thụ skill/workflow đã đúc kết trong .knowhow/. Ba nhịp: tra registry → load file bó khớp → đọc hết rồi làm theo. Nhận 3 dạng input: tên bó cụ thể (load thẳng), mô tả task (tra registry theo trigger/Mô tả/tags), hoặc rỗng (liệt kê bó khả dụng). Workflow gặp skill con resolve đệ quy. KHÔNG sản xuất, KHÔNG ghi vào .knowhow/. Trigger: 'knowhow run', 'chạy skill X', 'làm theo workflow Y', 'dùng knowhow để làm', khi bắt đầu task thuộc lĩnh vực của kho và cần dùng bó đã tích luỹ."
 ---
 
 # Knowhow Run
@@ -102,4 +102,4 @@ Xác định input thuộc dạng nào rồi rẽ nhánh:
 - **Bó có `status: deprecated`**: vẫn load được nhưng cảnh báo "bó này deprecated, có thể có cách mới hơn", hỏi user có tiếp không.
 - **Bó có `status: archived`**: nằm trong `archive/`, KHÔNG nên chạy. Báo user bó đã lỗi thời.
 - **Workflow trỏ skill con không resolve** (`[[X]]` không tìm thấy file): dừng nhịp đó, báo link hỏng, gợi ý chạy `knowhow-lint quick` để bắt link hỏng.
-- **Registry rỗng** (chưa có bó nào): báo "dự án chưa đúc kết skill/workflow nào", gợi ý `knowhow-capture` + `knowhow-distill`.
+- **Registry rỗng** (chưa có bó nào): báo "kho chưa đúc kết skill/workflow nào", gợi ý `knowhow-capture` + `knowhow-distill`.

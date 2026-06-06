@@ -1,11 +1,11 @@
 ---
 name: knowhow-capture
-description: "Ghi nhận knowhow từ cuộc trao đổi hoặc nguồn ngoài vào inbox dự án. Quét cuộc hội thoại, nhận diện quyết định, pattern, troubleshooting, ý tưởng skill/workflow, trình bày cho user duyệt rồi ghi vào .knowhow/inbox/. Trigger: 'knowhow capture', 'capture lại', 'ghi nhận knowhow', 'lưu bài học', khi user nói 'cái này hay, ghi lại đi', hoặc sau phiên làm việc muốn đúc kết."
+description: "Ghi nhận knowhow từ cuộc trao đổi hoặc nguồn ngoài vào inbox của kho. Quét cuộc hội thoại, nhận diện quyết định, pattern, troubleshooting, ý tưởng skill/workflow, trình bày cho user duyệt rồi ghi vào .knowhow/inbox/. Trigger: 'knowhow capture', 'capture lại', 'ghi nhận knowhow', 'lưu bài học', khi user nói 'cái này hay, ghi lại đi', hoặc sau phiên làm việc muốn đúc kết."
 ---
 
 # Knowhow Capture
 
-Ghi nhận knowhow vào inbox dự án. Capture CHỈ ghi vào inbox, KHÔNG ghi thẳng vào wiki/skills/workflows.
+Ghi nhận knowhow vào inbox của kho. Capture CHỈ ghi vào inbox, KHÔNG ghi thẳng vào wiki/skills/workflows.
 
 ## Precondition
 

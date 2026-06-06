@@ -1,6 +1,6 @@
 ## Knowhow
 
-Dự án này sử dụng hệ thống Knowhow để quản lý tri thức và kỹ năng.
+Kho tri thức này dùng hệ thống Knowhow để tích luỹ và quản lý tri thức.
 
 ### Bản đồ tri thức (nạp tự động đầu phiên)
 

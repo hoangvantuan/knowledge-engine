@@ -11,7 +11,7 @@ description: "Đúc kết knowhow từ inbox thành wiki pages, skills, workflow
 
 ## Precondition
 
-1. Kiểm tra `.knowhow/` tồn tại trong project root.
+1. Kiểm tra `.knowhow/` tồn tại trong thư mục gốc của không gian làm việc.
 2. Kiểm tra `.knowhow/inbox/` có ít nhất 1 file.
 3. Nếu inbox rỗng → báo "Không có gì để đúc kết." rồi dừng.
 
@@ -141,7 +141,7 @@ Với mỗi item được duyệt, thực hiện theo thứ tự:
    - Thêm `[[...]]` link trong body khi mention page khác.
    - Cập nhật page cũ thêm reference ngược đến page mới (nếu cần).
 
-3b. **Rewrite inbound link khi GỘP/deprecate**: Khi gộp page hoặc set deprecated, page khác có thể đang trỏ `[[old-slug]]`. Grep toàn repo và sửa:
+3b. **Rewrite inbound link khi GỘP/deprecate**: Khi gộp page hoặc set deprecated, page khác có thể đang trỏ `[[old-slug]]`. Grep toàn `.knowhow/` và sửa:
    ```bash
    grep -rln "\[\[old-slug\]\]" .knowhow
    ```
@@ -189,7 +189,7 @@ Chọn loại dựa trên bản chất nội dung:
 | Tri thức, khái niệm, quyết định, cách xử lý sự cố | **Wiki page** |
 | Không chắc, hoặc mới gặp lần đầu | Mặc định **Wiki page** (chờ tín hiệu lặp rồi promote) |
 
-Tại sao mặc định wiki? Wiki page an toàn hơn: dễ tạo, dễ sửa, dễ gộp. KHÔNG ép mọi thứ thành skill ngay. Nhưng đừng để wiki thành nghĩa địa: khi một cách làm bị dùng lặp (≥3 phiếu promote-candidate, xem Bước 1.5), NÂNG nó thành skill. Skill KHÔNG cần "độc lập hoàn toàn với context dự án": chấp nhận skill gắn domain MIỄN LÀ làm-theo-được và tái dùng cho task tương tự. Tiêu chí loại bỏ skill chỉ là: thao tác quá cụ thể, dùng một lần, không lặp lại.
+Tại sao mặc định wiki? Wiki page an toàn hơn: dễ tạo, dễ sửa, dễ gộp. KHÔNG ép mọi thứ thành skill ngay. Nhưng đừng để wiki thành nghĩa địa: khi một cách làm bị dùng lặp (≥3 phiếu promote-candidate, xem Bước 1.5), NÂNG nó thành skill. Skill KHÔNG cần "độc lập hoàn toàn với context của kho": chấp nhận skill gắn domain MIỄN LÀ làm-theo-được và tái dùng cho task tương tự. Tiêu chí loại bỏ skill chỉ là: thao tác quá cụ thể, dùng một lần, không lặp lại.
 
 ## Cross-referencing
 

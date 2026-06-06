@@ -1,13 +1,13 @@
 ---
 name: knowhow-init
-description: "Khởi tạo hệ thống knowhow trong dự án. Tạo thư mục .knowhow/ với schema, wiki, skills registry, workflows registry. Dùng khi bắt đầu dự án mới hoặc muốn thêm quản lý knowhow vào dự án hiện có. Trigger: 'knowhow init', 'khởi tạo knowhow', 'thêm knowhow', 'setup knowhow', hoặc khi user muốn bắt đầu ghi nhận tri thức dự án."
+description: "Khởi tạo hệ thống knowhow trong một kho tri thức. Tạo thư mục .knowhow/ với schema, wiki, skills registry, workflows registry. Dùng khi bắt đầu kho mới hoặc muốn thêm quản lý knowhow vào không gian làm việc hiện có. Trigger: 'knowhow init', 'khởi tạo knowhow', 'thêm knowhow', 'setup knowhow', hoặc khi user muốn bắt đầu ghi nhận tri thức của kho."
 ---
 
 # Knowhow Init
 
 ## Tổng quan
 
-Knowhow System là nghi thức tích luỹ tri thức có cấu trúc cho dự án (AI viết, người duyệt) qua 3 lớp:
+Knowhow System là nghi thức tích luỹ tri thức có cấu trúc cho một kho (AI viết, người duyệt) qua 3 lớp:
 
 | Lớp                    | Vai trò                                          |
 | ---------------------- | ------------------------------------------------ |
@@ -27,8 +27,8 @@ Phân biệt Skill và Workflow:
 
 Hỏi user 2 câu:
 
-1. **Tên dự án** (dùng cho SCHEMA.md và log)
-2. **Mô tả domain** (1-2 câu, giải thích dự án làm gì)
+1. **Tên kho tri thức** (dùng cho SCHEMA.md và log)
+2. **Mô tả lĩnh vực** (1-2 câu, giải thích kho phục vụ việc gì)
 
 Nếu user cung cấp sẵn trong prompt, không cần hỏi lại.
 
@@ -64,7 +64,7 @@ mkdir -p .knowhow/{raw,inbox,archive/inbox,wiki,skills,workflows}
 
 Thay thế:
 
-- `{{PROJECT_NAME}}` → tên dự án user cung cấp
+- `{{PROJECT_NAME}}` → tên kho user cung cấp
 - `{{PROJECT_DESCRIPTION}}` → mô tả domain user cung cấp
 - `{{DATE}}` → ngày hiện tại (YYYY-MM-DD), dùng cho entry Changelog đầu tiên trong SCHEMA
 
@@ -86,12 +86,12 @@ Ghi kết quả vào `.knowhow/SCHEMA.md`.
 ## Troubleshooting
 ```
 
-**wiki/log.md** (thay `YYYY-MM-DD` bằng ngày hiện tại, `{{PROJECT_NAME}}` bằng tên dự án):
+**wiki/log.md** (thay `YYYY-MM-DD` bằng ngày hiện tại, `{{PROJECT_NAME}}` bằng tên kho):
 
 ```markdown
 # Activity Log
 
-## [YYYY-MM-DD] init | Khởi tạo .knowhow/ cho dự án {{PROJECT_NAME}}
+## [YYYY-MM-DD] init | Khởi tạo .knowhow/ cho kho {{PROJECT_NAME}}
 ```
 
 **skills/registry.md**:

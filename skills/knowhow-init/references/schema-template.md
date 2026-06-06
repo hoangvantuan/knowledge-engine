@@ -2,7 +2,7 @@
 
 **schema_version**: 1
 
-## Giới thiệu dự án
+## Giới thiệu kho tri thức
 {{PROJECT_DESCRIPTION}}
 
 ## Cấu trúc thư mục
@@ -24,7 +24,7 @@
 |------|----------------|----------|
 | decision | wiki/decision-<slug>.md | Quyết định + lý do + bối cảnh |
 | pattern | wiki/pattern-<slug>.md | Cách làm đã chứng minh hiệu quả |
-| concept | wiki/concept-<slug>.md | Thuật ngữ, khái niệm riêng dự án |
+| concept | wiki/concept-<slug>.md | Thuật ngữ, khái niệm riêng của kho |
 | troubleshooting | wiki/troubleshooting-<slug>.md | Sự cố đã gặp + cách xử lý |
 | skill | skills/<slug>.md | Thao tác cụ thể, làm-theo-được, tái sử dụng |
 | workflow | workflows/<slug>.md | Chuỗi bước, gắn domain, gọi nhiều skill |
@@ -86,14 +86,14 @@
 ## Onboarding cho agent mới
 
 1. Đọc file SCHEMA.md này
-2. Đọc wiki/index.md để biết dự án có knowhow gì
+2. Đọc wiki/index.md để biết kho có knowhow gì
 3. Đọc skills/registry.md và workflows/registry.md để biết có gì dùng được
 4. Khi gặp vấn đề, tra wiki/ trước khi tự suy luận
 5. Khi cần thực hiện quy trình, tra skills/ và workflows/ trước
 
 ## Tiến hoá cấu trúc (schema evolution)
 
-Khuôn này tự tiến hoá theo dự án. Cơ chế:
+Khuôn này tự tiến hoá theo kho. Cơ chế:
 
 1. distill/query phát hiện "khuôn không vừa" → ghi tín hiệu vào `schema-signals.md` (KHÔNG tự đổi khuôn).
 2. `knowhow-lint schema-review` đọc sổ + quét sống + áp ngưỡng → đề xuất diff lên SCHEMA.md.
@@ -104,7 +104,7 @@ Bốn loại thay đổi cấu trúc: thêm/đổi/nghỉ hưu page type, đổi
 
 ## Glossary & Convention (tiến hoá)
 
-[Thuật ngữ riêng dự án + quy ước vận hành bổ sung. Trống lúc init. schema-review thêm vào khi phát hiện thuật ngữ/quy ước lặp nhiều lần.]
+[Thuật ngữ riêng của kho + quy ước vận hành bổ sung. Trống lúc init. schema-review thêm vào khi phát hiện thuật ngữ/quy ước lặp nhiều lần.]
 
 ## Changelog
 
