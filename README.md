@@ -23,6 +23,16 @@ Lấy cảm hứng từ:
 - **LLM Wiki** (Karpathy): wiki là "persistent, compounding artifact", AI viết và duy trì, người curate và hỏi đúng câu hỏi.
 - **SOP Framework v2.0** (Minh Đỗ): đóng gói quy trình ở mức thao tác, có WHY, có ngoại lệ, có vòng phản hồi.
 
+## Phục vụ chung (từ vựng)
+
+Bộ skill dùng được cho cả người làm kỹ thuật lẫn không kỹ thuật. Vài từ dưới đây là tương đương, chỉ cùng một thứ:
+
+| Từ trung lập | Người kỹ thuật hiểu là | Người cá nhân hiểu là |
+|---|---|---|
+| Kho tri thức | Repo dự án | Thư mục tài liệu của bạn |
+| Không gian làm việc | Project root | Thư mục gốc đang làm |
+| Hoàn tác (reversible) | `git revert` | Lấy lại từ `archive/` |
+
 ## Điểm nổi bật
 
 - **Markdown thuần, agent-agnostic.** Sản phẩm knowhow là markdown, mọi agent đọc được, commit vào repo cùng code.
@@ -47,7 +57,7 @@ flowchart LR
 | ------------- | ----------------------- | ----------------------------------------------- |
 | **Raw**       | Người / import          | Nguyên liệu thô, không sửa                      |
 | **Wiki**      | AI viết, người duyệt    | Tri thức có cấu trúc, liên kết chéo             |
-| **Skills**    | AI đề xuất, người duyệt | Công việc cụ thể, chạy độc lập, tái sử dụng cao |
+| **Skills**    | AI đề xuất, người duyệt | Thao tác cụ thể, làm-theo-được, tái sử dụng cao |
 | **Workflows** | AI đề xuất, người duyệt | Chuỗi bước, gắn domain, gọi nhiều skill         |
 
 Hệ thống chia làm hai tầng tách biệt:
@@ -84,7 +94,7 @@ Hệ thống chia làm hai tầng tách biệt:
 │   ├── pattern-*.md       # Pattern đã chứng minh hiệu quả
 │   ├── concept-*.md       # Thuật ngữ, khái niệm riêng dự án
 │   └── troubleshooting-*.md  # Sự cố đã gặp + cách xử lý
-├── skills/                # Lớp 3a: skill (chạy độc lập, tái sử dụng)
+├── skills/                # Lớp 3a: skill (làm-theo-được, tái sử dụng)
 │   └── registry.md        # Danh sách skill + metadata
 └── workflows/             # Lớp 3b: workflow (nhiều bước, gọi skill)
     └── registry.md        # Danh sách workflow + metadata

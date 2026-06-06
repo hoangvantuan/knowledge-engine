@@ -161,12 +161,12 @@ Chọn loại dựa trên bản chất nội dung:
 
 | Tiêu chí | Loại |
 |---|---|
-| Chạy độc lập, tái sử dụng cao, không phụ thuộc context dự án | **Skill** |
+| Thao tác làm-theo được, có thể dùng lại cho task tương tự (được phép gắn domain) | **Skill** |
 | Chuỗi bước, gắn domain, gọi nhiều skill, thay đổi khi đổi domain | **Workflow** |
 | Tri thức, khái niệm, quyết định, cách xử lý sự cố | **Wiki page** |
-| Không chắc | Mặc định **Wiki page** |
+| Không chắc, hoặc mới gặp lần đầu | Mặc định **Wiki page** (chờ tín hiệu lặp rồi promote) |
 
-Tại sao mặc định wiki? Wiki page an toàn hơn: dễ tạo, dễ sửa, dễ gộp. Sau khi tích lũy đủ, có thể promote lên skill/workflow. Ngược lại, tạo skill quá sớm khi chưa đủ hiểu biết sẽ tạo ra skill kém chất lượng.
+Tại sao mặc định wiki? Wiki page an toàn hơn: dễ tạo, dễ sửa, dễ gộp. KHÔNG ép mọi thứ thành skill ngay. Nhưng đừng để wiki thành nghĩa địa: khi một cách làm bị dùng lặp nhiều lần, NÂNG nó thành skill. Skill KHÔNG cần "độc lập hoàn toàn với context dự án": chấp nhận skill gắn domain MIỄN LÀ làm-theo-được và tái dùng cho task tương tự. Tiêu chí loại bỏ skill chỉ là: thao tác quá cụ thể, dùng một lần, không lặp lại.
 
 ## Cross-referencing
 

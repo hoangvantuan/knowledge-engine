@@ -18,7 +18,7 @@ Knowhow System là nghi thức tích luỹ tri thức có cấu trúc cho dự �
 
 Phân biệt Skill và Workflow:
 
-- **Skill** = công việc cụ thể, chạy độc lập, tái sử dụng cao. Ít thay đổi khi đổi domain.
+- **Skill** = thao tác khép kín, làm-theo-được, tái dùng cho task tương tự (được phép gắn domain).
 - **Workflow** = chuỗi bước, gắn domain, gọi nhiều skill. Thay đổi khi đổi domain.
 
 ## Flow khởi tạo

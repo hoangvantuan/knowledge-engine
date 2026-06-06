@@ -41,7 +41,7 @@ Nếu user không chỉ rõ chế độ, hỏi:
 | pattern | Cách giải quyết lặp lại, "hay là dùng...", "trick này..." | Retry với jitter |
 | troubleshooting | "lỗi", "fix", "nguyên nhân", "root cause" | Memory leak do không close connection |
 | concept | Thuật ngữ mới, định nghĩa, giải thích khái niệm | "Bounded context" trong kiến trúc dự án |
-| candidate-skill | Thao tác cụ thể, tái sử dụng, chạy độc lập | Parse PDF hóa đơn |
+| candidate-skill | Thao tác cụ thể, làm-theo-được, tái dùng cho task tương tự | Parse PDF hóa đơn |
 | candidate-workflow | Chuỗi bước, quy trình, checklist | Release flow |
 
 **Lưu ý**: Một đoạn hội thoại có thể chứa nhiều loại knowhow. Tách riêng từng item.

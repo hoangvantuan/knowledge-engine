@@ -13,7 +13,7 @@
 | inbox/ | Bộ đệm chờ đúc kết. Nội dung chưa phân loại. |
 | archive/ | Page lỗi thời đã rút khỏi wiki. Lint consolidation chuyển vào đây. |
 | wiki/ | Tri thức có cấu trúc, liên kết chéo. |
-| skills/ | Công việc cụ thể, chạy độc lập, tái sử dụng cao. |
+| skills/ | Thao tác cụ thể, làm-theo-được, tái sử dụng. |
 | workflows/ | Chuỗi bước, gắn domain, gọi nhiều skill. |
 
 > **Lưu ý file top-level**: ngoài `SCHEMA.md`, thư mục `.knowhow/` còn có `schema-signals.md`, là sổ tích luỹ tín hiệu "khuôn không vừa" (meta về khuôn, KHÔNG phải tri thức). distill và query ghi vào đây; lint `schema-review` đọc. File này KHÔNG nằm trong `wiki/` và KHÔNG vào `index.md`.
@@ -26,16 +26,16 @@
 | pattern | wiki/pattern-<slug>.md | Cách làm đã chứng minh hiệu quả |
 | concept | wiki/concept-<slug>.md | Thuật ngữ, khái niệm riêng dự án |
 | troubleshooting | wiki/troubleshooting-<slug>.md | Sự cố đã gặp + cách xử lý |
-| skill | skills/<slug>.md | Công việc cụ thể, chạy độc lập, tái sử dụng |
+| skill | skills/<slug>.md | Thao tác cụ thể, làm-theo-được, tái sử dụng |
 | workflow | workflows/<slug>.md | Chuỗi bước, gắn domain, gọi nhiều skill |
 
 ## Phân biệt Skill và Workflow
 
 | | Skill | Workflow |
 |---|---|---|
-| Bản chất | Một công việc cụ thể, khép kín | Chuỗi bước hoàn thành mục tiêu lớn hơn |
-| Tái sử dụng | Cao, dùng ở nhiều bối cảnh | Thấp hơn, gắn domain cụ thể |
-| Phụ thuộc | Chạy độc lập | Gọi nhiều skill, có thứ tự bước |
+| Bản chất | Một thao tác khép kín, làm-theo-được | Chuỗi bước hoàn thành mục tiêu lớn hơn |
+| Tái sử dụng | Dùng lại được cho task tương tự (có thể gắn domain) | Thấp hơn, gắn domain cụ thể |
+| Phụ thuộc | Một thao tác khép kín (không nhất thiết độc lập hoàn toàn với kho) | Gọi nhiều skill, có thứ tự bước |
 | Khi đổi domain | Ít thay đổi | Thay đổi nhiều |
 
 ## Naming Conventions
