@@ -1,4 +1,4 @@
-# Knowhow Schema — {{PROJECT_NAME}}
+# Knowhow Schema: {{PROJECT_NAME}}
 
 **schema_version**: 1
 
@@ -16,7 +16,7 @@
 | skills/ | Công việc cụ thể, chạy độc lập, tái sử dụng cao. |
 | workflows/ | Chuỗi bước, gắn domain, gọi nhiều skill. |
 
-> **Lưu ý file top-level**: ngoài `SCHEMA.md`, thư mục `.knowhow/` còn có `schema-signals.md` — sổ tích luỹ tín hiệu "khuôn không vừa" (meta về khuôn, KHÔNG phải tri thức). distill và query ghi vào đây; lint `schema-review` đọc. File này KHÔNG nằm trong `wiki/` và KHÔNG vào `index.md`.
+> **Lưu ý file top-level**: ngoài `SCHEMA.md`, thư mục `.knowhow/` còn có `schema-signals.md`, là sổ tích luỹ tín hiệu "khuôn không vừa" (meta về khuôn, KHÔNG phải tri thức). distill và query ghi vào đây; lint `schema-review` đọc. File này KHÔNG nằm trong `wiki/` và KHÔNG vào `index.md`.
 
 ## Page Types
 

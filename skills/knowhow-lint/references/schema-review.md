@@ -56,7 +56,7 @@ Mỗi đề xuất được duyệt chạy một batch migrate. Mọi batch Đ�
 1. Tạo subfolder `wiki/<type>/` (hoặc nhóm theo tag).
 2. Move các file của type đó vào subfolder.
 3. **Rewrite mọi `[[link]]`** trỏ tới (xem grep ở Bước chung).
-4. Cập nhật ghi chú resolve trong `SCHEMA.md` (mục Cross-referencing đã nói resolve tìm đệ quy — xác nhận còn đúng).
+4. Cập nhật ghi chú resolve trong `SCHEMA.md` (mục Cross-referencing đã nói resolve tìm đệ quy, xác nhận còn đúng).
 
 ### 4.3. Đổi format page type
 
@@ -77,7 +77,7 @@ Page của type bị nghỉ hưu: set `status: archived`, move vào `archive/`. 
 Bắt buộc, theo đúng thứ tự:
 
 1. **Bump `schema_version`** ở đầu `SCHEMA.md` (tăng 1).
-2. **Ghi Changelog SCHEMA**: thêm dòng `- YYYY-MM-DD: <loại thay đổi> — <lý do ngắn>` vào mục `## Changelog`.
+2. **Ghi Changelog SCHEMA**: thêm dòng `- YYYY-MM-DD: <loại thay đổi>, <lý do ngắn>` vào mục `## Changelog`.
 3. **Rewrite link ảnh hưởng**: grep + sửa mọi `[[old-slug]]`:
    ```bash
    grep -rln "\[\[<old-slug>\]\]" .knowhow

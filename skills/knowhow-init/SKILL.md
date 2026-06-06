@@ -104,7 +104,7 @@ Ghi kết quả vào `.knowhow/SCHEMA.md`.
 |----------|--------|-------------|---------|----------|
 ```
 
-**schema-signals.md** (top-level, cạnh SCHEMA.md — sổ tích luỹ tín hiệu tiến hoá, tạo rỗng chỉ có header):
+**schema-signals.md** (top-level, cạnh SCHEMA.md, là sổ tích luỹ tín hiệu tiến hoá, tạo rỗng chỉ có header):
 ````markdown
 # Schema Signals
 
@@ -116,7 +116,7 @@ Format mỗi dòng:
 
 - nguồn ∈ distill | query
 - loại ∈ no-fit-type | adhoc-section | query-miss
-- lint scan (type-bloat, tag-cluster) KHÔNG ghi vào sổ này — tính live khi schema-review chạy.
+- lint scan (type-bloat, tag-cluster) KHÔNG ghi vào sổ này, tính live khi schema-review chạy.
 
 ## Đang chờ xử lý
 

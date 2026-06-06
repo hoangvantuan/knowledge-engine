@@ -166,7 +166,7 @@ Thực thi từng thay đổi đã được duyệt:
 ### Bước thực hiện
 
 1. Quét frontmatter mọi file trong `wiki/` ĐỆ QUY (gồm subfolder, trừ index.md, log.md): đọc `type`, `title`, `tags`, `updated`. Dùng `find .knowhow/wiki -name "*.md" -not -name "index.md" -not -name "log.md"`.
-2. Sinh `wiki/index.md`, group theo `type`. Tập type ĐỌC TỪ bảng Page Types trong `SCHEMA.md` (không cố định 4 heading — nếu schema đã thêm type mới như `experiment`, sinh thêm heading tương ứng). Mỗi dòng `- [[<type>-<slug>]] - <title>`. Heading mỗi type là giá trị type viết HOA chữ cái đầu (decision → `## Decision`, experiment → `## Experiment`), nhất quán với seed của `knowhow-init`.
+2. Sinh `wiki/index.md`, group theo `type`. Tập type ĐỌC TỪ bảng Page Types trong `SCHEMA.md` (không cố định 4 heading. Nếu schema đã thêm type mới như `experiment`, sinh thêm heading tương ứng). Mỗi dòng `- [[<type>-<slug>]] - <title>`. Heading mỗi type là giá trị type viết HOA chữ cái đầu (decision → `## Decision`, experiment → `## Experiment`), nhất quán với seed của `knowhow-init`.
 3. Quét frontmatter mọi file trong `skills/` (đệ quy, `find .knowhow/skills -name "*.md" -not -name "registry.md"`) (trừ registry.md): đọc `title`, `trigger`, `version`, `tags`, `updated`. Sinh `skills/registry.md` theo format page-formats mục 6.1 (cột `Khi nào dùng` lấy từ `trigger`; skill cũ thiếu `trigger` → để ô trống và sẽ bị frontmatter check 1c báo), sort alphabet.
 4. Quét frontmatter mọi file trong `workflows/` (đệ quy, `find .knowhow/workflows -name "*.md" -not -name "registry.md"`) (trừ registry.md): đọc `title`, `skills_used`, `version`, `updated`. Sinh `workflows/registry.md` theo format mục 6.2, sort alphabet.
 5. Ghi log: `## [YYYY-MM-DD] lint | Rebuild index + 2 registry từ frontmatter`.
@@ -181,7 +181,7 @@ Tổng hợp tín hiệu "khuôn không vừa" → đề xuất diff lên `SCHEM
 
 ### Precondition
 
-- `.knowhow/schema-signals.md` PHẢI tồn tại (init tạo). Nếu thiếu: tạo lại file rỗng tối thiểu — dòng tiêu đề `# Schema Signals`, rồi hai heading `## Đang chờ xử lý` và `## Đã xử lý` (giống template init) — rồi tiếp tục, coi như chưa có tín hiệu sự kiện nào. KHÔNG dừng. (Lưu ý: `schema-signals.md` là file meta top-level, KHÔNG phải page nên không chịu frontmatter check 1c.)
+- `.knowhow/schema-signals.md` PHẢI tồn tại (init tạo). Nếu thiếu: tạo lại file rỗng tối thiểu gồm dòng tiêu đề `# Schema Signals`, rồi hai heading `## Đang chờ xử lý` và `## Đã xử lý` (giống template init), rồi tiếp tục, coi như chưa có tín hiệu sự kiện nào. KHÔNG dừng. (Lưu ý: `schema-signals.md` là file meta top-level, KHÔNG phải page nên không chịu frontmatter check 1c.)
 
 ### Flow
 

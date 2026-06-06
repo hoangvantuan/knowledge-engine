@@ -73,7 +73,7 @@ Trình bày đề xuất cho user. Mỗi item gồm:
 
 ### Bước 3.5: Phát tín hiệu strain (tiến hoá cấu trúc)
 
-Trong lúc phân loại + đề xuất, để ý hai dấu hiệu "khuôn không vừa". Nếu gặp, GHI tín hiệu vào `.knowhow/schema-signals.md` (mục "Đang chờ xử lý"). KHÔNG tự đổi khuôn — đó là việc của `knowhow-lint schema-review`. Giả định init đã tạo `.knowhow/schema-signals.md` với sẵn heading; nếu thiếu, tạo lại theo template của init trước khi ghi.
+Trong lúc phân loại + đề xuất, để ý hai dấu hiệu "khuôn không vừa". Nếu gặp, GHI tín hiệu vào `.knowhow/schema-signals.md` (mục "Đang chờ xử lý"). KHÔNG tự đổi khuôn, đó là việc của `knowhow-lint schema-review`. Giả định init đã tạo `.knowhow/schema-signals.md` với sẵn heading; nếu thiếu, tạo lại theo template của init trước khi ghi.
 
 **Khi nào emit `no-fit-type`**: item rõ ràng là một *loại tri thức* không nằm trong 4 wiki type {decision, pattern, concept, troubleshooting} nhưng buộc phải xếp tạm vào wiki type gần nhất. Ví dụ: "kết quả thí nghiệm", "nguồn tham khảo cần lưu", "runbook vận hành". Dấu hiệu: bạn thấy mình miễn cưỡng chọn type vì không cái nào khớp.
 
@@ -143,7 +143,7 @@ Với mỗi item được duyệt, thực hiện theo thứ tự:
 
 5b. **Lifecycle metadata**:
    - `status`: page mới set `active`. Khi hành động là SỬA (thay cách cũ), set page/section cũ `status: deprecated`. Khi GỘP, page bị nuốt set `status: archived`.
-   - `confidence` (chỉ wiki, không áp skill/workflow): set theo số entry Changelog sau khi ghi entry mới — 1 → `low`, ≥2 → `medium`, ≥3 → `high`.
+   - `confidence` (chỉ wiki, không áp skill/workflow): set theo số entry Changelog sau khi ghi entry mới: 1 → `low`, ≥2 → `medium`, ≥3 → `high`.
 
 6. **Log**: Ghi vào `wiki/log.md`:
    ```
