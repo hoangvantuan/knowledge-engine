@@ -114,7 +114,7 @@ Với mỗi item được duyệt, thực hiện theo thứ tự:
 1. **Tạo hoặc cập nhật page** theo format chuẩn.
    - Format reference: `../knowhow-capture/references/page-formats.md` (đường dẫn tương đối từ thư mục skill này). Nếu không resolve được, dùng format frontmatter cơ bản bên dưới.
    - Format frontmatter cơ bản: title, type, tags, created, updated.
-   - **Skill: BẮT BUỘC điền `trigger`** trong frontmatter (mô tả "khi nào nên dùng skill này"). Đây là tín hiệu mạnh nhất để `knowhow-run` match task sang skill; thiếu nó registry sẽ trống cột `Khi nào dùng`. Đối xứng với workflow (vốn đã bắt buộc `trigger`). Khi REFINE skill cũ chưa có `trigger`, bổ sung luôn trong lần sửa này.
+   - **Skill: BẮT BUỘC điền `trigger`** trong frontmatter (mô tả "khi nào nên dùng skill này"). Đây là tín hiệu để `knowhow-run` match task sang skill; thiếu nó registry sẽ trống cột `Khi nào dùng`. Khi REFINE skill cũ chưa có `trigger`, bổ sung luôn trong lần sửa này.
 
 2. **Cập nhật registry tương ứng**:
    - Tạo/xoá wiki page → cập nhật `wiki/index.md`

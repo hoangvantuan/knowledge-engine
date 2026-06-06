@@ -5,9 +5,9 @@ description: "Entrypoint chủ động để tiêu thụ skill/workflow đã đ�
 
 # Knowhow Run
 
-Entrypoint chủ động để tra, load và làm theo skill/workflow đã đúc kết. Đây là phần `recall` + `execute` mà knowhow trước đây thiếu: hệ tích luỹ bó tốt, nhưng tiêu thụ chúng vẫn thụ động (agent phải tự nhớ tra registry, tự mở file, dễ liếc một dòng mô tả rồi bịa).
+Entrypoint chủ động để tra, load và làm theo skill/workflow đã đúc kết. Mục tiêu: thay vì liếc một dòng mô tả trong registry rồi tự làm theo trí nhớ, agent mở đúng file bó và làm theo nội dung thật.
 
-Lõi: skill/workflow cùng là tri thức như wiki, khác duy nhất là chúng *hành động được*. Vì chỉ là tri thức actionable dạng markdown, tiêu thụ KHÔNG cần execution engine. Chỉ cần ba nhịp:
+Skill/workflow cùng là tri thức như wiki, khác duy nhất là chúng *hành động được*. Vì chỉ là tri thức actionable dạng markdown, tiêu thụ KHÔNG cần execution engine. Chỉ cần ba nhịp:
 
 ```
 tra registry/index  →  load file bó khớp  →  đọc kỹ rồi làm theo
@@ -27,7 +27,7 @@ Nếu không tồn tại, dừng và hướng dẫn user chạy `knowhow-init` t
 
 ## Phạm vi agent
 
-`knowhow-run` thuần đọc-file-rồi-làm-theo, không thao tác đặc thù agent nào. Vì là markdown thuần, nó ít phụ thuộc agent hơn 5 skill kia. Dù vậy nó vẫn là skill vận hành, sống ở config agent, không nhúng vào sản phẩm `.knowhow/`.
+`knowhow-run` thuần đọc-file-rồi-làm-theo, không thao tác đặc thù agent nào. Nó là skill vận hành, sống ở config agent, không nhúng vào sản phẩm `.knowhow/`.
 
 ## Phân vai với knowhow-query
 
@@ -91,7 +91,7 @@ Xác định input thuộc dạng nào rồi rẽ nhánh:
 
 ## Quy tắc cứng
 
-1. **KHÔNG ghi gì vào `.knowhow/`.** run thuần tiêu thụ: không tạo inbox item, không sửa wiki/skill/workflow, KHÔNG ghi `wiki/log.md`. (Đánh đổi đã chốt spec v1.3: bỏ log để giữ gọn. Nếu sau cần vòng phản hồi bó-nóng/bó-chết, thêm một dòng log là đủ.)
+1. **KHÔNG ghi gì vào `.knowhow/`.** run thuần tiêu thụ: không tạo inbox item, không sửa wiki/skill/workflow, KHÔNG ghi `wiki/log.md`.
 2. **Đọc hết file bó trước khi làm.** Cấm liếc một dòng registry rồi bịa các bước.
 3. **Không bịa bó.** Không có bó khớp thì nói không có, gợi ý đúc kết. Không tự nghĩ ra quy trình rồi gán cho một bó không tồn tại.
 4. **Không sản xuất.** Nếu trong lúc làm phát hiện bó thiếu/sai bước, KHÔNG tự sửa bó ở đây. Ghi nhận và gợi ý user chạy `knowhow-distill` để refine. (Tách tiêu thụ khỏi sản xuất.)
