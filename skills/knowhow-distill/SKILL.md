@@ -38,6 +38,21 @@ description: "Đúc kết knowhow từ inbox thành wiki pages, skills, workflow
 
 Ghi nhận toàn bộ vào context. Đây là bước quan trọng nhất: không đọc registry → không biết cái đã có → sẽ tạo trùng.
 
+### Bước 1.5: Quét tín hiệu promote (nâng pattern thành skill)
+
+Ngoài inbox, distill tổng hợp tín hiệu "page bị dùng lặp để làm theo" để đề xuất nâng lên skill. Đây là đối xứng của cơ chế tiến hoá SCHEMA, nhưng điểm tổng hợp là distill vì promote sinh artifact actionable.
+
+1. Đọc `.knowhow/schema-signals.md`, lấy các dòng `promote-candidate` trong mục `## Đang chờ xử lý`. Nếu file không tồn tại → bỏ qua bước này, không dừng.
+2. Gom theo slug page (cột related). Đếm số dòng mỗi slug. Cộng thêm mỗi inbox item có `promote_of: <slug>` vào số đếm của slug đó (tín hiệu thủ công từ run/capture).
+3. **Ngưỡng: ≥ 3 phiếu cùng một slug** → page đó là ứng viên promote. Dưới ngưỡng → để tín hiệu lại trong sổ, không đề xuất. Ngoại lệ: item `promote_of` do user/run chủ động thả thì đề xuất ngay, không cần đủ 3.
+4. Với mỗi slug vượt ngưỡng (hoặc có `promote_of`): đọc HẾT nội dung wiki page nguồn, đánh giá chuyển thành skill (thao tác khép kín) hay workflow (chuỗi bước). Đưa vào đề xuất ở Bước 3 cùng các inbox item khác, dạng:
+
+```
+⬆️ promote-candidate: [[<slug>]] (N phiếu)
+   → Hành động: NÂNG thành skill / NÂNG thành workflow
+   → Preview: tạo skills/<verb-noun>.md từ nội dung page, giữ liên kết ngược
+```
+
 ### Bước 2: Đọc inbox
 
 - Liệt kê tất cả file trong `.knowhow/inbox/`.
@@ -145,6 +160,14 @@ Với mỗi item được duyệt, thực hiện theo thứ tự:
    - `status`: page mới set `active`. Khi hành động là SỬA (thay cách cũ), set page/section cũ `status: deprecated`. Khi GỘP, page bị nuốt set `status: archived`.
    - `confidence` (chỉ wiki, không áp skill/workflow): set theo số entry Changelog sau khi ghi entry mới: 1 → `low`, ≥2 → `medium`, ≥3 → `high`.
 
+5c. **Thực thi promote (nếu đề xuất promote-candidate được duyệt)**:
+   1. Tạo skill/workflow từ nội dung wiki page nguồn theo format `../knowhow-capture/references/page-formats.md` mục 3 (skill) hoặc 4 (workflow). BẮT BUỘC điền `trigger`.
+   2. Thêm vào frontmatter skill mới: `promoted_from: [[<slug-page-nguồn>]]` (liên kết ngược).
+   3. Cập nhật wiki page nguồn: thêm `[[<slug-skill-mới>]]` vào `related:` và một dòng trong body "Đã nâng thành skill: [[<slug-skill-mới>]]". KHÔNG xoá page nguồn (page vẫn là tri thức 'để biết', skill là bản 'để làm'). Nếu nội dung page thuần thao tác và không còn giá trị tham khảo riêng, có thể hỏi user set page `status: deprecated`.
+   4. Cập nhật `skills/registry.md` (hoặc `workflows/registry.md`).
+   5. Log: `## [YYYY-MM-DD] distill | Promote [[<slug-page>]] → skills/<slug-skill>.md`.
+   6. Cắt các dòng `promote-candidate` slug đó từ `## Đang chờ xử lý` sang `## Đã xử lý` trong `schema-signals.md` (nếu có). Move các inbox item `promote_of: <slug>` đã xử lý sang `archive/inbox/` (KHÔNG xoá cứng).
+
 6. **Log**: Ghi vào `wiki/log.md`:
    ```
    ## [YYYY-MM-DD] distill | Tạo mới wiki/<type>-<slug>.md
@@ -166,7 +189,7 @@ Chọn loại dựa trên bản chất nội dung:
 | Tri thức, khái niệm, quyết định, cách xử lý sự cố | **Wiki page** |
 | Không chắc, hoặc mới gặp lần đầu | Mặc định **Wiki page** (chờ tín hiệu lặp rồi promote) |
 
-Tại sao mặc định wiki? Wiki page an toàn hơn: dễ tạo, dễ sửa, dễ gộp. KHÔNG ép mọi thứ thành skill ngay. Nhưng đừng để wiki thành nghĩa địa: khi một cách làm bị dùng lặp nhiều lần, NÂNG nó thành skill. Skill KHÔNG cần "độc lập hoàn toàn với context dự án": chấp nhận skill gắn domain MIỄN LÀ làm-theo-được và tái dùng cho task tương tự. Tiêu chí loại bỏ skill chỉ là: thao tác quá cụ thể, dùng một lần, không lặp lại.
+Tại sao mặc định wiki? Wiki page an toàn hơn: dễ tạo, dễ sửa, dễ gộp. KHÔNG ép mọi thứ thành skill ngay. Nhưng đừng để wiki thành nghĩa địa: khi một cách làm bị dùng lặp (≥3 phiếu promote-candidate, xem Bước 1.5), NÂNG nó thành skill. Skill KHÔNG cần "độc lập hoàn toàn với context dự án": chấp nhận skill gắn domain MIỄN LÀ làm-theo-được và tái dùng cho task tương tự. Tiêu chí loại bỏ skill chỉ là: thao tác quá cụ thể, dùng một lần, không lặp lại.
 
 ## Cross-referencing
 

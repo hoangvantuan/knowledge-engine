@@ -8,7 +8,7 @@ Nguyên tắc nền: **tách phát hiện khỏi quyết định**. lint tổng 
 
 ## 1. Hai kiểu tín hiệu
 
-- **Tín hiệu sự kiện** (đọc từ `schema-signals.md` mục "Đang chờ xử lý"): `no-fit-type`, `adhoc-section` (distill), `query-miss` (query). Đã được ghi sẵn giữa các lần review.
+- **Tín hiệu sự kiện** (đọc từ `schema-signals.md` mục "Đang chờ xử lý"): `no-fit-type`, `adhoc-section` (distill), `query-miss` (query). Đã được ghi sẵn giữa các lần review. (Dòng `promote-candidate` cũng nằm trong sổ nhưng KHÔNG thuộc schema-review: `knowhow-distill` xử lý chúng, schema-review bỏ qua.)
 - **Tín hiệu trạng thái** (tính LIVE lúc review, KHÔNG đọc từ sổ): `type-bloat`, `tag-cluster`. Quét tại thời điểm chạy.
 
 ## 2. Quét sống (tính tín hiệu trạng thái)

@@ -61,6 +61,8 @@ Thêm theo loại:
 
 Thiếu field nào → báo cụ thể file và field thiếu.
 
+Field TUỲ CHỌN (KHÔNG báo thiếu): `promoted_from` và `reusable_across` ở skill; `promote_of` ở inbox item.
+
 ### 1d. Inbox backlog
 
 - Liệt kê file trong `inbox/`.
@@ -167,7 +169,7 @@ Thực thi từng thay đổi đã được duyệt:
 
 1. Quét frontmatter mọi file trong `wiki/` ĐỆ QUY (gồm subfolder, trừ index.md, log.md): đọc `type`, `title`, `tags`, `updated`. Dùng `find .knowhow/wiki -name "*.md" -not -name "index.md" -not -name "log.md"`.
 2. Sinh `wiki/index.md`, group theo `type`. Tập type ĐỌC TỪ bảng Page Types trong `SCHEMA.md` (không cố định 4 heading. Nếu schema đã thêm type mới như `experiment`, sinh thêm heading tương ứng). Mỗi dòng `- [[<type>-<slug>]] - <title>`. Heading mỗi type là giá trị type viết HOA chữ cái đầu (decision → `## Decision`, experiment → `## Experiment`), nhất quán với seed của `knowhow-init`.
-3. Quét frontmatter mọi file trong `skills/` (đệ quy, `find .knowhow/skills -name "*.md" -not -name "registry.md"`) (trừ registry.md): đọc `title`, `trigger`, `version`, `tags`, `updated`. Sinh `skills/registry.md` theo format page-formats mục 6.1 (cột `Khi nào dùng` lấy từ `trigger`; skill cũ thiếu `trigger` → để ô trống và sẽ bị frontmatter check 1c báo), sort alphabet.
+3. Quét frontmatter mọi file trong `skills/` (đệ quy, `find .knowhow/skills -name "*.md" -not -name "registry.md"`) (trừ registry.md): đọc `title`, `trigger`, `version`, `tags`, `updated`. Sinh `skills/registry.md` theo format page-formats mục 6.1 (cột `Khi nào dùng` lấy từ `trigger`; skill cũ thiếu `trigger` → để ô trống và sẽ bị frontmatter check 1c báo; bỏ qua `promoted_from`/`reusable_across` vì registry không có cột tương ứng), sort alphabet.
 4. Quét frontmatter mọi file trong `workflows/` (đệ quy, `find .knowhow/workflows -name "*.md" -not -name "registry.md"`) (trừ registry.md): đọc `title`, `skills_used`, `version`, `updated`. Sinh `workflows/registry.md` theo format mục 6.2, sort alphabet.
 5. Ghi log: `## [YYYY-MM-DD] lint | Rebuild index + 2 registry từ frontmatter`.
 
@@ -185,7 +187,7 @@ Tổng hợp tín hiệu "khuôn không vừa" → đề xuất diff lên `SCHEM
 
 ### Flow
 
-1. **Đọc sổ tín hiệu**: đọc `.knowhow/schema-signals.md`, lấy các dòng trong mục "Đang chờ xử lý" (BỎ QUA mục "Đã xử lý").
+1. **Đọc sổ tín hiệu**: đọc `.knowhow/schema-signals.md`, lấy các dòng trong mục "Đang chờ xử lý" (BỎ QUA mục "Đã xử lý"). BỎ QUA các dòng loại `promote-candidate` (đó là việc của `knowhow-distill`, không phải schema-review).
 2. **Quét sống**: tính tín hiệu trạng thái tại thời điểm chạy (đếm page mỗi type, cụm tag, file/folder phình, orphan). Lệnh cụ thể trong `references/schema-review.md` mục 2. KHÔNG ghi tín hiệu trạng thái vào sổ.
 3. **Áp ngưỡng**: đối chiếu tín hiệu (sự kiện + trạng thái) với 4 ngưỡng trong reference mục 3. Chỉ những gì VƯỢT ngưỡng mới thành đề xuất. Dưới ngưỡng → giữ trong sổ, không báo.
 4. **Sinh đề xuất diff**, nhóm theo 4 loại thay đổi. Trình bày cho user (xem Output format dưới). Nếu KHÔNG có tín hiệu nào vượt ngưỡng → hiển thị `✅ Không đủ ngưỡng nào` và DỪNG, không sang bước 5-6.

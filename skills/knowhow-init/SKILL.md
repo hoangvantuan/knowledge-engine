@@ -123,8 +123,9 @@ distill và query ghi vào "Đang chờ xử lý". lint `schema-review` đọc, 
 Format mỗi dòng:
 `- [YYYY-MM-DD] <nguồn> | <loại> | <chi tiết ngắn> | related: <slug-hoặc-tag>`
 
-- nguồn ∈ distill | query
-- loại ∈ no-fit-type | adhoc-section | query-miss
+- nguồn ∈ distill | query | run
+- loại ∈ no-fit-type | adhoc-section | query-miss | promote-candidate
+- promote-candidate: tín hiệu "một wiki pattern/troubleshooting page đang bị dùng lặp để LÀM THEO", ứng viên nâng thành skill/workflow. query/run phát; `related` trỏ slug page nguồn. Tổng hợp promote-candidate là việc của `knowhow-distill` (KHÔNG phải schema-review); schema-review BỎ QUA các dòng promote-candidate.
 - lint scan (type-bloat, tag-cluster) KHÔNG ghi vào sổ này, tính live khi schema-review chạy.
 
 ## Đang chờ xử lý

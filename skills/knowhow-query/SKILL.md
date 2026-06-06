@@ -58,6 +58,25 @@ Ví dụ dòng tín hiệu:
 
 > Nếu câu trả lời gọn (1-2 page sạch trúng đích), KHÔNG emit. Tín hiệu chỉ dành cho "khuôn không vừa".
 
+### Bước 3b: Phát tín hiệu promote-candidate
+
+Ngoài query-miss (khuôn không vừa), query là chỗ tốt để bắt "một page bị dùng đi dùng lại để LÀM THEO", ứng viên nâng thành skill.
+
+Emit `promote-candidate` vào `.knowhow/schema-signals.md` khi CẢ HAI đúng:
+
+- Câu hỏi có tính thao tác ("làm sao để...", "các bước...", "quy trình..."), và
+- Câu trả lời dựa chủ yếu vào MỘT page type pattern/troubleshooting (page đó là nguồn hành động, không chỉ tham khảo).
+
+Chèn dòng tín hiệu NGAY DƯỚI heading `## Đang chờ xử lý`. THAY `YYYY-MM-DD` bằng ngày thật và `<slug-page>` bằng slug thật TRƯỚC khi chạy:
+
+```bash
+awk '/^## Đang chờ xử lý$/{print; print "- [YYYY-MM-DD] query | promote-candidate | hỏi làm-theo trúng [[<slug-page>]] | related: <slug-page>"; next} 1' \
+  .knowhow/schema-signals.md > /tmp/ss && mv /tmp/ss .knowhow/schema-signals.md
+```
+
+> Mỗi lần page đó lại được hỏi kiểu làm-theo thì emit thêm một dòng (cùng slug). distill đếm số dòng cùng slug để áp ngưỡng. KHÔNG dedupe ở đây: mỗi lần lặp là một phiếu.
+> Page đã có skill tương ứng (grep cố định `grep -F 'promoted_from: [[<slug>]]' .knowhow/skills` ra kết quả) thì KHÔNG emit nữa.
+
 ### Bước 4: File ngược qua inbox (tôn trọng cửa duy nhất)
 
 Nếu câu trả lời đáng tái dùng (user xác nhận OK), thả nó vào `inbox/` như một candidate page. KHÔNG ghi thẳng vào `wiki/`. distill xử lý sau như mọi item khác.
@@ -83,3 +102,4 @@ Thêm vào `wiki/log.md`:
 2. Không bịa câu trả lời. Không có page thì nói không có.
 3. Trích dẫn `[[slug]]` cho mọi tuyên bố lấy từ page.
 4. Chỉ emit `query-miss` khi thật sự "khuôn không vừa" (≥3 page hoặc không page sạch), tránh báo nhiễu.
+5. Emit `promote-candidate` chỉ khi câu hỏi có tính làm-theo VÀ trả lời dựa chủ yếu vào một pattern/troubleshooting page. Không emit cho câu hỏi tra cứu thuần (để biết). Không emit nếu page đó đã được promote (đã có skill với `promoted_from` trỏ về).

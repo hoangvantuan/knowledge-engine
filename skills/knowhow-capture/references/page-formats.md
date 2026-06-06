@@ -16,9 +16,10 @@ Mỗi item capture ghi vào `inbox/YYYY-MM-DD-slug.md`.
 type: decision | pattern | troubleshooting | concept | candidate-skill | candidate-workflow
 title: "Tên ngắn gọn"
 tags: []
-captured_from: conversation | file-import | query
+captured_from: conversation | file-import | query | run
 captured_at: "YYYY-MM-DDTHH:mm"
 source_file: "raw/YYYY-MM-DD-slug.md"  # BẮT BUỘC. Trích đoạn nguồn (cả hội thoại) luôn lưu vào raw/. Không để trống.
+promote_of: ""  # TUỲ CHỌN. Chỉ điền khi item là ứng viên promote: slug wiki page nguồn (ví dụ pattern-retry-jitter). distill đọc page này rồi đề xuất tạo skill giữ liên kết ngược.
 ---
 ```
 
@@ -434,6 +435,7 @@ trigger: "Khi nào nên dùng skill này"
 input: "Mô tả đầu vào"
 output: "Mô tả đầu ra"
 reusable_across: []
+promoted_from: ""   # TUỲ CHỌN. Nếu skill được nâng từ một wiki page, trỏ về: [[<slug-page-nguồn>]].
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 version: "1.0"

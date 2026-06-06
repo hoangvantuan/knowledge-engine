@@ -96,6 +96,10 @@ Xác định input thuộc dạng nào rồi rẽ nhánh:
 3. **Không bịa bó.** Không có bó khớp thì nói không có, gợi ý đúc kết. Không tự nghĩ ra quy trình rồi gán cho một bó không tồn tại.
 4. **Không sản xuất.** Nếu trong lúc làm phát hiện bó thiếu/sai bước, KHÔNG tự sửa bó ở đây. Ghi nhận và gợi ý user chạy `knowhow-distill` để refine. (Tách tiêu thụ khỏi sản xuất.)
 5. **Tôn trọng cửa duy nhất.** Bài học mới sinh trong lúc chạy (nếu đáng lưu) đi qua `knowhow-capture` → inbox, KHÔNG ghi thẳng.
+6. **Tín hiệu promote khi chạy theo wiki page.** Nếu lần chạy này phải đọc và làm theo một wiki page type pattern/troubleshooting (vì chưa có bó, agent lấy bước từ page đó) thì đó là dấu hiệu page nên thành skill. run KHÔNG được ghi `.knowhow/` (gồm cả `schema-signals.md`), nên CUỐI lần chạy chỉ GỢI Ý user:
+   > Lần này mình làm theo wiki page [[<slug>]] vì chưa có skill. Nếu việc này lặp lại, chạy `knowhow-capture` để file một candidate-skill với `promote_of: <slug>`, rồi `knowhow-distill` sẽ đề xuất tạo skill.
+
+   Không tự chạy capture, chỉ gợi ý. Đây là cách run đóng góp tín hiệu promote mà vẫn giữ quy tắc "run không ghi gì".
 
 ## Edge cases
 
