@@ -27,7 +27,7 @@ Nếu không tồn tại, dừng và hướng dẫn user chạy `knowhow-init` t
 
 ## Phạm vi agent
 
-`knowhow-run` thuần đọc-file-rồi-làm-theo, không thao tác đặc thù agent nào. Nó là skill vận hành, sống ở config agent, không nhúng vào sản phẩm `.knowhow/`.
+`knowhow-run` agent-agnostic: thuần đọc file bó rồi làm theo, không phụ thuộc thao tác cụ thể của agent nào. Skill này sống ở config agent, không nhúng vào sản phẩm `.knowhow/` (chỉ tiêu thụ, không sản xuất).
 
 ## Phân vai với knowhow-query
 

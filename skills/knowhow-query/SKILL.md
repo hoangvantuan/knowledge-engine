@@ -19,7 +19,7 @@ Nếu không tồn tại, dừng và hướng dẫn user chạy `knowhow-init` t
 
 ## Phạm vi agent
 
-Như 4 skill kia, `knowhow-query` viết cho Antigravity (Gemini). Agent khác đọc được kết quả (markdown thuần) nhưng chưa chạy được skill cho tới khi port.
+`knowhow-query` và sản phẩm knowhow đều là markdown thuần, dùng chung cho mọi AI agent. Không gắn với agent cụ thể nào: mọi agent đều chạy được skill và đọc được kết quả query.
 
 ## Flow query
 

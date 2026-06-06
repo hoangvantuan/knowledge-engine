@@ -103,7 +103,7 @@ Hệ thống chia làm hai tầng tách biệt:
 ## Bắt đầu
 
 > [!NOTE]
-> 6 skill vận hành hiện được viết cho **Antigravity (Gemini)**. Sản phẩm knowhow (`.knowhow/`) là markdown thuần nên mọi agent (Claude Code, Codex, ...) đều **đọc** được, nhưng để **chạy** capture/distill/lint/query/run trên agent khác cần port skill trước.
+> Cả 6 skill vận hành lẫn sản phẩm knowhow (`.knowhow/`) đều là markdown thuần, không gắn với AI agent cụ thể nào. Mọi agent (Claude Code, Codex, Gemini, ...) đều **đọc** knowhow và **chạy** được capture/distill/lint/query/run.
 
 ### 1. Khởi tạo
 
@@ -131,13 +131,13 @@ flowchart LR
 
 ### 3. Onboard agent mới
 
-`knowhow-init` gắn khối `@import` vào file config agent (`CLAUDE.md` / `GEMINI.md`), nên 4 file bản đồ tri thức được nạp tự động vào context ngay đầu mỗi phiên:
+`knowhow-init` gắn một khối hướng dẫn vào file config agent (`CLAUDE.md` / `AGENTS.md` / `GEMINI.md`), liệt kê 4 file bản đồ tri thức để agent đọc ngay đầu mỗi phiên:
 
 - `SCHEMA.md` (quy ước)
 - `wiki/index.md` (mục lục)
 - `skills/registry.md` và `workflows/registry.md` (cái gì dùng được)
 
-Đây là cơ chế "đảm bảo có mặt" thay cho "nhắc agent đọc": agent thấy bản đồ ngay, không phụ thuộc việc model có nhớ đọc hay không. Chỉ bản đồ được nạp sẵn, nội dung chi tiết (wiki page, skill/workflow bó) load on-demand qua `knowhow-query` / `knowhow-run`. Agent không hỗ trợ `@import` (ví dụ Codex/`AGENTS.md`) thì đọc thủ công 4 file trên theo chỉ dẫn trong config.
+Khối hướng dẫn này yêu cầu agent đọc 4 file bản đồ ngay đầu phiên, không phụ thuộc cơ chế auto-load riêng của từng agent, nên dùng được cho mọi agent. Chỉ bản đồ được đọc sẵn; nội dung chi tiết (wiki page, skill/workflow bó) load on-demand qua `knowhow-query` / `knowhow-run` khi cần.
 
 ## Tiến hoá cấu trúc (schema evolution)
 
