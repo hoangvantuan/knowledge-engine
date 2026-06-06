@@ -70,7 +70,7 @@ Mỗi đề xuất được duyệt chạy một batch migrate. Mọi batch Đ�
 
 ### Type nghỉ hưu (retire)
 
-Page của type bị nghỉ hưu: set `status: archived` (tái dùng field v1.1 C4), move vào `archive/`. Xoá định nghĩa type khỏi bảng Page Types.
+Page của type bị nghỉ hưu: set `status: archived`, move vào `archive/`. Xoá định nghĩa type khỏi bảng Page Types.
 
 ## 5. Bước chung cuối mỗi batch migrate
 
@@ -88,8 +88,8 @@ Bắt buộc, theo đúng thứ tự:
 
 > **Reversibility**: toàn bộ là markdown trong git. Nếu migrate sai, `git revert` đưa về trạng thái cũ sạch.
 
-## 6. Phụ thuộc v1.1 (không bỏ sót)
+## 6. Phụ thuộc bắt buộc (không bỏ sót)
 
-- **Tái dùng** `rebuild-index` (v1.1 P2-F) làm bước cuối mỗi migrate.
-- **Phải mở rộng** resolve `[[slug]]` (v1.1 P0-B) cho type mới + subfolder TRƯỚC khi migrate sinh chúng — nếu không, lint báo link hỏng giả. (Xem `knowhow-lint/SKILL.md` mục 1b.)
-- Type nghỉ hưu dùng `status: archived` + `archive/` (v1.1 C4).
+- **Tái dùng** `rebuild-index` làm bước cuối mỗi migrate.
+- **Phải mở rộng** resolve `[[slug]]` cho type mới + subfolder TRƯỚC khi migrate sinh chúng. Nếu không, lint báo link hỏng giả. (Xem `knowhow-lint/SKILL.md` mục 1b.)
+- Type nghỉ hưu dùng `status: archived` + `archive/`.

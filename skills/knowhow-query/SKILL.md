@@ -64,7 +64,7 @@ Nếu câu trả lời đáng tái dùng (user xác nhận OK), thả nó vào `
 
 1. Đánh giá đáng lưu: câu trả lời đáng lưu nếu có thể tái dùng cho câu hỏi tương tự sau này (không phải thông tin quá cụ thể, dùng một lần). Nếu đáng, hỏi user: "Câu trả lời này đáng lưu lại không?"
 2. Nếu user OK:
-   - Lưu Q&A nguyên văn vào `raw/YYYY-MM-DD-query-<slug>.md` (provenance, nhất quán quy tắc capture C3).
+   - Lưu Q&A nguyên văn vào `raw/YYYY-MM-DD-query-<slug>.md` (provenance, nhất quán với quy tắc capture).
    - Tạo inbox item `inbox/YYYY-MM-DD-query-<slug>.md` theo format inbox trong `../knowhow-capture/references/page-formats.md` (đường dẫn tương đối từ thư mục skill này), với:
      - `captured_from: query`
      - `source_file: raw/YYYY-MM-DD-query-<slug>.md`

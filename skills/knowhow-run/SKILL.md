@@ -56,7 +56,7 @@ Xác định input thuộc dạng nào rồi rẽ nhánh:
 1. Đọc `.knowhow/skills/registry.md` và `.knowhow/workflows/registry.md`. (Đầu phiên agent đã đọc `SCHEMA.md` + index nên biết có bó nào.)
 2. Nếu input RỖNG: liệt kê các bó khả dụng (tên + cột `Khi nào dùng` + `Mô tả`) cho user chọn, rồi dừng chờ chọn.
 3. Nếu input là MÔ TẢ TASK: match task với các bó. Thứ tự ưu tiên khi match:
-   - Cột `Khi nào dùng` (field `trigger`) — tín hiệu mạnh nhất, mô tả đúng tình huống kích hoạt.
+   - Cột `Khi nào dùng` (field `trigger`): tín hiệu mạnh nhất, mô tả đúng tình huống kích hoạt.
    - Cột `Mô tả`.
    - Cột `Tags`.
    Rút 3-5 từ khoá từ task, đối chiếu. Nếu registry chưa đủ để chắc, grep nội dung thật:
