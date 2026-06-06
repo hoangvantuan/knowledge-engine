@@ -37,10 +37,10 @@ Nếu user không chỉ rõ chế độ, hỏi:
 
 | Loại | Tín hiệu nhận biết | Ví dụ |
 |------|---------------------|-------|
-| decision | "quyết định", "chọn X thay Y", "vì lý do..." | Chuyển từ REST sang GraphQL |
+| decision | "quyết định", "chọn X thay Y", "vì lý do..." | Chọn kênh bán hàng chính thay vì dàn trải |
 | pattern | Cách giải quyết lặp lại, "hay là dùng...", "trick này..." | Retry với jitter |
 | troubleshooting | "lỗi", "fix", "nguyên nhân", "root cause" | Memory leak do không close connection |
-| concept | Thuật ngữ mới, định nghĩa, giải thích khái niệm | "Bounded context" trong kiến trúc dự án |
+| concept | Thuật ngữ mới, định nghĩa, giải thích khái niệm | "Khách hạng A": định nghĩa nội bộ công ty |
 | candidate-skill | Thao tác cụ thể, làm-theo-được, tái dùng cho task tương tự | Parse PDF hóa đơn; nâng từ một pattern page bị làm-theo lặp |
 | candidate-workflow | Chuỗi bước, quy trình, checklist | Release flow |
 

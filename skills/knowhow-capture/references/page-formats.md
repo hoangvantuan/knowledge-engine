@@ -3,6 +3,8 @@
 Tài liệu tham chiếu chứa tất cả format page cho toàn bộ Knowhow System.
 Dùng chung cho `knowhow-capture` (ghi inbox) và `knowhow-distill` (đúc kết wiki/skill/workflow).
 
+Format dưới đây dùng chung cho MỌI lĩnh vực: code hay không code đều cùng một cấu trúc, chỉ khác nội dung. Ví dụ minh hoạ cố ý lấy từ nhiều nghề (kỹ thuật, kinh doanh, nội dung, vận hành) để thấy khuôn áp được ở đâu cũng được.
+
 ---
 
 ## 1. Inbox Item Format
@@ -125,43 +127,44 @@ status: active   # active | deprecated | archived
 ```markdown
 ---
 type: decision
-title: "Chọn PostgreSQL thay MongoDB"
-tags: [database, architecture]
-related: [payment-module-design]
-created: 2026-06-05
-updated: 2026-06-05
-confidence: high
+title: "Chọn kênh bán hàng chính cho dòng sản phẩm mới"
+tags: [sales, kenh-phan-phoi, chien-luoc]
+related: [dinh-vi-san-pham-moi]
+created: 2026-06-06
+updated: 2026-06-06
+confidence: medium
 status: active
 ---
 
 ## Bối cảnh
 
-Module thanh toán yêu cầu transaction ACID xuyên nhiều bảng. Cần chọn database phù hợp.
+Dòng sản phẩm mới sắp ra mắt, ngân sách marketing có hạn. Phải dồn lực vào một kênh bán chính trong quý đầu thay vì dàn mỏng nhiều kênh.
 
 ## Các lựa chọn đã xét
 
 | Lựa chọn | Ưu | Nhược |
 |-----------|-----|-------|
-| MongoDB | Schema linh hoạt, horizontal scale dễ | Multi-doc transaction chậm, latency +3x |
-| PostgreSQL | ACID native, mature ecosystem | Schema cứng hơn, vertical scale trước |
+| Sàn TMĐT (Shopee/Lazada) | Có sẵn lưu lượng, thanh toán/vận chuyển lo hết | Phí sàn cao, khó dựng thương hiệu |
+| Website tự vận hành | Sở hữu khách hàng, biên lợi nhuận tốt | Phải tự kéo traffic, chi phí quảng cáo lớn lúc đầu |
+| Bán qua đại lý/cộng tác viên | Mở rộng nhanh, tận dụng quan hệ sẵn | Khó kiểm soát giá và hình ảnh thương hiệu |
 
 ## Quyết định
 
-Dùng PostgreSQL làm database chính cho toàn bộ hệ thống.
+Chọn sàn TMĐT làm kênh chính cho quý đầu, song song dựng website ở chế độ chờ.
 
 ## Lý do
 
-Payment flow là core, cần data integrity tuyệt đối. Benchmark cho thấy MongoDB multi-doc transaction latency tăng 3x so với PostgreSQL transaction.
+Mục tiêu quý đầu là kiểm chứng nhu cầu thật, không phải tối đa biên lợi nhuận. Sàn cho lưu lượng có sẵn nên test được thông điệp và giá nhanh nhất với rủi ro thấp nhất. Website giữ lại để chuyển dần khi đã biết tệp khách nào mua.
 
 ## Hệ quả
 
-- Schema migration cần quản lý chặt chẽ hơn.
-- Horizontal scale phức tạp hơn nếu cần sau này (xem xét Citus).
-- Data integrity cho payment flow được đảm bảo.
+- Biên lợi nhuận quý đầu thấp vì phí sàn, chấp nhận để đổi lấy dữ liệu nhu cầu.
+- Phải đầu tư ảnh/nội dung gian hàng đạt chuẩn sàn ngay từ đầu.
+- Khi có đủ khách quay lại, chủ động kéo về website để sở hữu tệp khách.
 
 ## Changelog
 
-- 2026-06-05: Tạo mới từ inbox
+- 2026-06-06: Tạo mới từ inbox
 ```
 
 ### 2.2. Pattern
@@ -302,33 +305,33 @@ status: active   # active | deprecated | archived
 ```markdown
 ---
 type: concept
-title: "Bounded Context"
-tags: [ddd, architecture]
-related: [aggregate-root, ubiquitous-language]
-created: 2026-06-05
-updated: 2026-06-05
+title: "Khách hạng A (định nghĩa nội bộ công ty)"
+tags: [sales, phan-khuc-khach, thuat-ngu-noi-bo]
+related: [chinh-sach-cham-soc-vip, quy-trinh-phan-bo-sales]
+created: 2026-06-06
+updated: 2026-06-06
 confidence: medium
 status: active
 ---
 
 ## Định nghĩa
 
-Bounded Context là ranh giới logic trong đó một domain model cụ thể có hiệu lực. Trong dự án này, mỗi bounded context tương ứng với một module (payment, inventory, user).
+"Khách hạng A" trong công ty là khách có doanh số 12 tháng gần nhất từ 200 triệu trở lên VÀ đã mua lặp lại ít nhất 2 lần. Đây là định nghĩa nội bộ, không trùng với "khách VIP" chung chung ngoài thị trường.
 
-Cùng một entity (ví dụ "User") có thể có nghĩa khác nhau giữa các context: Payment context quan tâm billing info, User context quan tâm profile.
+Lưu ý: chỉ doanh số cao mà mua một lần thì KHÔNG tính hạng A (xếp vào "khách lớn vãng lai"), vì tiêu chí hạng A nhấn mạnh tính trung thành chứ không chỉ giá trị đơn.
 
 ## Liên quan
 
-- [[aggregate-root]]: Mỗi bounded context có các aggregate root riêng.
-- [[ubiquitous-language]]: Ngôn ngữ chung CHỈ có hiệu lực trong 1 bounded context.
+- [[chinh-sach-cham-soc-vip]]: Chỉ khách hạng A mới được áp dụng chính sách này.
+- [[quy-trinh-phan-bo-sales]]: Khách hạng A được giao cho sales senior, không qua đội mới.
 
 ## Ví dụ
 
-Module Payment có `Customer` (chỉ giữ billing info). Module User có `User` (giữ profile, preferences). Hai entity khác nhau dù cùng đại diện "người dùng".
+Công ty X mua 350 triệu trong năm qua nhưng chỉ một đơn duy nhất, KHÔNG phải hạng A. Chị Lan mua 240 triệu chia 4 lần trong năm, là hạng A. Cùng mức doanh số không đồng nghĩa cùng hạng.
 
 ## Changelog
 
-- 2026-06-05: Tạo mới từ inbox
+- 2026-06-06: Tạo mới từ inbox
 ```
 
 ### 2.4. Troubleshooting
@@ -383,39 +386,41 @@ status: active   # active | deprecated | archived
 ```markdown
 ---
 type: troubleshooting
-title: "Memory leak do connection pool không release"
-tags: [memory, database, production]
-related: [connection-pooling-pattern]
-created: 2026-06-05
-updated: 2026-06-05
-confidence: high
+title: "Bài đăng fanpage bị tụt reach đột ngột"
+tags: [social-media, facebook, reach, van-hanh]
+related: [lich-dang-bai-toi-uu]
+created: 2026-06-06
+updated: 2026-06-06
+confidence: medium
 status: active
 ---
 
 ## Triệu chứng
 
-- Memory usage tăng liên tục sau deploy, đạt OOM sau ~4 giờ.
-- Số connection database tăng không giảm.
-- Response time tăng dần.
+- Reach trung bình mỗi bài tụt từ ~8.000 xuống ~1.500 trong vòng một tuần.
+- Lượt tương tác (like, comment) giảm theo, dù nội dung không đổi.
+- Không có cảnh báo vi phạm nào từ nền tảng.
 
 ## Nguyên nhân gốc
 
-Code mới thêm query trong middleware nhưng dùng `pool.connect()` mà không gọi `client.release()` trong error path. Khi có exception, connection bị giữ vĩnh viễn.
+Nhóm vận hành bắt đầu chèn link ngoài (web bán hàng) ngay trong nội dung bài đăng. Thuật toán Facebook giảm phân phối các bài kéo người dùng rời khỏi nền tảng. Triệu chứng "tụt reach" chỉ là biểu hiện, gốc là hành vi đặt link trong body.
 
 ## Cách fix
 
-1. Wrap tất cả `pool.connect()` trong `try/finally` với `client.release()` ở `finally`.
-2. Hoặc dùng `pool.query()` thay vì `pool.connect()` + `client.query()` cho single query.
-3. Set `pool.max = 20` và `idleTimeoutMillis = 30000` để tự cleanup connection cũ.
+1. Bỏ link ngoài khỏi nội dung chính của bài.
+2. Đưa link xuống comment đầu tiên hoặc dùng nút "Tìm hiểu thêm".
+3. Ưu tiên định dạng nền tảng đang đẩy (video ngắn/Reels) cho 3-5 bài kế tiếp.
+4. Theo dõi reach 7 ngày để xác nhận hồi phục.
 
 ## Phòng ngừa
 
-- Lint rule: cấm `pool.connect()` trực tiếp, bắt buộc dùng wrapper function có release.
-- Monitor: alert khi connection count > 80% pool size.
+- Quy ước nội bộ: không đặt link ngoài trong body bài đăng, luôn để ở comment.
+- Checklist trước khi đăng: kiểm tra định dạng, vị trí link, độ dài caption.
+- Mỗi tháng rà thay đổi thuật toán của nền tảng để cập nhật quy ước.
 
 ## Changelog
 
-- 2026-06-05: Tạo mới từ inbox
+- 2026-06-06: Tạo mới từ inbox
 ```
 
 ---
@@ -585,46 +590,44 @@ status: active   # active | deprecated | archived
 ```markdown
 ---
 type: workflow
-title: "Release flow"
-tags: [release, deployment, ci-cd]
-skills_used: [run-test-suite, build-docker-image, deploy-to-k8s]
-trigger: "Khi merge vào branch main và muốn release lên production"
-created: 2026-06-05
-updated: 2026-06-05
+title: "Quy trình xuất bản một bài blog"
+tags: [content, blog, bien-tap, van-hanh]
+skills_used: [viet-caption-theo-gu-thuong-hieu, toi-uu-seo-tieu-de, kiem-tra-chinh-ta]
+trigger: "Khi có bản nháp bài blog cần đưa lên website"
+created: 2026-06-06
+updated: 2026-06-06
 version: "1.0"
 status: active
 ---
 
 ## Khi nào dùng
 
-Sau khi feature branch đã merge vào main. Tech lead quyết định release. Thường 1-2 lần/tuần.
+Khi cây bút đã có bản nháp hoàn chỉnh và bài cần được biên tập, tối ưu rồi xuất bản lên website. Thường chạy 2-3 lần mỗi tuần theo lịch nội dung.
 
 ## Các bước
 
-1. Tạo release branch `release/vX.Y.Z` từ main.
-2. Chạy full test suite.
-   → Dùng skill: [[run-test-suite]]
-3. Kiểm tra kết quả test:
-   - Nếu pass: tiếp bước 4.
-   - Nếu fail: fix trên release branch, quay lại bước 2.
-4. Build Docker image với tag version.
-   → Dùng skill: [[build-docker-image]]
-5. Deploy lên staging, smoke test 30 phút.
-   → Dùng skill: [[deploy-to-k8s]]
-6. Kiểm tra staging:
-   - Nếu OK: deploy lên production.
-   - Nếu có issue: rollback staging, fix, quay lại bước 2.
-7. Tag release trên git, viết release notes.
-8. Thông báo team qua Slack.
+1. Đọc soát bản nháp: cấu trúc, độ dài, có đúng đối tượng đọc không.
+2. Biên tập câu chữ và kiểm tra chính tả.
+   → Dùng skill: [[kiem-tra-chinh-ta]]
+3. Tối ưu tiêu đề và phần mô tả cho SEO.
+   → Dùng skill: [[toi-uu-seo-tieu-de]]
+4. Chuẩn bị ảnh bìa và ảnh minh họa (đúng kích thước, có alt text).
+5. Kiểm tra trước khi đăng:
+   - Nếu bài có yếu tố pháp lý/số liệu: gửi người phụ trách duyệt, chờ OK rồi tiếp.
+   - Nếu là bài thường: tiếp bước 6.
+6. Lên lịch hoặc xuất bản trên website, gắn đúng chuyên mục và tag.
+7. Soạn caption chia sẻ lên mạng xã hội.
+   → Dùng skill: [[viet-caption-theo-gu-thuong-hieu]]
+8. Cập nhật lịch nội dung: đánh dấu bài đã xuất bản, ghi link.
 
 ## Điều kiện rẽ nhánh
 
-- **Test fail (bước 3)**: KHÔNG được skip. Fix xong mới tiếp.
-- **Staging có issue (bước 6)**: Rollback ngay. Nếu issue nhỏ, fix trên release branch. Nếu issue lớn, abort release và tạo hotfix.
+- **Bài có số liệu/pháp lý (bước 5)**: BẮT BUỘC qua người duyệt, không tự đăng.
+- **Phát hiện trùng nội dung với bài cũ (bước 1)**: dừng lại, quyết định gộp/cập nhật bài cũ thay vì đăng bài mới.
 
 ## Changelog
 
-- 2026-06-05: Tạo mới, version 1.0
+- 2026-06-06: Tạo mới, version 1.0
 ```
 
 ---
