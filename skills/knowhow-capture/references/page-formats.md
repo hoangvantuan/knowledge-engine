@@ -653,9 +653,9 @@ File: `skills/registry.md`
 ```markdown
 # Skill Registry
 
-| Skill | Mô tả | Version | Tags | Cập nhật |
-|-------|--------|---------|------|----------|
-| [[slug]] | mô tả ngắn | 1.0 | tag1, tag2 | YYYY-MM-DD |
+| Skill | Mô tả | Khi nào dùng | Version | Tags | Cập nhật |
+|-------|--------|--------------|---------|------|----------|
+| [[slug]] | mô tả ngắn | khi nào nên dùng (= trigger) | 1.0 | tag1, tag2 | YYYY-MM-DD |
 ```
 
 Quy tắc:
