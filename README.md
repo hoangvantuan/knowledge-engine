@@ -16,7 +16,7 @@ Mỗi lần mở lại dự án là một lần bắt đầu từ con số khôn
 
 ## Giải pháp
 
-Một hệ thống **3 lớp dữ liệu** + **5 skills vận hành**, cài vào bất kỳ dự án nào (code hoặc không code). Knowhow đi qua một cửa duy nhất là `inbox/`, rồi được đúc kết thành tri thức có cấu trúc, được rà soát định kỳ, và tự tiến hoá khuôn khi dự án lớn lên.
+Một hệ thống **3 lớp dữ liệu** + **6 skills vận hành**, cài vào bất kỳ dự án nào (code hoặc không code). Knowhow đi qua một cửa duy nhất là `inbox/`, rồi được đúc kết thành tri thức có cấu trúc, được rà soát định kỳ, và tự tiến hoá khuôn khi dự án lớn lên.
 
 Lấy cảm hứng từ:
 
@@ -57,7 +57,7 @@ Hệ thống chia làm hai tầng tách biệt:
 | **Skills vận hành**     | Config của agent    | Công cụ xây dựng và duy trì knowhow  |
 | **Sản phẩm knowhow**    | `.knowhow/` trong repo | Kiến thức dự án, mọi agent đọc được |
 
-## 5 skills vận hành
+## 6 skills vận hành
 
 | Skill | Làm gì | Khi nào dùng |
 |-------|--------|--------------|
@@ -66,6 +66,7 @@ Hệ thống chia làm hai tầng tách biệt:
 | **knowhow-distill** | Đúc kết `inbox/` thành wiki page / skill / workflow, ưu tiên cập nhật cái cũ | Khi inbox có nội dung chờ |
 | **knowhow-lint** | Rà soát sức khoẻ hệ thống, 4 chế độ: quick, consolidation, rebuild-index, schema-review | Định kỳ, hoặc khi knowhow đã tích luỹ nhiều |
 | **knowhow-query** | Trả lời câu hỏi từ knowhow, trích dẫn `[[slug]]`, phát tín hiệu khi không trúng page | Khi cần tra cứu tri thức đã tích luỹ |
+| **knowhow-run** | Tiêu thụ skill/workflow đã đúc kết: tra registry → load file bó → làm theo. Không ghi vào `.knowhow/` | Khi bắt đầu task domain cần làm theo một bó đã có |
 
 ## Cấu trúc `.knowhow/`
 
@@ -92,7 +93,7 @@ Hệ thống chia làm hai tầng tách biệt:
 ## Bắt đầu
 
 > [!NOTE]
-> 5 skill vận hành hiện được viết cho **Antigravity (Gemini)**. Sản phẩm knowhow (`.knowhow/`) là markdown thuần nên mọi agent (Claude Code, Codex, ...) đều **đọc** được, nhưng để **chạy** capture/distill/lint/query trên agent khác cần port skill trước.
+> 6 skill vận hành hiện được viết cho **Antigravity (Gemini)**. Sản phẩm knowhow (`.knowhow/`) là markdown thuần nên mọi agent (Claude Code, Codex, ...) đều **đọc** được, nhưng để **chạy** capture/distill/lint/query/run trên agent khác cần port skill trước.
 
 ### 1. Khởi tạo
 
@@ -142,7 +143,8 @@ Bốn loại thay đổi cấu trúc: thêm page type mới, đổi layout (subf
 │   ├── knowhow-capture/   # SKILL.md + references (page-formats)
 │   ├── knowhow-distill/   # SKILL.md
 │   ├── knowhow-lint/      # SKILL.md + references (schema-review, consolidation-checklist)
-│   └── knowhow-query/     # SKILL.md
+│   ├── knowhow-query/     # SKILL.md
+│   └── knowhow-run/       # SKILL.md
 └── docs/
     └── superpowers/       # Spec thiết kế + plan triển khai
 ```
