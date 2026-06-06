@@ -24,7 +24,7 @@ description: "Đúc kết knowhow từ inbox thành wiki pages, skills, workflow
 | Đã có page, knowhow thay thế | **SỬA** page cũ, set status: deprecated cho cách cũ | Đổi từ exponential sang jitter |
 | Đã có skill/workflow, thiếu/thừa bước | **REFINE** skill/workflow, tăng version | Skill deploy thiếu bước verify |
 | Nhiều page nhỏ cùng chủ đề | **GỘP** thành 1 page chất lượng hơn | 3 page error handling → 1 |
-| Không đáng lưu | **BỎ QUA**, xoá khỏi inbox | Thông tin quá cụ thể, không tái sử dụng |
+| Không đáng lưu | **BỎ QUA**: move inbox item vào `archive/inbox/` (không xoá cứng) | Thông tin quá cụ thể, không tái sử dụng |
 
 ## Flow distill
 
@@ -133,7 +133,7 @@ Với mỗi item được duyệt, thực hiện theo thứ tự:
    - GỘP: đổi `[[old-slug]]` → `[[new-slug]]` ở mọi file nguồn.
    - Deprecate (vẫn giữ page): để link nguyên nhưng đảm bảo page đích có `status: deprecated` để người đọc biết.
 
-4. **Changelog**: Ghi dòng changelog cuối page bị thay đổi. Lấy nguồn từ `source_file` của inbox item (trỏ `raw/...`), KHÔNG trỏ `inbox/...` (inbox sẽ bị xoá ở mục 7).
+4. **Changelog**: Ghi dòng changelog cuối page bị thay đổi. Lấy nguồn từ `source_file` của inbox item (trỏ `raw/...`), KHÔNG trỏ `inbox/...` (inbox sẽ được dọn sang `archive/inbox/` ở mục 7, đường dẫn `inbox/...` sẽ không còn ổn định).
    ```
    ## Changelog
    - YYYY-MM-DD: [mô tả thay đổi] (source: raw/YYYY-MM-DD-slug.md)
@@ -150,10 +150,10 @@ Với mỗi item được duyệt, thực hiện theo thứ tự:
    ## [YYYY-MM-DD] distill | Tạo mới wiki/<type>-<slug>.md
    ## [YYYY-MM-DD] distill | Cập nhật wiki/<type>-<slug>.md: <mô tả thay đổi>
    ## [YYYY-MM-DD] distill | Gộp <slug-a> + <slug-b> → <slug-mới>
-   ## [YYYY-MM-DD] distill | Bỏ qua inbox/<slug>.md: <lý do>
+   ## [YYYY-MM-DD] distill | Bỏ qua (archive) inbox/<slug>.md: <lý do>
    ```
 
-7. **Xoá inbox items** đã xử lý thành công.
+7. **Dọn inbox items đã xử lý thành công**: move sang `archive/inbox/` (KHÔNG xoá cứng). Item đã được đúc kết vào wiki/skill/workflow nên không cần trong inbox nữa, nhưng giữ ở `archive/inbox/` để: (a) trace ngược candidate gốc đến page đã tạo, (b) khôi phục được nếu user thấy distill phân loại sai mà kho không có git.
 
 ## Quy tắc phân loại
 

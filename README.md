@@ -40,7 +40,7 @@ Bộ skill dùng được cho cả người làm kỹ thuật lẫn không kỹ 
 - **Một cửa duy nhất.** Mọi knowhow vào `inbox/` trước, không ghi thẳng vào wiki/skills/workflows. Bất biến này giữ tri thức nhất quán.
 - **Ưu tiên cải tiến hơn tạo mới.** Distill luôn đọc cái đã có trước, gộp tri thức thay vì phân mảnh.
 - **Khuôn tự tiến hoá.** Hệ thống tích luỹ tín hiệu "khuôn không vừa" rồi đề xuất thay đổi cấu trúc khi vượt ngưỡng.
-- **Mọi thay đổi reversible.** Tất cả là markdown trong git, `git revert` được.
+- **Mọi thay đổi reversible (kép).** Lớp gốc không cần công cụ: không xoá cứng, mọi thao tác phá huỷ (rút page, gộp, nghỉ hưu) đi qua `archive/` + trạng thái `status` nên luôn lấy lại được. Khi không gian làm việc có git, `git revert` là lớp an toàn cộng thêm.
 
 ## Kiến trúc
 
@@ -86,7 +86,7 @@ Hệ thống chia làm hai tầng tách biệt:
 ├── schema-signals.md      # Sổ tín hiệu "khuôn không vừa" cho schema-review
 ├── raw/                   # Lớp 1: nguồn thô, immutable
 ├── inbox/                 # Bộ đệm: chờ đúc kết, chưa phân loại
-├── archive/               # Page lỗi thời đã rút khỏi wiki
+├── archive/               # Kho phục hồi: page rút khỏi wiki + inbox đã dọn (archive/inbox/)
 ├── wiki/                  # Lớp 2: tri thức có cấu trúc
 │   ├── index.md           # Mục lục toàn bộ wiki
 │   ├── log.md             # Nhật ký hoạt động (append-only)

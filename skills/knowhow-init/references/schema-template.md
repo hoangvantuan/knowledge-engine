@@ -11,7 +11,7 @@
 |---------|----------|
 | raw/ | Nguồn thô, immutable. Agent đọc nhưng không sửa. |
 | inbox/ | Bộ đệm chờ đúc kết. Nội dung chưa phân loại. |
-| archive/ | Page lỗi thời đã rút khỏi wiki. Lint consolidation chuyển vào đây. |
+| archive/ | Kho phục hồi (không xoá cứng): page rút khỏi wiki, cùng inbox item đã đúc kết hoặc bị bỏ qua. `archive/inbox/` giữ inbox item đã dọn. |
 | wiki/ | Tri thức có cấu trúc, liên kết chéo. |
 | skills/ | Thao tác cụ thể, làm-theo-được, tái sử dụng. |
 | workflows/ | Chuỗi bước, gắn domain, gọi nhiều skill. |
@@ -62,6 +62,8 @@
 - `deprecated`: còn để tham khảo nhưng có cách mới tốt hơn. Distill set khi thay thế cách cũ.
 - `archived`: lỗi thời, chuyển vào `archive/`. Lint consolidation set.
 
+> **Khôi phục không cần git**: mọi thao tác phá huỷ chỉ move vào `archive/` + đổi `status`, không xoá cứng. Lấy lại: move file từ `archive/` về chỗ cũ, đổi `status` về `active`, rồi chạy `knowhow-lint rebuild-index`.
+
 ### confidence (chỉ 4 wiki type, skill/workflow dùng version)
 
 Đếm theo **số entry trong phần Changelog** của page:
@@ -100,7 +102,7 @@ Khuôn này tự tiến hoá theo dự án. Cơ chế:
 3. User duyệt từng đề xuất.
 4. Hệ migrate file bị ảnh hưởng, rewrite link, rebuild index, bump `schema_version`, ghi vào Changelog dưới đây.
 
-Bốn loại thay đổi cấu trúc: thêm/đổi/nghỉ hưu page type, đổi layout (subfolder), đổi format page type, sửa mục SCHEMA. Mọi thay đổi reversible bằng git.
+Bốn loại thay đổi cấu trúc: thêm/đổi/nghỉ hưu page type, đổi layout (subfolder), đổi format page type, sửa mục SCHEMA. Mọi thay đổi reversible kép: gốc là `archive/` + `status` (không xoá cứng), `git revert` là lớp cộng khi kho có git.
 
 ## Glossary & Convention (tiến hoá)
 

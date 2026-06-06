@@ -2,7 +2,7 @@
 
 Reference cho `knowhow-lint` mode `schema-review`. Chứa: ngưỡng kích hoạt 4 loại thay đổi cấu trúc, và migration playbook tương ứng.
 
-Nguyên tắc nền: **tách phát hiện khỏi quyết định**. lint tổng hợp + đề xuất; chỉ user duyệt; mọi migrate reversible bằng git.
+Nguyên tắc nền: **tách phát hiện khỏi quyết định**. lint tổng hợp + đề xuất; chỉ user duyệt; mọi migrate reversible KÉP, gốc qua `archive/` + `status` (không xoá cứng, không cần git), git revert là lớp cộng khi có git.
 
 ---
 
@@ -86,7 +86,7 @@ Bắt buộc, theo đúng thứ tự:
 5. **Ghi log**: `## [YYYY-MM-DD] lint | Schema-review: <loại>, <N> file migrate`.
 6. **Đánh dấu tín hiệu đã xử lý**: cắt các dòng tín hiệu liên quan từ "Đang chờ xử lý" sang "Đã xử lý" trong `schema-signals.md` (để không đếm lại lần sau).
 
-> **Reversibility**: toàn bộ là markdown trong git. Nếu migrate sai, `git revert` đưa về trạng thái cũ sạch.
+> **Reversibility (kép)**: (1) Gốc, không cần git: batch migrate KHÔNG xoá cứng, file bị rút/thay đi vào `archive/` với `status: archived` (type retire) hoặc giữ với `status: deprecated`; muốn quay lại thì move ngược từ `archive/` + đổi `status` về `active` + rebuild-index. (2) Lớp cộng, khi có git: `git revert` đưa cả batch về trạng thái cũ sạch trong một bước.
 
 ## 6. Phụ thuộc bắt buộc (không bỏ sót)
 

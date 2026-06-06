@@ -101,7 +101,7 @@ Tạo báo cáo dạng artifact. Trình bày cho user duyệt.
 Fix các vấn đề:
 - Registry thiếu → thêm entry vào index/registry.
 - Registry thừa (file không tồn tại) → xoá entry.
-- Link hỏng → xoá hoặc sửa link, hỏi user nếu không chắc target đúng.
+- Link hỏng → ưu tiên SỬA link (trỏ target đúng); chỉ GỠ link khi user xác nhận target không còn tồn tại. Khi gỡ, để lại slug dạng text (ví dụ ghi chú "(link cũ: old-slug, đã gỡ)") thay vì xoá trắng, để vết tích còn truy được mà không cần git.
 - Frontmatter thiếu → bổ sung field với giá trị mặc định hợp lý.
 - Inbox tồn đọng → nhắc user xử lý, không tự xoá.
 - Workflow dependency → báo user review, không tự xoá reference.
@@ -150,7 +150,7 @@ Tạo báo cáo dạng artifact. Trình bày cho user duyệt.
 ### Sau khi user duyệt
 
 Thực thi từng thay đổi đã được duyệt:
-- Gộp page → tạo page mới, xoá page cũ, cập nhật registry và link.
+- Gộp page → tạo/cập nhật page đích, các page bị nuốt set `status: archived` và move vào `archive/` (KHÔNG xoá cứng), cập nhật registry và rewrite link `[[old-slug]]` thành `[[new-slug]]`.
 - Thống nhất thuật ngữ → find-replace trên tất cả page liên quan.
 - Archive page lỗi thời → chuyển vào `archive/`, set `status: archived`, xoá khỏi registry.
 - Hạ confidence → sửa `confidence` trong frontmatter page xuống 1 bậc, ghi entry changelog.
@@ -218,7 +218,7 @@ Tổng hợp tín hiệu "khuôn không vừa" → đề xuất diff lên `SCHEM
 
 - **Tách phát hiện khỏi quyết định**: lint chỉ đề xuất; chỉ user duyệt.
 - **Ngưỡng bảo thủ**: thà bỏ sót còn hơn báo nhiễu lúc đầu (tín hiệu không mất, vẫn tích luỹ).
-- **Reversibility**: mọi migrate là markdown trong git, `git revert` được.
+- **Reversibility (kép)**: gốc không cần git, migrate không xoá cứng file nào; page bị rút/đổi đi qua `archive/` + `status: archived/deprecated` nên khôi phục được bằng cách move ngược + đổi status. Nếu không gian làm việc có git, `git revert` là lớp khôi phục cộng thêm cho cả batch.
 - **Không auto-migrate**: mọi batch gate qua user.
 
 ---
