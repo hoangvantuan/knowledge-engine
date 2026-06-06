@@ -430,6 +430,7 @@ File: `skills/slug.md`
 type: skill
 title: "Tên skill"
 tags: []
+trigger: "Khi nào nên dùng skill này"
 input: "Mô tả đầu vào"
 output: "Mô tả đầu ra"
 reusable_across: []
@@ -476,6 +477,7 @@ status: active   # active | deprecated | archived
 type: skill
 title: "Parse PDF hóa đơn thành structured JSON"
 tags: [pdf, parsing, invoice]
+trigger: "Khi có hoá đơn PDF (VAT Việt Nam) cần trích dữ liệu thành JSON"
 input: "File PDF hóa đơn (VAT Việt Nam)"
 output: "JSON object chứa seller, buyer, items, totals"
 reusable_across: [accounting-module, report-generator]
