@@ -1,6 +1,6 @@
 ---
 name: knowhow-init
-description: "Khởi tạo hệ thống knowhow trong một kho tri thức. Tạo thư mục .knowhow/ với schema, wiki, skills registry, workflows registry. Dùng khi bắt đầu kho mới hoặc muốn thêm quản lý knowhow vào không gian làm việc hiện có. Trigger: 'knowhow init', 'khởi tạo knowhow', 'thêm knowhow', 'setup knowhow', hoặc khi user muốn bắt đầu ghi nhận tri thức của kho."
+description: "Khởi tạo hệ thống knowhow từ số không cho một kho. CHỈ dùng khi workspace CHƯA có thư mục .knowhow/ và user muốn tạo lần đầu. Kích hoạt: 'init knowhow', 'setup knowhow', 'khởi tạo knowhow', 'thêm knowhow vào dự án'; muốn lập một hệ thống có cấu trúc để ghi lại tri thức/bài học của team ở nơi hiện chưa có hạ tầng nào; team cứ mất cách giải quyết vì không có chỗ ghi. Tạo .knowhow/ gồm wiki, registry skill, registry workflow, và gắn hướng dẫn vào config agent. KHÔNG dùng khi .knowhow/ đã tồn tại, hay khi khởi tạo hạ tầng dự án khác (git, npm, boilerplate)."
 ---
 
 # Knowhow Init
@@ -16,7 +16,7 @@ Knowhow System là nghi thức tích luỹ tri thức có cấu trúc cho một 
 | **Skills & Workflows** | Kiến thức thực thi, tái sử dụng.                 |
 
 
-Phân biệt Skill và Workflow:
+Phân biệt Skill và Workflow (bản rút gọn, định nghĩa chuẩn nằm trong `references/schema-template.md` mục "Phân biệt Skill và Workflow" mà Bước 3 sinh vào `SCHEMA.md`):
 
 - **Skill** = thao tác khép kín, làm-theo-được, tái dùng cho task tương tự (được phép gắn domain).
 - **Workflow** = chuỗi bước, gắn domain, gọi nhiều skill. Thay đổi khi đổi domain.
@@ -25,10 +25,11 @@ Phân biệt Skill và Workflow:
 
 ### Bước 1: Thu thập thông tin
 
-Hỏi user 2 câu:
+Hỏi user 3 câu:
 
 1. **Tên kho tri thức** (dùng cho SCHEMA.md và log)
 2. **Mô tả lĩnh vực** (1-2 câu, giải thích kho phục vụ việc gì)
+3. **Kho có làm việc theo dự án/khách hàng/chiến dịch không?** (có/không). Nếu CÓ: seed thêm page type `project` (trang thực thể làm điểm neo cho tri thức cùng dự án, xem Bước 3 và 4). Nếu KHÔNG hoặc không chắc: bỏ qua, schema evolution sẽ thêm sau khi đủ tín hiệu.
 
 Nếu user cung cấp sẵn trong prompt, không cần hỏi lại.
 
@@ -68,6 +69,12 @@ Thay thế:
 - `{{PROJECT_DESCRIPTION}}` → mô tả domain user cung cấp
 - `{{DATE}}` → ngày hiện tại (YYYY-MM-DD), dùng cho entry Changelog đầu tiên trong SCHEMA
 
+**Nếu câu 3 = CÓ** (kho theo dự án): thêm dòng sau vào cuối bảng "Page Types" trong SCHEMA vừa sinh:
+
+```
+| project | wiki/project-<slug>.md | Trang thực thể dự án: mục tiêu, kết quả, neo tri thức cùng dự án |
+```
+
 Ghi kết quả vào `.knowhow/SCHEMA.md`.
 
 ### Bước 4: Sinh các file nội dung
@@ -84,7 +91,11 @@ Ghi kết quả vào `.knowhow/SCHEMA.md`.
 ## Concept
 
 ## Troubleshooting
+
+## Lesson
 ```
+
+Nếu câu 3 = CÓ, thêm heading `## Project` vào cuối index.
 
 **wiki/log.md** (thay `YYYY-MM-DD` bằng ngày hiện tại, `{{PROJECT_NAME}}` bằng tên kho):
 
@@ -94,22 +105,22 @@ Ghi kết quả vào `.knowhow/SCHEMA.md`.
 ## [YYYY-MM-DD] init | Khởi tạo .knowhow/ cho kho {{PROJECT_NAME}}
 ```
 
-**skills/registry.md**:
+**skills/registry.md** (header phải khớp page-formats mục 6.1, gồm cột `Khi nào dùng` để `knowhow-run` match task sang skill):
 
 ```markdown
 # Skill Registry
 
-| Skill | Mô tả | Version | Tags | Cập nhật |
-|-------|--------|---------|------|----------|
+| Skill | Mô tả | Khi nào dùng | Version | Tags | Cập nhật |
+|-------|--------|--------------|---------|------|----------|
 ```
 
-**workflows/registry.md**:
+**workflows/registry.md** (header phải khớp page-formats mục 6.2, gồm cột `Khi nào dùng` + `Tags` để `knowhow-run` match task sang workflow):
 
 ```markdown
 # Workflow Registry
 
-| Workflow | Mô tả | Skills dùng | Version | Cập nhật |
-|----------|--------|-------------|---------|----------|
+| Workflow | Mô tả | Khi nào dùng | Skills dùng | Version | Tags | Cập nhật |
+|----------|--------|--------------|-------------|---------|------|----------|
 ```
 
 **schema-signals.md** (top-level, cạnh SCHEMA.md, là sổ tích luỹ tín hiệu tiến hoá, tạo rỗng chỉ có header):

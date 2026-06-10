@@ -1,6 +1,6 @@
 ---
 name: knowhow-distill
-description: "Đúc kết knowhow từ inbox thành wiki pages, skills, workflows chính thức. Đọc cái đã có trước, ưu tiên cập nhật/cải tiến hơn tạo mới. AI đề xuất, user duyệt từng item. Trigger: 'knowhow distill', 'đúc kết knowhow', 'xử lý inbox', khi inbox có nội dung chờ, hoặc user muốn chuyển ghi nhận thành tri thức chính thức."
+description: "Đúc kết inbox của kho thành wiki page, skill, hoặc workflow. Khớp khi user muốn: gộp file inbox thành một wiki page, đúc kết/promote bài học từ inbox lên wiki chính thức, tạo skill mới từ pattern trong inbox, xử lý tồn đọng inbox thành kiến thức có cấu trúc, hoặc gõ 'knowhow distill', 'đúc kết knowhow'. Thao tác lõi: chuyển nội dung RA KHỎI inbox VÀO kho tri thức có cấu trúc, ưu tiên cập nhật cái cũ hơn tạo mới. KHÔNG dùng cho: nhặt note mới vào inbox (đó là knowhow-capture), khởi tạo hệ thống knowhow, hay tóm tắt tài liệu chung."
 ---
 
 # Knowhow Distill
@@ -22,6 +22,7 @@ description: "Đúc kết knowhow từ inbox thành wiki pages, skills, workflow
 | Chưa có gì liên quan | **TẠO MỚI** page | Lần đầu gặp pattern retry |
 | Đã có page, knowhow bổ sung | **CẬP NHẬT** page cũ, thêm nội dung, ghi changelog | Thêm edge case vào retry.md |
 | Đã có page, knowhow thay thế | **SỬA** page cũ, set status: deprecated cho cách cũ | Đổi từ exponential sang jitter |
+| Knowhow mới ĐÁ page cũ, user chưa chắc bên nào đúng | **CẬP NHẬT** page cũ: thêm section `## Mâu thuẫn đang mở` ghi cả hai phía + nguồn mỗi phía, hạ `confidence: low`. KHÔNG chọn phe | Đo lần này nói A nhanh hơn, page cũ nói B nhanh hơn, chưa rõ vì sao |
 | Đã có skill/workflow, thiếu/thừa bước | **REFINE** skill/workflow, tăng version | Skill deploy thiếu bước verify |
 | Nhiều page nhỏ cùng chủ đề | **GỘP** thành 1 page chất lượng hơn | 3 page error handling → 1 |
 | Không đáng lưu | **BỎ QUA**: move inbox item vào `archive/inbox/` (không xoá cứng) | Thông tin quá cụ thể, không tái sử dụng |
@@ -63,7 +64,7 @@ Ngoài inbox, distill tổng hợp tín hiệu "page bị dùng lặp để làm
 
 Với mỗi inbox item:
 
-1. **Phân loại**: wiki page (decision/pattern/concept/troubleshooting) hay skill hay workflow? (xem quy tắc phân loại bên dưới)
+1. **Phân loại**: wiki page (decision/pattern/concept/troubleshooting/lesson) hay skill hay workflow? (xem quy tắc phân loại bên dưới)
 2. **Tìm trùng (grep nội dung thật, chống mù)**: Registry chỉ có title + mô tả 1 dòng, KHÔNG đủ để so sánh nội dung. Với mỗi inbox item:
    - Rút 3-5 từ khoá từ tiêu đề + `tags` của item.
    - Chạy grep tìm page liên quan:
@@ -77,6 +78,8 @@ Với mỗi inbox item:
 
 3. **Quyết định hành động**: Dùng bảng quyết định ở trên.
 
+4. **Riêng item type `lesson`**: phần "Hành động hệ thống" của lesson là việc phải đề xuất KÈM, không chỉ tạo page. Với mỗi hành động ghi trong đó (sửa workflow X, tạo decision Y), sinh thêm một đề xuất tương ứng trong cùng batch (bước workflow mới ghi kèm `(vì [[lesson-slug]])` để trace). Bài học không kéo theo thay đổi hệ thống sẽ bị quên; đây là chốt chặn chống điều đó.
+
 Trình bày đề xuất cho user. Mỗi item gồm:
 
 ```
@@ -88,30 +91,19 @@ Trình bày đề xuất cho user. Mỗi item gồm:
 
 ### Bước 3.5: Phát tín hiệu strain (tiến hoá cấu trúc)
 
-Trong lúc phân loại + đề xuất, để ý hai dấu hiệu "khuôn không vừa". Nếu gặp, GHI tín hiệu vào `.knowhow/schema-signals.md` (mục "Đang chờ xử lý"). KHÔNG tự đổi khuôn, đó là việc của `knowhow-lint schema-review`. Giả định init đã tạo `.knowhow/schema-signals.md` với sẵn heading; nếu thiếu, tạo lại theo template của init trước khi ghi.
+Trong lúc phân loại + đề xuất, để ý hai dấu hiệu "khuôn không vừa". Nếu gặp, ghi tín hiệu vào `.knowhow/schema-signals.md` theo giao thức bên dưới. KHÔNG tự đổi khuôn, đó là việc của `knowhow-lint schema-review`.
 
-**Khi nào emit `no-fit-type`**: item rõ ràng là một *loại tri thức* không nằm trong 4 wiki type {decision, pattern, concept, troubleshooting} nhưng buộc phải xếp tạm vào wiki type gần nhất. Ví dụ: "kết quả thí nghiệm", "nguồn tham khảo cần lưu", "runbook vận hành". Dấu hiệu: bạn thấy mình miễn cưỡng chọn type vì không cái nào khớp.
+**Khi nào emit `no-fit-type`**: item rõ ràng là một *loại tri thức* không nằm trong các wiki type của SCHEMA (mặc định: {decision, pattern, concept, troubleshooting, lesson}) nhưng buộc phải xếp tạm vào wiki type gần nhất. Ví dụ: "kết quả thí nghiệm", "nguồn tham khảo cần lưu", "runbook vận hành". Dấu hiệu: bạn thấy mình miễn cưỡng chọn type vì không cái nào khớp.
 
-**Khi nào emit `adhoc-section`**: khi tạo/cập nhật page, bạn phải thêm một section KHÔNG có trong template chuẩn của type đó (xem `../knowhow-capture/references/page-formats.md`). Kiểm tra section này có lặp ở page khác cùng type không:
+**Khi nào emit `adhoc-section`**: khi tạo/cập nhật page, bạn phải thêm một section KHÔNG có trong template chuẩn của type đó (xem `../knowhow-capture/references/page-formats.md`). Kiểm tra section tự chế đó có lặp ở page khác cùng type không:
 ```bash
 grep -rl '## <tên section>' .knowhow/wiki
 ```
 Nếu section đã xuất hiện ở ≥ 1 page khác cùng type → emit `adhoc-section`. Nếu chưa thấy ở đâu, CHƯA cần emit, chờ nó lặp lại.
 
-**Cách ghi**: chèn dòng tín hiệu NGAY DƯỚI heading `## Đang chờ xử lý` trong `.knowhow/schema-signals.md`. KHÔNG append cuối file (cuối file là vùng `## Đã xử lý`). Chèn bằng awk:
-```bash
-awk '/^## Đang chờ xử lý$/{print; print "- [YYYY-MM-DD] distill | no-fit-type | <chi tiết ngắn> | related: tag:<chủ-đề>"; next} 1' \
-  .knowhow/schema-signals.md > /tmp/ss && mv /tmp/ss .knowhow/schema-signals.md
-```
-Dòng tín hiệu theo đúng format `- [YYYY-MM-DD] distill | <loại> | <chi tiết ngắn> | related: tag:<chủ-đề>`, với `<loại>` ∈ no-fit-type | adhoc-section.
+Ngoại lệ KHÔNG emit: `## Mâu thuẫn đang mở` là section chuẩn của hệ (sinh từ bảng quyết định, dòng mâu thuẫn chưa phân xử), được phép xuất hiện ở mọi wiki type.
 
-Ví dụ:
-```
-- [2026-06-05] distill | no-fit-type | item về kết quả thí nghiệm, không vừa decision/pattern/concept/troubleshooting | related: tag:experiment
-- [2026-06-05] distill | adhoc-section | section "Metrics đo được" ở page experiment-ab-test | related: tag:experiment
-```
-
-> **Quan trọng**: emit tín hiệu KHÔNG chặn distill. Vẫn xếp item vào wiki page tốt nhất hiện có và xử lý bình thường. Tín hiệu chỉ là ghi chú cho lần `schema-review` sau.
+**Cách ghi**: theo [schema-signals-protocol.md](references/schema-signals-protocol.md) (awk chèn dưới "Đang chờ xử lý", format dòng, quy tắc chung). Dòng distill phát có dạng `- [YYYY-MM-DD] distill | no-fit-type | <chi tiết> | related: tag:<chủ-đề>` (đổi `no-fit-type` → `adhoc-section` tuỳ loại). Ví dụ: `no-fit-type | item kết quả thí nghiệm, không vừa decision/pattern/concept/troubleshooting | related: tag:experiment`.
 
 ### Bước 4: User duyệt
 
@@ -128,8 +120,8 @@ Với mỗi item được duyệt, thực hiện theo thứ tự:
 
 1. **Tạo hoặc cập nhật page** theo format chuẩn.
    - Format reference: `../knowhow-capture/references/page-formats.md` (đường dẫn tương đối từ thư mục skill này). Nếu không resolve được, dùng format frontmatter cơ bản bên dưới.
-   - Format frontmatter cơ bản: title, type, tags, created, updated.
-   - **Skill: BẮT BUỘC điền `trigger`** trong frontmatter (mô tả "khi nào nên dùng skill này"). Đây là tín hiệu để `knowhow-run` match task sang skill; thiếu nó registry sẽ trống cột `Khi nào dùng`. Khi REFINE skill cũ chưa có `trigger`, bổ sung luôn trong lần sửa này.
+   - Format frontmatter cơ bản (kể cả khi fallback, phải đủ field bắt buộc của lint 1c): `title`, `type`, `tags`, `created`, `updated`, `status` (mặc định `active`); thêm `confidence` cho wiki page, thêm `version` cho skill/workflow. Thiếu các field này page mới sẽ bị lint 1c báo ngay.
+   - **Skill: BẮT BUỘC điền `trigger`, `input`, `output`** trong frontmatter (lint 1c đòi đủ cả ba cho skill). `trigger` mô tả "khi nào nên dùng skill này", là tín hiệu để `knowhow-run` match task sang skill; thiếu nó registry sẽ trống cột `Khi nào dùng`. Khi REFINE skill cũ thiếu các field này, bổ sung luôn trong lần sửa này.
 
 2. **Cập nhật registry tương ứng**:
    - Tạo/xoá wiki page → cập nhật `wiki/index.md`
@@ -161,7 +153,7 @@ Với mỗi item được duyệt, thực hiện theo thứ tự:
    - `confidence` (chỉ wiki, không áp skill/workflow): set theo số entry Changelog sau khi ghi entry mới: 1 → `low`, ≥2 → `medium`, ≥3 → `high`.
 
 5c. **Thực thi promote (nếu đề xuất promote-candidate được duyệt)**:
-   1. Tạo skill/workflow từ nội dung wiki page nguồn theo format `../knowhow-capture/references/page-formats.md` mục 3 (skill) hoặc 4 (workflow). BẮT BUỘC điền `trigger`.
+   1. Tạo skill/workflow từ nội dung wiki page nguồn theo format `../knowhow-capture/references/page-formats.md` mục 3 (skill) hoặc 4 (workflow). BẮT BUỘC điền đủ field bắt buộc của lint 1c: skill cần `trigger`, `input`, `output`, `version`, `status`; workflow cần `trigger`, `version`, `status`. Wiki page nguồn không có `input`/`output`, phải tự suy ra từ nội dung page khi nâng.
    2. Thêm vào frontmatter skill mới: `promoted_from: [[<slug-page-nguồn>]]` (liên kết ngược).
    3. Cập nhật wiki page nguồn: thêm `[[<slug-skill-mới>]]` vào `related:` và một dòng trong body "Đã nâng thành skill: [[<slug-skill-mới>]]". KHÔNG xoá page nguồn (page vẫn là tri thức 'để biết', skill là bản 'để làm'). Nếu nội dung page thuần thao tác và không còn giá trị tham khảo riêng, có thể hỏi user set page `status: deprecated`.
    4. Cập nhật `skills/registry.md` (hoặc `workflows/registry.md`).
@@ -180,6 +172,8 @@ Với mỗi item được duyệt, thực hiện theo thứ tự:
 
 ## Quy tắc phân loại
 
+Định nghĩa chuẩn Skill vs Workflow: xem `.knowhow/SCHEMA.md` mục "Phân biệt Skill và Workflow". Bảng dưới là tiêu chí áp dụng khi phân loại inbox item.
+
 Chọn loại dựa trên bản chất nội dung:
 
 | Tiêu chí | Loại |
@@ -193,11 +187,12 @@ Tại sao mặc định wiki? Wiki page an toàn hơn: dễ tạo, dễ sửa, d
 
 ## Cross-referencing
 
-Sau khi tạo/cập nhật page, kiểm tra 3 điều:
+Sau khi tạo/cập nhật page, kiểm tra 4 điều:
 
 1. Page mới có liên quan page cũ nào không? → thêm `related: [...]` trong frontmatter.
 2. Body có mention page khác không? → thêm `[[slug]]` link.
 3. Page cũ có cần reference ngược đến page mới không? → cập nhật page cũ.
+4. Kho có type `project` và item thuộc một dự án có trang? → link hai chiều: thêm `[[project-slug]]` vào `related` của page mới, và thêm page mới vào mục "Tri thức sinh ra từ dự án" của project page.
 
 Tại sao quan trọng? Cross-reference biến danh sách page rời rạc thành mạng lưới tri thức. Khi tra cứu 1 page, tự động thấy các page liên quan.
 

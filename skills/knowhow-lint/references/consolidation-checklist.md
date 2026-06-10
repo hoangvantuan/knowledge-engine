@@ -19,6 +19,8 @@
 
 **Hành động**: Flag mâu thuẫn. Đề xuất page nào là source of truth. Hỏi user xác nhận trước khi sửa.
 
+**Mâu thuẫn đang mở tồn đọng**: grep `'## Mâu thuẫn đang mở'` trong `wiki/`. Page nào mang section này (distill đỗ lại khi chưa phân xử được) → nhắc user phân xử trong lần audit này. Phân xử xong: xoá section, ghi changelog "chốt mâu thuẫn: chọn X vì...", set lại `confidence` theo số entry changelog.
+
 ---
 
 ## 2. Nhất quán thuật ngữ

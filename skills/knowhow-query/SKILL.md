@@ -1,6 +1,6 @@
 ---
 name: knowhow-query
-description: "Trả lời câu hỏi nhắm vào knowhow của kho: đọc index + grep page liên quan, tổng hợp câu trả lời kèm trích dẫn [[slug]]. Phát tín hiệu query-miss khi hỏi không trúng page sạch. Nếu câu trả lời đáng tái dùng, file ngược qua inbox (không ghi thẳng wiki). Trigger: 'tra knowhow', 'kho có gì về X', 'so sánh...', 'knowhow query', khi user hỏi một câu nhắm vào tri thức đã tích luỹ."
+description: "Dùng khi 'kho' hoặc 'knowhow' là ĐÍCH được hỏi: user hỏi kho tri thức chứa gì, không phải hỏi web hay codebase. Bao gồm: tra bài học/quyết định của team ('kho có gì về X', 'kho tri thức có...không'), tìm cách làm đã ghi ('tìm/so sánh trong knowhow'), tổng hợp từ knowhow đã tích luỹ trong kho, hoặc soạn tài liệu onboarding/đào tạo từ wiki của kho. Tín hiệu phân biệt: câu hỏi hướng VÀO kho như nguồn thông tin. KHÔNG dùng cho: tìm trên internet, đọc file project/log/config bất kỳ, làm theo một quy trình đã đúc kết (đó là knowhow-run), hay kiểm tra sức khoẻ hệ thống (đó là knowhow-lint)."
 ---
 
 # Knowhow Query
@@ -41,16 +41,7 @@ Nếu không tồn tại, dừng và hướng dẫn user chạy `knowhow-init` t
 - Phải chắp vá từ **≥ 3 page** mới trả lời được (T = 3, khởi điểm).
 - KHÔNG có page sạch nào trực tiếp trả lời (toàn suy luận chắp nối).
 
-Chèn dòng tín hiệu NGAY DƯỚI heading `## Đang chờ xử lý` (KHÔNG append cuối file, vì cuối file là vùng `## Đã xử lý`):
-```bash
-awk '/^## Đang chờ xử lý$/{print; print "- [YYYY-MM-DD] query | query-miss | <câu hỏi rút gọn>, phải chắp <N> page | related: tag:<chủ-đề>"; next} 1' \
-  .knowhow/schema-signals.md > /tmp/ss && mv /tmp/ss .knowhow/schema-signals.md
-```
-
-Ví dụ dòng tín hiệu:
-```
-- [2026-06-07] query | query-miss | "so sánh 3 thí nghiệm A/B/C", phải chắp 4 page | related: tag:experiment
-```
+Ghi theo [schema-signals-protocol.md](../knowhow-distill/references/schema-signals-protocol.md). Dòng query-miss có dạng `- [YYYY-MM-DD] query | query-miss | <câu hỏi rút gọn>, phải chắp <N> page | related: tag:<chủ-đề>`.
 
 > Nếu câu trả lời gọn (1-2 page sạch trúng đích), KHÔNG emit. Tín hiệu chỉ dành cho "khuôn không vừa".
 
@@ -63,15 +54,7 @@ Emit `promote-candidate` vào `.knowhow/schema-signals.md` khi CẢ HAI đúng:
 - Câu hỏi có tính thao tác ("làm sao để...", "các bước...", "quy trình..."), và
 - Câu trả lời dựa chủ yếu vào MỘT page type pattern/troubleshooting (page đó là nguồn hành động, không chỉ tham khảo).
 
-Chèn dòng tín hiệu NGAY DƯỚI heading `## Đang chờ xử lý`. THAY `YYYY-MM-DD` bằng ngày thật và `<slug-page>` bằng slug thật TRƯỚC khi chạy:
-
-```bash
-awk '/^## Đang chờ xử lý$/{print; print "- [YYYY-MM-DD] query | promote-candidate | hỏi làm-theo trúng [[<slug-page>]] | related: <slug-page>"; next} 1' \
-  .knowhow/schema-signals.md > /tmp/ss && mv /tmp/ss .knowhow/schema-signals.md
-```
-
-> Mỗi lần page đó lại được hỏi kiểu làm-theo thì emit thêm một dòng (cùng slug). distill đếm số dòng cùng slug để áp ngưỡng. KHÔNG dedupe ở đây: mỗi lần lặp là một phiếu.
-> Page đã có skill tương ứng (grep cố định `grep -F 'promoted_from: [[<slug>]]' .knowhow/skills` ra kết quả) thì KHÔNG emit nữa.
+Ghi theo [schema-signals-protocol.md](../knowhow-distill/references/schema-signals-protocol.md) (quy tắc "1 phiếu mỗi lần, không dedupe" và "đã promote thì thôi" nằm ở đó). Dòng promote-candidate có dạng `- [YYYY-MM-DD] query | promote-candidate | hỏi làm-theo trúng [[<slug-page>]] | related: <slug-page>`.
 
 ### Bước 4: File ngược qua inbox (tôn trọng cửa duy nhất)
 
@@ -91,6 +74,20 @@ Thêm vào `wiki/log.md`:
 ```
 ## [YYYY-MM-DD] query | <câu hỏi rút gọn> (emit query-miss: có/không, file inbox: có/không)
 ```
+
+## Chế độ teach (soạn lộ trình truyền đạt)
+
+Kích hoạt khi user yêu cầu kiểu "soạn tài liệu onboarding", "dạy lại X cho người mới", "tổng hợp cho người khác học". Bản chất: vẫn là query (đọc wiki, tổng hợp, trích dẫn), khác ở hình thức output là một LỘ TRÌNH ĐỌC thay vì một câu trả lời.
+
+1. **Gom**: như Bước 1 query thường, theo chủ đề/vai trò user nêu.
+2. **Xếp theo thang biết → hiểu → làm**:
+   - Mở đầu: `concept` (từ vựng phải biết trước).
+   - Giữa: `decision` + `lesson` (vì sao mọi thứ như hiện tại, bẫy đã gặp).
+   - Cuối: `pattern` + skill/workflow (làm thế nào, theo bó nào).
+3. **Soạn lộ trình**: mỗi mục gồm tóm tắt 2-3 câu + link `[[slug]]` đến bản đầy đủ + 1 câu hỏi tự kiểm. KHÔNG copy nguyên văn page vào lộ trình: wiki vẫn là bản gốc duy nhất, lộ trình chỉ là bản đồ đọc. Copy nguyên văn sẽ tạo bản sao lỗi thời dần, đúng cái hệ này chống.
+4. **Đầu ra**: trình cho user. Chỉ ghi ra file khi user chỉ định nơi lưu, và lưu NGOÀI `.knowhow/` (ví dụ `docs/onboarding-<chủ-đề>.md`). KHÔNG ghi vào `wiki/`.
+5. **Lỗ hổng lộ ra khi soạn** (chủ đề quan trọng không có page, chuỗi học đứt quãng): báo user kèm danh sách thiếu, gợi ý capture/distill bổ sung. Mục cơ bản mà phải chắp ≥3 page: emit `query-miss` như thường (Bước 3).
+6. **Log**: `## [YYYY-MM-DD] query | teach: <chủ đề> (N page, thiếu: <danh sách ngắn hoặc "không">)`.
 
 ## Quy tắc cứng
 

@@ -1,6 +1,6 @@
 ---
 name: knowhow-run
-description: "Entrypoint chủ động để tiêu thụ skill/workflow đã đúc kết trong .knowhow/. Ba nhịp: tra registry → load file bó khớp → đọc hết rồi làm theo. Nhận 3 dạng input: tên bó cụ thể (load thẳng), mô tả task (tra registry theo trigger/Mô tả/tags), hoặc rỗng (liệt kê bó khả dụng). Workflow gặp skill con resolve đệ quy. KHÔNG sản xuất, KHÔNG ghi vào .knowhow/. Trigger: 'knowhow run', 'chạy skill X', 'làm theo workflow Y', 'dùng knowhow để làm', khi bắt đầu task thuộc lĩnh vực của kho và cần dùng bó đã tích luỹ."
+description: "BẮT BUỘC gọi skill này, KHÔNG phải skill 'run' built-in, khi user muốn chạy hoặc liệt kê bó skill/workflow trong .knowhow/. Trigger rõ: 'chạy skill [tên]', 'áp dụng workflow [tên]', 'dùng workflow [tên] trong kho', 'knowhow run', liệt kê cái có sẵn trong .knowhow/ ('liệt kê skill/workflow trong .knowhow/'), hoặc hỏi kho có quy trình cho một task không rồi muốn chạy ('kho có workflow cho X không? chạy đi'). Thứ được chạy là một bó quy trình markdown do team viết trong .knowhow/skills/ hoặc .knowhow/workflows/, KHÔNG phải code, npm, shell script, hay app. Chỉ tra cứu tri thức (để biết) thì dùng knowhow-query."
 ---
 
 # Knowhow Run
@@ -87,15 +87,21 @@ Xác định input thuộc dạng nào rồi rẽ nhánh:
 
 ## Quy tắc cứng
 
-1. **KHÔNG ghi gì vào `.knowhow/`.** run thuần tiêu thụ: không tạo inbox item, không sửa wiki/skill/workflow, KHÔNG ghi `wiki/log.md`.
+1. **Chỉ được ghi HAI thứ, đều là sổ sách, không phải tri thức**: (a) MỘT dòng usage log vào `wiki/log.md` sau khi chạy xong (xem quy tắc 7), (b) MỘT dòng tín hiệu `promote-candidate` vào `.knowhow/schema-signals.md` khi rơi vào quy tắc 6. Ngoài hai dòng đó run thuần tiêu thụ: không tạo inbox item, không sửa wiki/skill/workflow. Ranh giới "tách tiêu thụ khỏi sản xuất" vẫn giữ: cả hai đều là nhật ký/tín hiệu meta, không phải nội dung tri thức.
 2. **Đọc hết file bó trước khi làm.** Cấm liếc một dòng registry rồi bịa các bước.
 3. **Không bịa bó.** Không có bó khớp thì nói không có, gợi ý đúc kết. Không tự nghĩ ra quy trình rồi gán cho một bó không tồn tại.
-4. **Không sản xuất.** Nếu trong lúc làm phát hiện bó thiếu/sai bước, KHÔNG tự sửa bó ở đây. Ghi nhận và gợi ý user chạy `knowhow-distill` để refine. (Tách tiêu thụ khỏi sản xuất.)
+4. **Không sản xuất.** Nếu trong lúc làm phát hiện bó thiếu/sai bước, KHÔNG tự sửa bó ở đây. Ghi phần "vướng" vào usage log (quy tắc 7) và gợi ý user chạy `knowhow-distill` để refine. (Tách tiêu thụ khỏi sản xuất.)
 5. **Tôn trọng cửa duy nhất.** Bài học mới sinh trong lúc chạy (nếu đáng lưu) đi qua `knowhow-capture` → inbox, KHÔNG ghi thẳng.
-6. **Tín hiệu promote khi chạy theo wiki page.** Nếu lần chạy này phải đọc và làm theo một wiki page type pattern/troubleshooting (vì chưa có bó, agent lấy bước từ page đó) thì đó là dấu hiệu page nên thành skill. run KHÔNG được ghi `.knowhow/` (gồm cả `schema-signals.md`), nên CUỐI lần chạy chỉ GỢI Ý user:
-   > Lần này mình làm theo wiki page [[<slug>]] vì chưa có skill. Nếu việc này lặp lại, chạy `knowhow-capture` để file một candidate-skill với `promote_of: <slug>`, rồi `knowhow-distill` sẽ đề xuất tạo skill.
+6. **Tín hiệu promote khi chạy theo wiki page.** Nếu lần chạy này phải đọc và làm theo một wiki page type pattern/troubleshooting (vì chưa có bó, agent lấy bước từ page đó) thì đó là dấu hiệu page nên thành skill. Đây là nơi tín hiệu "page bị làm theo lặp" mạnh nhất (run là entrypoint LÀM THEO thật), nên run TỰ ghi 1 dòng `promote-candidate`, đối xứng với `knowhow-query` Bước 3b. Ghi theo [schema-signals-protocol.md](../knowhow-distill/references/schema-signals-protocol.md) (awk, quy tắc "1 phiếu/lần không dedupe" và "đã promote thì thôi" ở đó). Dòng run phát có dạng `- [YYYY-MM-DD] run | promote-candidate | làm theo wiki page [[<slug>]] vì chưa có skill | related: <slug>`.
 
-   Không tự chạy capture, chỉ gợi ý. Đây là cách run đóng góp tín hiệu promote mà vẫn giữ quy tắc "run không ghi gì".
+   Đây là NGOẠI LỆ DUY NHẤT của "run không sản xuất": chỉ ghi sổ tín hiệu, KHÔNG ghi wiki/skill/workflow/log, KHÔNG tự chạy capture. Kèm gợi ý nhẹ cho user (không bắt buộc): "Lần này mình làm theo wiki page [[<slug>]] vì chưa có skill; đã ghi một phiếu promote. Nếu lặp lại đủ, `knowhow-distill` sẽ đề xuất nâng thành skill."
+
+7. **Usage log: MỘT dòng sau mỗi lần chạy.** Khi chạy xong một bó (hoàn tất hoặc bỏ dở), thêm 1 entry vào `wiki/log.md`:
+   ```
+   ## [YYYY-MM-DD] run | <slug-bó> | ok
+   ## [YYYY-MM-DD] run | <slug-bó> | vướng: <1 câu, bước nào thiếu/sai/không áp được>
+   ```
+   Tại sao đây không phải "sản xuất": entry này là nhật ký SỬ DỤNG, không phải tri thức. Nó phục vụ hai việc: (a) `lint metrics` đếm mức tái sử dụng thật của từng bó (không có nó, reuse mù hoàn toàn), (b) chuỗi "vướng" lặp lại trên cùng một bó là bằng chứng để distill refine. Giới hạn: đúng 1 dòng, không mô tả dài, chi tiết thuộc về capture nếu đáng lưu.
 
 ## Edge cases
 

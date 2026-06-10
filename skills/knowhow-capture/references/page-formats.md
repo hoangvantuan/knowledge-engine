@@ -5,6 +5,15 @@ Dùng chung cho `knowhow-capture` (ghi inbox) và `knowhow-distill` (đúc kết
 
 Format dưới đây dùng chung cho MỌI lĩnh vực: code hay không code đều cùng một cấu trúc, chỉ khác nội dung. Ví dụ minh hoạ cố ý lấy từ nhiều nghề (kỹ thuật, kinh doanh, nội dung, vận hành) để thấy khuôn áp được ở đâu cũng được.
 
+## Mục lục
+
+1. **Inbox Item Format** — format item ghi vào `inbox/`
+2. **Wiki Page Formats** — 2.1 Decision · 2.2 Pattern · 2.3 Concept · 2.4 Troubleshooting · 2.5 Lesson · 2.6 Project (tuỳ chọn)
+3. **Skill Page Format** — frontmatter + body cho skill đã đúc kết
+4. **Workflow Page Format** — frontmatter + body cho workflow đã đúc kết
+5. **Changelog Format** — dòng changelog cuối mỗi page
+6. **Registry Formats** — 6.1 Skill Registry · 6.2 Workflow Registry
+
 ---
 
 ## 1. Inbox Item Format
@@ -15,10 +24,10 @@ Mỗi item capture ghi vào `inbox/YYYY-MM-DD-slug.md`.
 
 ```yaml
 ---
-type: decision | pattern | troubleshooting | concept | candidate-skill | candidate-workflow
+type: decision | pattern | troubleshooting | concept | lesson | candidate-skill | candidate-workflow
 title: "Tên ngắn gọn"
 tags: []
-captured_from: conversation | file-import | query | run
+captured_from: conversation | file-import | query | run | reflect
 captured_at: "YYYY-MM-DDTHH:mm"
 source_file: "raw/YYYY-MM-DD-slug.md"  # BẮT BUỘC. Trích đoạn nguồn (cả hội thoại) luôn lưu vào raw/. Không để trống.
 promote_of: ""  # TUỲ CHỌN. Chỉ điền khi item là ứng viên promote: slug wiki page nguồn (ví dụ pattern-retry-jitter). distill đọc page này rồi đề xuất tạo skill giữ liên kết ngược.
@@ -423,6 +432,152 @@ Nhóm vận hành bắt đầu chèn link ngoài (web bán hàng) ngay trong n�
 - 2026-06-06: Tạo mới từ inbox
 ```
 
+### 2.5. Lesson
+
+File: `wiki/lesson-slug.md`
+
+Khác `pattern` (cách làm đã chứng minh) và `troubleshooting` (sự cố + cách fix): `lesson` giữ cấu trúc phản tư, lõi là độ lệch giữa kỳ vọng và thực tế cùng hành động hệ thống rút ra. Thường sinh từ `knowhow-reflect`.
+
+#### Frontmatter
+
+```yaml
+---
+type: lesson
+title: "Tên bài học"
+tags: []
+related: []
+created: YYYY-MM-DD
+updated: YYYY-MM-DD
+confidence: low | medium | high
+status: active   # active | deprecated | archived
+---
+```
+
+#### Body
+
+```markdown
+## Bối cảnh
+
+[Sự việc gì? Dự án/giai đoạn nào? Ai liên quan?]
+
+## Kỳ vọng vs Thực tế
+
+[Ban đầu định đạt gì. Thực tế ra sao. Lệch ở đâu, mức nào, số cụ thể nếu có.]
+
+## Nguyên nhân gốc
+
+[Chuỗi "tại sao" đến gốc. Tách nguyên nhân trực tiếp và điều kiện bối cảnh.]
+
+## Bài học
+
+[MỘT câu, người ngoài cuộc đọc hiểu được.]
+
+## Khi áp dụng / Khi KHÔNG áp dụng
+
+[Điều kiện bài học đúng. Điều kiện bài học không còn đúng.]
+
+## Hành động hệ thống
+
+[Cái gì trong kho phải đổi để lần sau không phụ thuộc trí nhớ: link [[workflow]], [[skill]], [[decision]] cần tạo/sửa. Ghi rõ trạng thái: đã làm / chờ distill.]
+
+## Changelog
+
+- YYYY-MM-DD: Tạo mới từ inbox
+```
+
+#### Ví dụ
+
+```markdown
+---
+type: lesson
+title: "Estimate thiếu buffer kiểm thử hồi quy khi đụng module dùng chung"
+tags: [estimate, quan-ly-du-an, qa]
+related: [quy-trinh-estimate]
+created: 2026-06-10
+updated: 2026-06-10
+confidence: low
+status: active
+---
+
+## Bối cảnh
+
+Dự án A, giai đoạn bàn giao tháng 5. Team 4 người, lần đầu sửa sâu vào module thanh toán dùng chung với 2 hệ thống khác.
+
+## Kỳ vọng vs Thực tế
+
+Kỳ vọng bàn giao 15/5 theo estimate 6 tuần. Thực tế bàn giao 27/5, trễ 12 ngày. Toàn bộ phần trễ nằm ở giai đoạn kiểm thử: phát sinh 23 lỗi hồi quy ở 2 hệ thống dùng chung module.
+
+## Nguyên nhân gốc
+
+Trễ vì lỗi hồi quy → vì estimate không có thời gian kiểm thử hồi quy cho hệ thống ngoài phạm vi dự án → vì template estimate chỉ tính công việc trong phạm vi, không có mục "ảnh hưởng chéo" → gốc: quy trình estimate coi mỗi dự án là một ốc đảo. Điều kiện làm trầm trọng: khách đổi phạm vi giữa chừng nhưng không ai re-estimate.
+
+## Bài học
+
+Đụng vào module dùng chung thì chi phí kiểm thử nằm ở các hệ thống xung quanh, không nằm trong dự án, và estimate phải tính phần đó.
+
+## Khi áp dụng / Khi KHÔNG áp dụng
+
+- Áp dụng: mọi dự án sửa module có từ 2 hệ thống sử dụng trở lên.
+- KHÔNG áp dụng: module độc lập, chỉ một nơi dùng. Thêm buffer khi đó là lãng phí.
+
+## Hành động hệ thống
+
+- Sửa [[quy-trinh-estimate]]: thêm bước "liệt kê hệ thống dùng chung + buffer hồi quy" (chờ distill).
+- Tạo decision "đổi phạm vi thì buộc re-estimate" (chờ distill).
+
+## Changelog
+
+- 2026-06-10: Tạo mới từ inbox
+```
+
+### 2.6. Project (tuỳ chọn, chỉ seed khi init xác nhận kho theo dõi theo dự án)
+
+File: `wiki/project-slug.md`
+
+Khác các type còn lại một bậc: `project` là trang **thực thể** (entity hub), không phải một mẩu tri thức. Vai trò: điểm neo để decision/lesson/pattern cùng dự án link về, trả lời câu "dự án X dạy ta điều gì". Type này KHÔNG nằm trong schema mặc định; `knowhow-init` chỉ thêm khi user xác nhận kho làm việc theo dự án/khách hàng/chiến dịch, hoặc schema evolution thêm sau khi đủ tín hiệu.
+
+#### Frontmatter
+
+```yaml
+---
+type: project
+title: "Tên dự án"
+tags: []
+related: []
+phase: planning | active | done
+created: YYYY-MM-DD
+updated: YYYY-MM-DD
+confidence: low | medium | high
+status: active   # active | deprecated | archived
+---
+```
+
+`phase` là trạng thái của DỰ ÁN (chạy/xong), tách khỏi `status` là vòng đời của TRANG. Dự án xong thì `phase: done` nhưng trang vẫn `status: active` vì tri thức còn được tra.
+
+#### Body
+
+```markdown
+## Mục tiêu
+
+[Dự án định đạt gì, đo bằng gì.]
+
+## Phạm vi và mốc chính
+
+[Phạm vi, mốc thời gian quan trọng, ai tham gia.]
+
+## Kết quả so mục tiêu
+
+[Điền khi dự án xong. Đạt/lệch ở đâu, số cụ thể. Lệch lớn thì trỏ [[lesson]] tương ứng.]
+
+## Tri thức sinh ra từ dự án
+
+[Danh sách [[decision-...]], [[lesson-...]], [[pattern-...]]. distill bồi thêm mỗi khi đúc kết item thuộc dự án này.]
+
+## Changelog
+
+- YYYY-MM-DD: Tạo mới từ inbox
+```
+
 ---
 
 ## 3. Skill Page Format
@@ -585,6 +740,8 @@ status: active   # active | deprecated | archived
 - YYYY-MM-DD: Tạo mới, version 1.0
 ```
 
+Quy tắc trace: bước nào sinh ra từ một bài học thì ghi kèm nguồn ngay sau bước, dạng `(vì [[lesson-slug]])`. Người làm theo hiểu tại sao bước tồn tại, và khi bài học bị deprecated thì biết bước nào cần xét lại.
+
 ### Ví dụ
 
 ```markdown
@@ -675,13 +832,14 @@ File: `workflows/registry.md`
 ```markdown
 # Workflow Registry
 
-| Workflow | Mô tả | Skills dùng | Version | Cập nhật |
-|----------|--------|-------------|---------|----------|
-| [[slug]] | mô tả ngắn | skill1, skill2 | 1.0 | YYYY-MM-DD |
+| Workflow | Mô tả | Khi nào dùng | Skills dùng | Version | Tags | Cập nhật |
+|----------|--------|--------------|-------------|---------|------|----------|
+| [[slug]] | mô tả ngắn | khi nào nên dùng (= trigger) | skill1, skill2 | 1.0 | tag1, tag2 | YYYY-MM-DD |
 ```
 
 Quy tắc:
 - Mỗi workflow có đúng 1 dòng.
 - Sort theo alphabet.
+- Cột "Khi nào dùng" lấy từ field `trigger` của workflow (tín hiệu để `knowhow-run` match task sang workflow, đối xứng với skill registry).
 - Cột "Skills dùng" liệt kê các skill reference.
 - Cập nhật registry mỗi khi thêm/sửa/xóa workflow.

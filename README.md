@@ -16,7 +16,7 @@ Mỗi lần mở lại kho là một lần bắt đầu từ con số không.
 
 ## Giải pháp
 
-Một hệ thống **3 lớp dữ liệu** + **6 skills vận hành**, cài vào bất kỳ không gian làm việc nào (code hoặc không code). Knowhow đi qua một cửa duy nhất là `inbox/`, rồi được đúc kết thành tri thức có cấu trúc, được rà soát định kỳ, và tự tiến hoá khuôn khi kho lớn lên.
+Một hệ thống **3 lớp dữ liệu** + **7 skills vận hành**, cài vào bất kỳ không gian làm việc nào (code hoặc không code). Knowhow đi qua một cửa duy nhất là `inbox/`, rồi được đúc kết thành tri thức có cấu trúc, được rà soát định kỳ, và tự tiến hoá khuôn khi kho lớn lên.
 
 Lấy cảm hứng từ:
 
@@ -27,16 +27,17 @@ Lấy cảm hứng từ:
 
 Bộ skill dùng được cho cả người làm kỹ thuật lẫn không kỹ thuật. Vài từ dưới đây là tương đương, chỉ cùng một thứ:
 
-| Từ trung lập | Người kỹ thuật hiểu là | Người cá nhân hiểu là |
-|---|---|---|
-| Kho tri thức | Repo dự án | Thư mục tài liệu của bạn |
-| Không gian làm việc | Project root | Thư mục gốc đang làm |
-| Hoàn tác (reversible) | `git revert` | Lấy lại từ `archive/` |
+| Từ trung lập          | Người kỹ thuật hiểu là | Người cá nhân hiểu là    |
+| --------------------- | ---------------------- | ------------------------ |
+| Kho tri thức          | Repo dự án             | Thư mục tài liệu của bạn |
+| Không gian làm việc   | Project root           | Thư mục gốc đang làm     |
+| Hoàn tác (reversible) | `git revert`           | Lấy lại từ `archive/`    |
+
 
 ## Điểm nổi bật
 
 - **Markdown thuần, agent-agnostic.** Sản phẩm knowhow là markdown, mọi agent đọc được, lưu cùng nguồn gốc công việc.
-- **AI đề xuất, người duyệt.** Không bước nào tự động ghi vào tri thức chính thức. User duyệt từng item.
+- **AI đề xuất, người duyệt.** Không bước nào tự động ghi vào tri thức chính thức. User duyệt từng item. (Sổ sách dẫn xuất là ngoại lệ có chủ đích: index/registry/log do agent tự đồng bộ và báo lại, vì chúng sinh ra từ tri thức chứ không phải tri thức.)
 - **Một cửa duy nhất.** Mọi knowhow vào `inbox/` trước, không ghi thẳng vào wiki/skills/workflows. Bất biến này giữ tri thức nhất quán.
 - **Ưu tiên cải tiến hơn tạo mới.** Distill luôn đọc cái đã có trước, gộp tri thức thay vì phân mảnh.
 - **Khuôn tự tiến hoá.** Hệ thống tích luỹ tín hiệu "khuôn không vừa" rồi đề xuất thay đổi cấu trúc khi vượt ngưỡng.
@@ -60,23 +61,27 @@ flowchart LR
 | **Skills**    | AI đề xuất, người duyệt | Thao tác cụ thể, làm-theo-được, tái sử dụng cao |
 | **Workflows** | AI đề xuất, người duyệt | Chuỗi bước, gắn domain, gọi nhiều skill         |
 
+
 Hệ thống chia làm hai tầng tách biệt:
 
-| Tầng                    | Sống ở đâu          | Vai trò                              |
-| ----------------------- | ------------------- | ------------------------------------ |
-| **Skills vận hành**     | Config của agent    | Công cụ xây dựng và duy trì knowhow  |
-| **Sản phẩm knowhow**    | `.knowhow/` trong kho | Kiến thức của kho, mọi agent đọc được |
+| Tầng                 | Sống ở đâu            | Vai trò                               |
+| -------------------- | --------------------- | ------------------------------------- |
+| **Skills vận hành**  | Config của agent      | Công cụ xây dựng và duy trì knowhow   |
+| **Sản phẩm knowhow** | `.knowhow/` trong kho | Kiến thức của kho, mọi agent đọc được |
 
-## 6 skills vận hành
 
-| Skill | Làm gì | Khi nào dùng |
-|-------|--------|--------------|
-| **knowhow-init** | Tạo cấu trúc `.knowhow/`, sinh SCHEMA, gắn hướng dẫn vào config agent | Bắt đầu một kho mới, hoặc thêm knowhow vào không gian sẵn có |
-| **knowhow-capture** | Quét hội thoại/file, nhận diện knowhow, ghi candidate vào `inbox/` | Sau phiên làm việc, hoặc khi muốn lưu một bài học |
-| **knowhow-distill** | Đúc kết `inbox/` thành wiki page / skill / workflow, ưu tiên cập nhật cái cũ | Khi inbox có nội dung chờ |
-| **knowhow-lint** | Rà soát sức khoẻ hệ thống, 4 chế độ: quick, consolidation, rebuild-index, schema-review | Định kỳ, hoặc khi knowhow đã tích luỹ nhiều |
-| **knowhow-query** | Trả lời câu hỏi từ knowhow, trích dẫn `[[slug]]`, phát tín hiệu khi không trúng page | Khi cần tra cứu tri thức đã tích luỹ |
-| **knowhow-run** | Tiêu thụ skill/workflow đã đúc kết: tra registry → load file bó → làm theo. Không ghi vào `.knowhow/` | Khi bắt đầu task domain cần làm theo một bó đã có |
+## 7 skills vận hành
+
+| Skill               | Làm gì                                                                                                                                                                    | Khi nào dùng                                                 |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| **knowhow-init**    | Tạo cấu trúc `.knowhow/`, sinh SCHEMA, gắn hướng dẫn vào config agent                                                                                                     | Bắt đầu một kho mới, hoặc thêm knowhow vào không gian sẵn có |
+| **knowhow-capture** | Quét hội thoại/file, nhận diện knowhow, ghi candidate vào `inbox/`. Nguồn lớn (transcript, export chat, loạt issue): chế độ batch ingest, duyệt theo nhóm                 | Sau phiên làm việc, hoặc khi muốn lưu một bài học            |
+| **knowhow-reflect** | Phỏng vấn phản tư (AAR): kỳ vọng, thực tế, nguyên nhân gốc, bài học, hành động hệ thống. Kết quả đổ về flow capture                                                       | Sau sự cố, sau milestone, cuối dự án, hoặc retro định kỳ     |
+| **knowhow-distill** | Đúc kết `inbox/` thành wiki page / skill / workflow, ưu tiên cập nhật cái cũ                                                                                              | Khi inbox có nội dung chờ                                    |
+| **knowhow-lint**    | Rà soát sức khoẻ hệ thống, 6 chế độ: quick, consolidation, rebuild-index, schema-review, restore, metrics                                                                 | Định kỳ, hoặc khi knowhow đã tích luỹ nhiều                  |
+| **knowhow-query**   | Trả lời câu hỏi từ knowhow, trích dẫn `[[slug]]`, phát tín hiệu khi không trúng page. Chế độ teach: soạn lộ trình đọc onboarding từ wiki                                  | Khi cần tra cứu tri thức đã tích luỹ, hoặc đào tạo người mới |
+| **knowhow-run**     | Tiêu thụ skill/workflow đã đúc kết: tra registry → load file bó → làm theo. Không sản xuất tri thức, chỉ ghi 1 dòng usage log + 1 tín hiệu promote khi làm theo wiki page | Khi bắt đầu task domain cần làm theo một bó đã có            |
+
 
 ## Cấu trúc `.knowhow/`
 
@@ -93,7 +98,9 @@ Hệ thống chia làm hai tầng tách biệt:
 │   ├── decision-*.md      # Quyết định + lý do + bối cảnh
 │   ├── pattern-*.md       # Pattern đã chứng minh hiệu quả
 │   ├── concept-*.md       # Thuật ngữ, khái niệm riêng của kho
-│   └── troubleshooting-*.md  # Sự cố đã gặp + cách xử lý
+│   ├── troubleshooting-*.md  # Sự cố đã gặp + cách xử lý
+│   ├── lesson-*.md        # Bài học phản tư: kỳ vọng vs thực tế + hành động hệ thống
+│   └── project-*.md       # (tuỳ chọn) Trang thực thể dự án, neo tri thức cùng dự án
 ├── skills/                # Lớp 3a: skill (làm-theo-được, tái sử dụng)
 │   └── registry.md        # Danh sách skill + metadata
 └── workflows/             # Lớp 3b: workflow (nhiều bước, gọi skill)
@@ -104,7 +111,7 @@ Hệ thống chia làm hai tầng tách biệt:
 
 ### 1. Khởi tạo
 
-Gọi `knowhow-init`. Skill hỏi tên kho và mô tả lĩnh vực, rồi:
+Gọi `knowhow-init`. Skill hỏi tên kho, mô tả lĩnh vực, và kho có làm việc theo dự án không (nếu có thì seed thêm type `project`), rồi:
 
 - Tạo toàn bộ cây thư mục `.knowhow/`.
 - Sinh `SCHEMA.md` với quy ước mặc định.
@@ -114,17 +121,19 @@ Gọi `knowhow-init`. Skill hỏi tên kho và mô tả lĩnh vực, rồi:
 
 ```mermaid
 flowchart LR
-    C["capture<br/>(ghi vào inbox)"] --> D["distill<br/>(đúc kết)"]
+    R["reflect<br/>(phỏng vấn AAR)"] --> C["capture<br/>(ghi vào inbox)"]
+    C --> D["distill<br/>(đúc kết)"]
     D --> Q["query<br/>(tra cứu)"]
     Q -.->|"đáng lưu, file ngược"| C
-    D --> L["lint<br/>(rà soát)"]
+    D --> L["lint<br/>(rà soát + đo)"]
     L -.->|"tiến hoá khuôn"| D
 ```
 
+- **reflect**: sau sự cố hoặc cuối dự án, phỏng vấn 5 câu để moi tri thức ngầm thành chữ, rồi bàn giao cho capture.
 - **capture**: sau một phiên làm việc, ghi nhận quyết định, pattern, bài học vào `inbox/`.
 - **distill**: chuyển inbox thành wiki page / skill / workflow chính thức. Luôn đọc cái đã có trước để gộp thay vì tạo trùng.
 - **query**: hỏi knowhow đã tích luỹ, nhận câu trả lời kèm trích dẫn nguồn.
-- **lint**: định kỳ rà soát link hỏng, page mồ côi, mâu thuẫn nội dung, và đề xuất tiến hoá khuôn.
+- **lint**: định kỳ rà soát link hỏng, page mồ côi, mâu thuẫn nội dung, đo mức sử dụng (metrics), và đề xuất tiến hoá khuôn.
 
 ### 3. Onboard agent mới
 
@@ -153,7 +162,8 @@ Bốn loại thay đổi cấu trúc: thêm page type mới, đổi layout (subf
 .
 ├── skills/
 │   ├── knowhow-init/      # SKILL.md + references (schema-template, agent-config-snippet)
-│   ├── knowhow-capture/   # SKILL.md + references (page-formats)
+│   ├── knowhow-capture/   # SKILL.md + references (page-formats, batch-ingest)
+│   ├── knowhow-reflect/   # SKILL.md
 │   ├── knowhow-distill/   # SKILL.md
 │   ├── knowhow-lint/      # SKILL.md + references (schema-review, consolidation-checklist)
 │   ├── knowhow-query/     # SKILL.md

@@ -1,6 +1,6 @@
 ---
 name: knowhow-capture
-description: "Ghi nhận knowhow từ cuộc trao đổi hoặc nguồn ngoài vào inbox của kho. Quét cuộc hội thoại, nhận diện quyết định, pattern, troubleshooting, ý tưởng skill/workflow, trình bày cho user duyệt rồi ghi vào .knowhow/inbox/. Trigger: 'knowhow capture', 'capture lại', 'ghi nhận knowhow', 'lưu bài học', khi user nói 'cái này hay, ghi lại đi', hoặc sau phiên làm việc muốn đúc kết."
+description: "Nhặt knowhow từ hội thoại hoặc nguồn ngoài rồi ghi vào inbox của kho. Dùng khi: user gõ 'knowhow capture'; muốn lưu cái vừa phát hiện ('ghi lại', 'lưu bài học', 'nhặt knowhow/insight', 'capture lại', 'đừng để mất', 'ghi vào inbox'); hoặc cuối phiên/sprint muốn giữ lại điều rút ra (pattern tìm được, bug đã fix, bài học, quyết định). Nhận diện candidate, trình user duyệt, rồi ghi vào .knowhow/inbox/. KHÔNG dùng cho: git commit, viết tài liệu, todo list, changelog, nhắc lịch, hay đúc kết inbox thành wiki (đó là knowhow-distill)."
 ---
 
 # Knowhow Capture
@@ -29,6 +29,12 @@ Quét conversation history hiện tại. Đọc transcript từ log nếu cần.
 
 User cung cấp file (transcript, ghi chú, tài liệu). Đọc file, áp dụng cùng tiêu chí nhận diện.
 
+**Nguồn lớn (file dài hơn ~500 dòng) hoặc từ 3 file trở lên**: đọc [batch-ingest.md](references/batch-ingest.md) và làm theo. Khác biệt chính: lưu raw nguyên file một lần dùng chung, đọc cuốn chiếu gom xong mới trình, duyệt theo nhóm thay vì từng item.
+
+### 3. Từ phiên reflect
+
+`knowhow-reflect` phỏng vấn xong sẽ gọi thẳng flow này từ Bước 2 (trình candidates), với `captured_from: reflect` và "Context gốc" là nguyên văn lời user trả lời phỏng vấn.
+
 Nếu user không chỉ rõ chế độ, hỏi:
 
 > Capture từ cuộc trao đổi hiện tại hay từ file/nguồn ngoài?
@@ -41,6 +47,7 @@ Nếu user không chỉ rõ chế độ, hỏi:
 | pattern | Cách giải quyết lặp lại, "hay là dùng...", "trick này..." | Retry với jitter |
 | troubleshooting | "lỗi", "fix", "nguyên nhân", "root cause" | Memory leak do không close connection |
 | concept | Thuật ngữ mới, định nghĩa, giải thích khái niệm | "Khách hạng A": định nghĩa nội bộ công ty |
+| lesson | "bài học", "rút kinh nghiệm", "lần sau", "giá như", kỳ vọng lệch thực tế | Estimate thiếu buffer kiểm thử khi đụng module dùng chung |
 | candidate-skill | Thao tác cụ thể, làm-theo-được, tái dùng cho task tương tự | Parse PDF hóa đơn; nâng từ một pattern page bị làm-theo lặp |
 | candidate-workflow | Chuỗi bước, quy trình, checklist | Release flow |
 
@@ -73,6 +80,7 @@ Emoji mapping:
 - 🔧 pattern
 - 🐛 troubleshooting
 - 📖 concept
+- 🎓 lesson
 - ⚡ candidate-skill
 - 🔄 candidate-workflow
 
@@ -99,7 +107,7 @@ Thêm entry vào `wiki/log.md`:
 ## [YYYY-MM-DD] capture | Ghi nhận N items vào inbox từ [nguồn]
 ```
 
-Trong đó `[nguồn]` = "conversation" hoặc tên file gốc.
+Trong đó `[nguồn]` = "conversation", "reflect", hoặc tên file gốc.
 
 ### Bước 6: Xác nhận
 

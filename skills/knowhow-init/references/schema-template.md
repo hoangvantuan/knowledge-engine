@@ -26,10 +26,13 @@
 | pattern | wiki/pattern-<slug>.md | Cách làm đã chứng minh hiệu quả |
 | concept | wiki/concept-<slug>.md | Thuật ngữ, khái niệm riêng của kho |
 | troubleshooting | wiki/troubleshooting-<slug>.md | Sự cố đã gặp + cách xử lý |
+| lesson | wiki/lesson-<slug>.md | Bài học phản tư: kỳ vọng vs thực tế + hành động hệ thống |
 | skill | skills/<slug>.md | Thao tác cụ thể, làm-theo-được, tái sử dụng |
 | workflow | workflows/<slug>.md | Chuỗi bước, gắn domain, gọi nhiều skill |
 
 ## Phân biệt Skill và Workflow
+
+> Đây là **định nghĩa chuẩn (canonical)** cho cả hệ thống. Các skill vận hành (init, capture, distill) chỉ nhắc bản rút gọn cho ngữ cảnh tại chỗ và trỏ về mục này. Khi cần đổi định nghĩa, sửa ở đây trước rồi đồng bộ các bản rút gọn.
 
 | | Skill | Workflow |
 |---|---|---|
@@ -62,18 +65,23 @@
 - `deprecated`: còn để tham khảo nhưng có cách mới tốt hơn. Distill set khi thay thế cách cũ.
 - `archived`: lỗi thời, chuyển vào `archive/`. Lint consolidation set.
 
-> **Khôi phục không cần git**: mọi thao tác phá huỷ chỉ move vào `archive/` + đổi `status`, không xoá cứng. Lấy lại: move file từ `archive/` về chỗ cũ, đổi `status` về `active`, rồi chạy `knowhow-lint rebuild-index`.
+> **Khôi phục không cần git**: mọi thao tác phá huỷ chỉ move vào `archive/` + đổi `status`, không xoá cứng. Lấy lại: move file từ `archive/` về chỗ cũ, đổi `status` về `active`, rồi chạy `knowhow-lint rebuild-index`. (Có thể dùng `knowhow-lint restore` để hỗ trợ thao tác này.)
+
+> **Retention `raw/` và `archive/`**: hai thư mục này append-only, chỉ phình theo thời gian, hệ thống KHÔNG tự dọn (giữ để trace + khôi phục). Khi chúng quá lớn gây vướng, đây là việc thủ công có chủ đích của user: nén theo năm (`raw/2025/`, `archive/2025/`) hoặc move ra ngoài kho. KHÔNG xoá khi còn page sống trỏ `source:` về `raw/` tương ứng.
 
 ### confidence (chỉ 4 wiki type, skill/workflow dùng version)
+
+Ngữ nghĩa: `confidence` đo **độ chín** của tri thức (đã qua bao nhiêu vòng ghi nhận/cập nhật), KHÔNG phải độ đúng tuyệt đối. Page sửa nhiều lần nghĩa là đã qua nhiều vòng kiểm, không bảo đảm không sai. Đọc kèm `updated` và Changelog để hiểu đủ.
 
 Đếm theo **số entry trong phần Changelog** của page:
 - 1 entry (mới tạo) → `low`.
 - ≥2 entry → `medium`.
 - ≥3 entry → `high`.
 
-- capture set `low` cho item mới.
+- distill set `low` khi TẠO wiki page mới (1 entry Changelog đầu tiên). Inbox item KHÔNG mang field `confidence`; confidence chỉ áp wiki page do distill tạo, không áp inbox/skill/workflow.
 - distill nâng khi page được cập nhật lặp lại (grep trỏ về page cũ → CẬP NHẬT → thêm entry changelog).
 - lint consolidation hạ 1 bậc khi `updated` cũ hơn 90 ngày và không có entry changelog mới trong khoảng đó.
+- **Kiểm chứng không sửa gì**: đọc lại page thấy vẫn đúng nhưng không đổi nội dung thì ghi entry changelog `- YYYY-MM-DD: re-verified, không đổi nội dung` và cập nhật `updated`. Entry này giữ page khỏi bị hạ confidence oan, không cần field riêng.
 
 ## Quy tắc vận hành
 
@@ -81,7 +89,7 @@
 - Khi distill: đọc index.md + registry.md trước. Ưu tiên cập nhật cái cũ hơn tạo mới
 - Mọi thay đổi ghi changelog cuối page
 - Mọi hoạt động ghi log vào wiki/log.md
-- Mỗi entry log dùng heading prefix parse được: `## [YYYY-MM-DD] <op> | <tiêu đề>` (op ∈ init/capture/distill/lint/query). Cho phép `grep "^## \[" wiki/log.md | tail -5` xem hoạt động gần nhất.
+- Mỗi entry log dùng heading prefix parse được: `## [YYYY-MM-DD] <op> | <tiêu đề>` (op ∈ init/capture/distill/lint/query/run). Cho phép `grep "^## \[" wiki/log.md | tail -5` xem hoạt động gần nhất. (Entry `run` là nhật ký SỬ DỤNG bó, nguyên liệu cho `lint metrics` đo mức tái sử dụng.)
 
 ## Onboarding cho agent mới
 

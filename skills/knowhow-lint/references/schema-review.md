@@ -4,6 +4,8 @@ Reference cho `knowhow-lint` mode `schema-review`. Chứa: ngưỡng kích hoạ
 
 Nguyên tắc nền: **tách phát hiện khỏi quyết định**. lint tổng hợp + đề xuất; chỉ user duyệt; mọi migrate reversible KÉP, gốc qua `archive/` + `status` (không xoá cứng, không cần git), git revert là lớp cộng khi có git.
 
+Nguyên tắc gác cổng cho MỌI thêm-mới vào khuôn (field, tín hiệu, section, type): phải chỉ rõ **consumer**, tức skill nào sẽ ĐỌC nó và đọc để làm gì. Không có consumer thì không thêm, dù chi phí thêm rất rẻ. Metadata không ai đọc là metadata chết. (Đối chiếu: mọi thứ hiện có đều đạt chuẩn này: `promote-candidate` → distill đếm phiếu, `query-miss` → schema-review áp ngưỡng, entry `run` → metrics đo reuse, `confidence` → query và người đọc cân nhắc.)
+
 ---
 
 ## 1. Hai kiểu tín hiệu
@@ -14,20 +16,26 @@ Nguyên tắc nền: **tách phát hiện khỏi quyết định**. lint tổng 
 ## 2. Quét sống (tính tín hiệu trạng thái)
 
 ```bash
+# Đọc danh sách wiki type ĐỘNG từ bảng Page Types trong SCHEMA.md (cột đường dẫn bắt đầu bằng wiki/).
+# KHÔNG hardcode 4 base type: type mới sau tiến hoá (ví dụ experiment) tự được tính.
+WIKI_TYPES=$(awk -F'|' '$3 ~ /wiki\// {gsub(/[[:space:]]/,"",$2); print $2}' .knowhow/SCHEMA.md)
 # Đếm page mỗi type (dựa prefix tên file, đệ quy cả subfolder)
-for t in decision pattern concept troubleshooting; do
+for t in $WIKI_TYPES; do
   n=$(find .knowhow/wiki -name "${t}-*.md" | wc -l | tr -d ' ')
   echo "$t: $n"
 done
 # Cụm tag: gom tag từ frontmatter mọi wiki page, đếm tần suất
 grep -rh "^tags:" .knowhow/wiki | sed 's/tags://' | tr -d '[]' | tr ',' '\n' | sed 's/^[[:space:]]*//; s/[[:space:]]*$//' | grep -v '^$' | sort | uniq -c | sort -rn
 # Orphan ratio: page không được [[link]] hay related trỏ tới (tham khảo consolidation checklist mục 8)
+# Section ad-hoc: với mỗi tên section nghi ngờ (lấy từ các dòng adhoc-section trong sổ), đếm SỐ PAGE THẬT có section đó
+grep -rl '## <tên section>' .knowhow/wiki | wc -l
 ```
 
-> Lưu ý: quét tag giả định format inline `tags: [a, b]` (chuẩn của page-formats.md). Vòng lặp đếm type ở trên nên bao gồm cả type mới đã thêm vào SCHEMA Page Types, không chỉ 4 base type.
+> Lưu ý: quét tag giả định format inline `tags: [a, b]` (chuẩn của page-formats.md). Vòng lặp đếm type đọc danh sách type từ `SCHEMA.md` nên tự bao gồm type mới sau tiến hoá, KHÔNG cần sửa file skill này khi kho thêm type.
 
 - `type-bloat`: một type vượt 30 page (xem ngưỡng đổi layout).
 - `tag-cluster`: một tag xuất hiện ở ≥ 5 page mà chưa thành type riêng.
+- `adhoc-page-count`: với một section ad-hoc, SỐ PAGE cùng type thật có section đó (đếm sống bằng grep ở trên, dùng cho ngưỡng đổi format).
 
 ## 3. Ngưỡng kích hoạt (giá trị khởi điểm, bảo thủ để tránh nhiễu)
 
@@ -35,7 +43,7 @@ grep -rh "^tags:" .knowhow/wiki | sed 's/tags://' | tr -d '[]' | tr ',' '\n' | s
 |---|---|
 | **Thêm page type** | ≥ 5 tín hiệu `no-fit-type`/`tag-cluster` cùng chủ đề, HOẶC ≥ 5 page default-wiki chung một cụm tag → đề xuất "phong" cụm thành type mới |
 | **Đổi layout (subfolder)** | 1 type vượt 30 page phẳng → đề xuất gắt vào subfolder nhóm theo tag |
-| **Đổi format page type** | cùng một section tự chế (`adhoc-section`) xuất hiện ở ≥ 4 page cùng type → đề xuất thêm vào template type đó |
+| **Đổi format page type** | ≥ 4 page cùng type THẬT có cùng một section tự chế → đề xuất thêm vào template type đó. Đếm bằng quét sống (`grep -rl '## <section>' .knowhow/wiki | wc -l`), KHÔNG đếm số dòng `adhoc-section` trong sổ. Dòng tín hiệu chỉ TRỎ ứng viên (section nào, type nào) cần đếm, vì cơ chế emit của distill bỏ sót page đầu tiên tạo section nên đếm dòng sẽ lệch một bậc. |
 | **Thêm mục SCHEMA.md** | thuật ngữ/quy ước lặp lại nhiều lần trong body các page → đề xuất thêm vào mục Glossary & Convention |
 
 Lưới an toàn: tín hiệu CHƯA đủ ngưỡng vẫn tích luỹ trong sổ, không mất, không đề xuất.
@@ -48,7 +56,7 @@ Mỗi đề xuất được duyệt chạy một batch migrate. Mọi batch Đ�
 
 1. Định nghĩa type mới trong `SCHEMA.md`: thêm dòng vào bảng "Page Types" (`<type> | wiki/<type>-<slug>.md | <mục đích>`) và Naming Conventions.
 2. Reclassify page default cũ: đề xuất **TỪNG FILE MỘT**, user duyệt từng file. KHÔNG đổi hàng loạt. Mỗi file được duyệt: đổi tên `wiki/<old>-<slug>.md` → `wiki/<type>-<slug>.md`, cập nhật `type:` trong frontmatter.
-3. Cập nhật vòng lặp quét sống ở mục 2 để bao gồm type mới (thêm vào danh sách `for t in ...`).
+3. KHÔNG cần sửa vòng lặp quét sống ở mục 2: nó đọc danh sách type động từ bảng Page Types trong `SCHEMA.md`, nên thêm dòng type mới ở bước 1 là tự đủ. (Đây là lý do quét sống đọc `SCHEMA.md` thay vì hardcode: tránh rò state của kho vào file skill dùng chung.)
 4. (Tín hiệu liên quan: `no-fit-type`, `tag-cluster`, `query-miss` cùng chủ đề.)
 
 ### 4.2. Đổi layout (subfolder)
