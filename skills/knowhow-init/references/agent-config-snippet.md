@@ -1,17 +1,16 @@
+<!-- knowhow:start -->
 ## Knowhow
 
-Kho tri thức này dùng hệ thống Knowhow để tích luỹ và quản lý tri thức.
+Kho tri thức này dùng hệ thống **Knowhow** để quản trị tri thức tích luỹ: thu thập tri thức sinh ra trong lúc làm việc, đúc kết thành dạng có cấu trúc, tái sử dụng cho việc sau, và để khuôn tự tiến hoá khi kho lớn lên. Mục tiêu là không để tri thức biến mất sau mỗi phiên, biến không gian làm việc thành một kho tích luỹ có cấu trúc. AI viết, người duyệt.
 
-### Bản đồ tri thức (nạp tự động đầu phiên)
+### Bản đồ tri thức
 
-4 file dưới đây là "bản đồ" để định tuyến công việc. hãy ĐỌC đủ 4 file trên ngay khi bắt đầu phiên, trước khi làm việc.
+@.knowhow/SCHEMA.md
+@.knowhow/skills/registry.md
+@.knowhow/wiki/index.md
+@.knowhow/workflows/registry.md
 
-.knowhow/SCHEMA.md
-.knowhow/wiki/index.md
-.knowhow/skills/registry.md
-.knowhow/workflows/registry.md
-
-Chỉ nạp 4 file bản đồ này, KHÔNG nạp sẵn nội dung chi tiết. Wiki page, skill và workflow bó được load on-demand qua `knowhow-query` / `knowhow-run` khi cần.
+Đây là 4 file "bản đồ" để định tuyến công việc. KHÔNG nạp sẵn nội dung chi tiết; wiki page, skill và workflow bó được load on-demand qua `knowhow-query` / `knowhow-run` khi cần.
 
 ### Quy trình làm việc
 
@@ -21,3 +20,4 @@ Chỉ nạp 4 file bản đồ này, KHÔNG nạp sẵn nội dung chi tiết. W
 4. Sau phiên làm việc có bài học đáng ghi nhận, đề xuất capture vào `.knowhow/inbox/`
 5. Sau khi xử lý xong một sự cố, hoặc khi user nói vừa kết thúc một dự án/giai đoạn, đề xuất chạy `knowhow-reflect` (phỏng vấn rút bài học). Tri thức ngầm không tự thành chữ nếu không ai hỏi.
 6. Khi `.knowhow/inbox/` có ≥ 5 item hoặc có item cũ hơn 7 ngày, chủ động nhắc user chạy `knowhow-distill` để đúc kết, tránh inbox tồn đọng.
+<!-- knowhow:end -->

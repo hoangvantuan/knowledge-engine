@@ -115,7 +115,7 @@ Gọi `knowhow-init`. Skill hỏi tên kho, mô tả lĩnh vực, và kho có l�
 
 - Tạo toàn bộ cây thư mục `.knowhow/`.
 - Sinh `SCHEMA.md` với quy ước mặc định.
-- Thêm mục hướng dẫn vào `CLAUDE.md` / `AGENTS.md` / `GEMINI.md` (file nào tồn tại trước, hoặc tạo `CLAUDE.md` mới).
+- Thêm khối hướng dẫn (bọc trong marker `<!-- knowhow:start/end -->`) vào `AGENTS.md` (tạo mới nếu chưa có). Config agent khác user tự gắn.
 
 ### 2. Vòng lặp tích luỹ
 
@@ -137,13 +137,13 @@ flowchart LR
 
 ### 3. Onboard agent mới
 
-`knowhow-init` gắn một khối hướng dẫn vào file config agent (`CLAUDE.md` / `AGENTS.md` / `GEMINI.md`), liệt kê 4 file bản đồ tri thức để agent đọc ngay đầu mỗi phiên:
+`knowhow-init` gắn một khối hướng dẫn vào `AGENTS.md` (bọc trong marker `<!-- knowhow:start/end -->` để re-init cập nhật được tại chỗ), nêu vai trò bộ skill knowhow trong quản trị tri thức và dùng cú pháp `@` để agent tự nạp 4 file bản đồ vào context đầu mỗi phiên:
 
-- `SCHEMA.md` (quy ước)
-- `wiki/index.md` (mục lục)
-- `skills/registry.md` và `workflows/registry.md` (cái gì dùng được)
+- `@.knowhow/SCHEMA.md` (quy ước)
+- `@.knowhow/skills/registry.md` và `@.knowhow/workflows/registry.md` (cái gì dùng được)
+- `@.knowhow/wiki/index.md` (mục lục)
 
-Khối hướng dẫn này yêu cầu agent đọc 4 file bản đồ ngay đầu phiên, không phụ thuộc cơ chế auto-load riêng của từng agent, nên dùng được cho mọi agent. Chỉ bản đồ được đọc sẵn; nội dung chi tiết (wiki page, skill/workflow bó) load on-demand qua `knowhow-query` / `knowhow-run` khi cần.
+Chỉ bản đồ được nạp sẵn; nội dung chi tiết (wiki page, skill/workflow bó) load on-demand qua `knowhow-query` / `knowhow-run` khi cần.
 
 ## Tiến hoá cấu trúc (schema evolution)
 

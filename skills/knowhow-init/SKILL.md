@@ -146,21 +146,40 @@ Format mỗi dòng:
 
 ### Bước 5: Thêm hướng dẫn vào agent config
 
-Tìm file cấu hình agent tại root workspace theo thứ tự ưu tiên:
+Chỉ ghi vào **`AGENTS.md`** tại root workspace. Các config khác (`CLAUDE.md`, `GEMINI.md`) user tự xử lý.
 
-1. `CLAUDE.md`
-2. `AGENTS.md`
-3. `GEMINI.md`
+Nội dung thêm nằm trong `references/agent-config-snippet.md`, đã bọc sẵn trong cặp marker:
 
-Quy tắc:
+```
+<!-- knowhow:start -->
+...
+<!-- knowhow:end -->
+```
 
-- Thêm vào file **đầu tiên** tìm thấy.
-- Nếu **chưa có file nào**, tạo `CLAUDE.md` mới.
-- **Idempotent**: TRƯỚC khi append, grep `## Knowhow` trong file config. Nếu đã có → BỎ QUA, không append lần hai (tránh nhân đôi khi init chạy lại):
-  ```bash
-  grep -q "^## Knowhow" <config-file> && echo "Đã có, bỏ qua" || cat references/agent-config-snippet.md >> <config-file>
-  ```
-- Nội dung thêm: đọc `references/agent-config-snippet.md` và append vào cuối file.
+Snippet dùng cú pháp `@` để agent tự nạp 4 file bản đồ vào context đầu phiên.
+
+**Idempotent (3 nhánh)** — re-init phải **thay thế** nội dung trong marker để luôn đồng bộ phiên bản snippet mới nhất:
+
+```bash
+SNIPPET=references/agent-config-snippet.md
+CONFIG=AGENTS.md
+
+if [ ! -f "$CONFIG" ]; then
+  # 1. Chưa có file → tạo mới + ghi block
+  cp "$SNIPPET" "$CONFIG"
+elif grep -q "knowhow:start" "$CONFIG"; then
+  # 2. Đã có marker → thay thế toàn bộ vùng giữa start/end bằng snippet mới
+  awk '
+    /<!-- knowhow:start -->/ {while((getline line < "'"$SNIPPET"'")>0) print line; close("'"$SNIPPET"'"); skip=1; next}
+    /<!-- knowhow:end -->/ {skip=0; next}
+    !skip
+  ' "$CONFIG" > "$CONFIG.tmp" && mv "$CONFIG.tmp" "$CONFIG"
+else
+  # 3. Có file, chưa marker → append block
+  printf '\n' >> "$CONFIG"
+  cat "$SNIPPET" >> "$CONFIG"
+fi
+```
 
 ### Bước 6: Ghi log hoàn tất
 
